@@ -113,7 +113,6 @@ class DiscordBot
             channel.send("갓파파");
             this.needToRefresh = true;
         });
-        
     }
 
     private Load(channel: any, command: string)
