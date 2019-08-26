@@ -1,9 +1,8 @@
 const ConsoleLog = console.log;
-const setting = require('./setting.json');
+const secret = require('./sercret.json');
+const config = require('./config.json');
 import {Client, Message } from "discord.js";
 import CommandHandler from "./handler";
-
-const prefix = "$";
 
 class DiscordBot
 {
@@ -21,7 +20,7 @@ class DiscordBot
     public Login()
     {
         let self = this;
-        self.bot.login(setting.Token);
+        self.bot.login(secret.Token);
     }
 
     async OnReady()
@@ -35,9 +34,9 @@ class DiscordBot
         let channel = messageContainer.channel;
         let author = messageContainer.author;
 
-        if (message.startsWith(prefix) && !author.bot)
+        if (message.startsWith(config.Prefix) && !author.bot)
         {
-            var args = message.slice(prefix.length).split(' ');
+            var args = message.slice(config.Prefix.length).split(' ');
             await this.commandHandler.Handle(channel, args);
         }
     }

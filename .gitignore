@@ -1,4 +1,4 @@
 commands/
-setting.json
+secret.json
 *.js
 *.map
