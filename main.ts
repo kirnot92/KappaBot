@@ -4,7 +4,7 @@ const setting = require('./setting.json');
 import {Client, Message, TextChannel, DMChannel, GroupDMChannel } from "discord.js";
 import * as File from 'fs';
 
-const prefix = "+";
+const prefix = "$";
 const IsExists = util.promisify(File.exists);
 
 class DiscordBot
