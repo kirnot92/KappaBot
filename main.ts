@@ -1,6 +1,7 @@
 const ConsoleLog = console.log;
 const secret = require('./secret.json');
 const config = require('./config.json');
+const playing = require('./playing.json');
 import {Client, Message } from "discord.js";
 import CommandHandler from "./handler";
 import BackgroundJob from "./backgroundJob";
@@ -20,13 +21,10 @@ class DiscordBot
         this.commandHandler = new CommandHandler();
 
         this.statusList = new Array<string>();
-        this.statusList.push("갓파~");;
-        this.statusList.push("갓파파~");
-        this.statusList.push("갓파파파~");
-        this.statusList.push("갓파파파파~");
-        this.statusList.push("갓파파파파파~");
-
-        this.currentStatus = 0;
+        playing.Message.forEach((elem: string) =>
+        {
+            this.statusList.push(elem);
+        });
     }
 
     public async Login()
