@@ -8,6 +8,7 @@
     },
     "files": [
         "main.ts",
-        "file.ts"
+        "file.ts",
+        "handler.ts"
     ]
 }
