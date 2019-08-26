@@ -75,11 +75,19 @@ export default class CommandHandler
         this.needToRefresh = true;
     }
 
-    private async Load(channel: any, command: string)
+    private async Load(channel: TextChannel | DMChannel | GroupDMChannel, command: string)
     {
         var path = this.GetPath(command);
-        var file = await File.ReadFile(path, "utf8");
-        channel.send(file);
+        var content = await File.ReadFile(path, "utf8");
+
+        if(content.startsWith("https://") && content.endsWith(".png"))
+        {
+            channel.send("", {files: [content]});
+        }
+        else
+        {
+            channel.send(content);
+        }
     }
 
     private DefaultHelp(channel: any)
