@@ -32,4 +32,16 @@ export default class File
         var write = Utill.promisify<string, string>(FileRaw.writeFile);
         return await write(path, content);
     }
+
+    public static async GetCreatedDate(path: string) : Promise<Date>
+    {
+        var stats = await this.GetFileStats(path);
+        return stats.birthtime;
+    }
+
+    public static async GetFileStats(path: string): Promise<FileRaw.Stats>
+    {
+        var stats = Utill.promisify<string, FileRaw.Stats>(FileRaw.stat);   
+        return await stats(path);
+    }
 }
