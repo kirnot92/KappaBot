@@ -3,11 +3,14 @@ const secret = require('./secret.json');
 const config = require('./config.json');
 import {Client, Message } from "discord.js";
 import CommandHandler from "./handler";
+import BackgroundJob from "./backgroundJob";
 
 class DiscordBot
 {
     private bot : Client;
     private commandHandler: CommandHandler;
+    private currentStatus: number = 0;
+    private statusList: Array<string>;
 
     constructor()
     {
@@ -15,12 +18,33 @@ class DiscordBot
         this.bot.on('message', (msg) => this.OnMessage(msg));
         this.bot.on('ready', this.OnReady);
         this.commandHandler = new CommandHandler();
+
+        this.statusList = new Array<string>();
+        this.statusList.push("갓파~");;
+        this.statusList.push("갓파파~");
+        this.statusList.push("갓파파파~");
+        this.statusList.push("갓파파파파~");
+        this.statusList.push("갓파파파파파~");
+
+        this.currentStatus = 0;
     }
 
     public Login()
     {
         let self = this;
-        self.bot.login(secret.Token);
+        await self.bot.login(secret.Token);
+        await this.SetNextStatus();
+
+        BackgroundJob.Run(() =>
+        {
+           this.SetNextStatus()
+        }, BackgroundJob.HourInterval);
+    }
+
+    async SetNextStatus()
+    {
+        this.currentStatus = (this.currentStatus++) % this.statusList.length;
+        await this.bot.user.setActivity(this.statusList[this.currentStatus], { type: "PLAYING"});
     }
 
     async OnReady()
