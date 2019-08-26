@@ -1,5 +1,5 @@
 const ConsoleLog = console.log;
-const secret = require('./sercret.json');
+const secret = require('./secret.json');
 const config = require('./config.json');
 import {Client, Message } from "discord.js";
 import CommandHandler from "./handler";
