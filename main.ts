@@ -29,7 +29,7 @@ class DiscordBot
         this.currentStatus = 0;
     }
 
-    public Login()
+    public async Login()
     {
         let self = this;
         await self.bot.login(secret.Token);
