@@ -1,6 +1,5 @@
 import {TextChannel, DMChannel, GroupDMChannel } from "discord.js";
 import File from "./file";
-File.Initialize();
 
 export default class CommandHandler
 {
