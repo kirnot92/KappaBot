@@ -8,5 +8,6 @@
     },
     "files": [
         "main.ts",
+        "file.ts"
     ]
 }

@@ -1,11 +1,10 @@
 const Console = console;
-const util = require('util');
 const setting = require('./setting.json');
 import {Client, Message, TextChannel, DMChannel, GroupDMChannel } from "discord.js";
-import * as File from 'fs';
+import File from "./file";
+File.Initialize();
 
-const prefix = "$";
-const IsExists = util.promisify(File.exists);
+const prefix = "+";
 
 class DiscordBot
 {
@@ -53,17 +52,17 @@ class DiscordBot
         switch(args[0])
         {
             case "등록":
-                return () => this.Save(channel, args[1], args.slice(2).join(' '));
+                return async () => await this.Save(channel, args[1], args.slice(2).join(' '));
             case "목록":
-                return () => this.GetList(channel);
+                return async () => await this.GetList(channel);
             case "삭제":
-                return () => this.Delete(channel, args[1]);
+                return async () => await this.Delete(channel, args[1]);
             default:
-                if (await IsExists(this.GetPath(args[0])))
+                if (await File.IsExists(this.GetPath(args[0])))
                 {
-                    return () => this.Load(channel, args[0]);
+                    return async () => await this.Load(channel, args[0]);
                 }
-                else { return ()=> this.DefaultHelp(channel); }
+                else { return () => this.DefaultHelp(channel); }
         }
     }
 
@@ -71,18 +70,17 @@ class DiscordBot
     {
         if (this.needToRefresh)
         {
-            File.readdir('./commands/',(err, files)=>
-            {
-                var arr = new Array<string>();
-                files.forEach(element =>
-                {
-                    arr.push(element.replace('.txt', ''));
-                });
-                this.cachedFileList = arr.join(', ');
-                this.needToRefresh = false;
+            var files = await File.ReadDir('./commands/');
 
-                channel.send(this.cachedFileList);
+            var arr = new Array<string>();
+            files.forEach(element =>
+            {
+                arr.push(element.replace('.txt', ''));
             });
+            this.cachedFileList = arr.join(', ');
+            this.needToRefresh = false;
+
+            channel.send(this.cachedFileList);
         }
         else
         {
@@ -95,33 +93,29 @@ class DiscordBot
         return "./commands/" + command + ".txt";
     }
 
-    private Delete(channel: TextChannel | DMChannel | GroupDMChannel, command: string)
+    private async Delete(channel: TextChannel | DMChannel | GroupDMChannel, command: string)
     {
         var path = this.GetPath(command);
-        File.unlink(path, ()=>
-        {
-            channel.send("갓파파");
-            this.needToRefresh = true;
-        });
+        await File.Delete(path);
+
+        channel.send("갓파파");
+        this.needToRefresh = true;
     }
 
-    private Save(channel: TextChannel | DMChannel | GroupDMChannel, title: string, context: string)
+    private async Save(channel: TextChannel | DMChannel | GroupDMChannel, title: string, content: string)
     {
         var path = this.GetPath(title);
-        File.writeFile(path, context, ()=>
-        {
-            channel.send("갓파파");
-            this.needToRefresh = true;
-        });
+        await File.Write(path, content);
+
+        channel.send("갓파파");
+        this.needToRefresh = true;
     }
 
-    private Load(channel: any, command: string)
+    private async Load(channel: any, command: string)
     {
         var path = this.GetPath(command);
-        File.readFile(path, "utf8", (err, data)=>
-        {
-            channel.send(data);
-        });
+        var file = await File.ReadFile(path, "utf8");
+        channel.send(file);
     }
 
     private DefaultHelp(channel: any)
