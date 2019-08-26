@@ -29,8 +29,7 @@ class DiscordBot
 
     public async Login()
     {
-        let self = this;
-        await self.bot.login(secret.Token);
+        await this.bot.login(secret.Token);
         await this.SetNextStatus();
 
         BackgroundJob.Run(() =>
