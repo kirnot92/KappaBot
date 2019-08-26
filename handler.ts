@@ -60,18 +60,47 @@ export default class CommandHandler
         return "./commands/" + command + ".txt";
     }
 
+    private GetOldPath(command: string, order: number): string
+    {
+        return "./commandsOld/" + command + order + ".txt";
+    }
+
     private async Delete(channel: TextChannel | DMChannel | GroupDMChannel, command: string)
     {
         var path = this.GetPath(command);
-        await File.Delete(path);
+        if (await File.IsExists(path))
+        {
+            await this.ArciveOldFile(command);
+            await File.Delete(path);
+        }
 
         channel.send("갓파파");
         this.needToRefresh = true;
     }
 
+    private async ArciveOldFile(command: string)
+    {
+        var path = this.GetPath(command);
+        var content = await File.ReadFile(path, "utf8");
+        var order = 0;
+
+        while (await File.IsExists(this.GetOldPath(command, order)))
+        {
+            order++;
+        }
+
+        var oldPath = this.GetOldPath(command, order);
+        await File.Write(oldPath, content);
+    }
+
     private async Save(channel: TextChannel | DMChannel | GroupDMChannel, title: string, content: string)
     {
         var path = this.GetPath(title);
+        if (await File.IsExists(path))
+        {
+            await this.ArciveOldFile(title);
+        }
+
         await File.Write(path, content);
 
         channel.send("갓파파");
