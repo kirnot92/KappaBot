@@ -141,13 +141,14 @@ export default class CommandHandler
 
     private HasValue(...values: string[]): boolean
     {
-        values.forEach((value) =>
+        for (var i = 0; i < values.length; ++i)
         {
+            var value = values[i];
             if (value == null || value.length == 0)
             {
                 return false;
             }
-        })
+        }
         return true;
     }
 }
