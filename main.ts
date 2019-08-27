@@ -2,7 +2,7 @@ const ConsoleLog = console.log
 import * as Secret from './secret.json'
 import * as Config from './config.json'
 import * as Playing from './playing.json'
-import {Client, Message} from "discord.js"
+import {Client, Message as MessageContainer} from "discord.js"
 import CommandHandler from "./handler"
 import BackgroundJob from "./backgroundJob"
 
@@ -49,7 +49,7 @@ class DiscordBot
         ConsoleLog("Bot Ready")
     }
 
-    async OnMessage(messageContainer: Message)
+    async OnMessage(messageContainer: MessageContainer)
     {
         let message = messageContainer.content
         let channel = messageContainer.channel
