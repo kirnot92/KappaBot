@@ -54,11 +54,12 @@ class DiscordBot
         var message = messageContainer.content
         var channel = messageContainer.channel
         var author = messageContainer.author
+        var channelId = channel.id;
 
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
             var args = message.slice(Config.Prefix.length).split(' ')
-            var result = await this.commandHandler.Handle(args)
+            var result = await this.commandHandler.Handle(args, channelId)
 
             channel.send(result.Message, result.Options);
         }

@@ -16,6 +16,7 @@
         "scripts/backgroundJob.ts",
         "scripts/typeExtension.ts",
         "scripts/file.ts",
-        "scripts/StringExtension.ts"
+        "scripts/StringExtension.ts",
+        "scripts/fileHandler.ts"
     ]
 }
