@@ -1,7 +1,7 @@
 const ConsoleLog = console.log;
-const secret = require('./secret.json');
-const config = require('./config.json');
-const playing = require('./playing.json');
+import * as Secret from './secret.json'
+import * as Config from './config.json'
+import * as Playing from './playing.json'
 import {Client, Message } from "discord.js";
 import CommandHandler from "./handler";
 import BackgroundJob from "./backgroundJob";
@@ -21,7 +21,7 @@ class DiscordBot
         this.commandHandler = new CommandHandler();
 
         this.statusList = new Array<string>();
-        playing.Message.forEach((elem: string) =>
+        Playing.Message.forEach((elem: string) =>
         {
             this.statusList.push(elem);
         });
@@ -29,7 +29,7 @@ class DiscordBot
 
     public async Login()
     {
-        await this.bot.login(secret.Token);
+        await this.bot.login(Secret.Token);
         await this.SetNextStatus();
 
         BackgroundJob.Run(() =>
@@ -55,9 +55,9 @@ class DiscordBot
         let channel = messageContainer.channel;
         let author = messageContainer.author;
 
-        if (message.startsWith(config.Prefix) && !author.bot)
+        if (message.startsWith(Config.Prefix) && !author.bot)
         {
-            var args = message.slice(config.Prefix.length).split(' ');
+            var args = message.slice(Config.Prefix.length).split(' ');
             await this.commandHandler.Handle(channel, args);
         }
     }
