@@ -1,4 +1,4 @@
-import {TextChannel, DMChannel, GroupDMChannel } from "discord.js"
+import {AnyChannel} from "./typeExtension";
 import File from "./file"
 
 export default class CommandHandler
@@ -6,7 +6,7 @@ export default class CommandHandler
     private cachedFileList: string = ""
     private needToRefresh: boolean = true
 
-    public async Handle(channel: TextChannel | DMChannel | GroupDMChannel, args: string[])
+    public async Handle(channel: AnyChannel, args: string[])
     {
         switch(args[0])
         {
@@ -36,7 +36,7 @@ export default class CommandHandler
         }
     }
 
-    private async GetList(channel: TextChannel | DMChannel | GroupDMChannel)
+    private async GetList(channel: AnyChannel)
     {
         if (this.needToRefresh)
         {
@@ -65,7 +65,7 @@ export default class CommandHandler
         return "./commandsOld/" + command + order + ".txt"
     }
 
-    private async Delete(channel: TextChannel | DMChannel | GroupDMChannel, command: string)
+    private async Delete(channel: AnyChannel, command: string)
     {
         var path = this.GetPath(command)
         if (await File.IsExists(path))
@@ -93,7 +93,7 @@ export default class CommandHandler
         await File.Write(oldPath, content)
     }
 
-    private async Save(channel: TextChannel | DMChannel | GroupDMChannel, title: string, content: string)
+    private async Save(channel: AnyChannel, title: string, content: string)
     {
         var path = this.GetPath(title)
         if (await File.IsExists(path))
@@ -107,7 +107,7 @@ export default class CommandHandler
         this.needToRefresh = true
     }
 
-    private async Load(channel: TextChannel | DMChannel | GroupDMChannel, command: string)
+    private async Load(channel: AnyChannel, command: string)
     {
         var path = this.GetPath(command)
         var content = await File.ReadFile(path, "utf8")
@@ -122,7 +122,7 @@ export default class CommandHandler
         }
     }
 
-    private async Date(channel: TextChannel | DMChannel | GroupDMChannel, command: string)
+    private async Date(channel: AnyChannel, command: string)
     {
         var path = this.GetPath(command)
         var date = await File.GetCreatedDate(path)
