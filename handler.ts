@@ -70,7 +70,7 @@ export default class CommandHandler
         var path = this.GetPath(command);
         if (await File.IsExists(path))
         {
-            await this.ArciveOldFile(command);
+            await this.ArchiveCommand(command);
             await File.Delete(path);
         }
 
@@ -78,7 +78,7 @@ export default class CommandHandler
         this.needToRefresh = true;
     }
 
-    private async ArciveOldFile(command: string)
+    private async ArchiveCommand(command: string)
     {
         var path = this.GetPath(command);
         var content = await File.ReadFile(path, "utf8");
@@ -98,7 +98,7 @@ export default class CommandHandler
         var path = this.GetPath(title);
         if (await File.IsExists(path))
         {
-            await this.ArciveOldFile(title);
+            await this.ArchiveCommand(title);
         }
 
         await File.Write(path, content);
