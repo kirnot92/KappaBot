@@ -10,12 +10,12 @@
     },
     "files": [
         "main.ts",
-        "file.ts",
-        "handler.ts",
-        "handlerResult.ts",
-        "backgroundJob.ts",
-        "typeExtension.ts",
-        "file.ts",
-        "StringExtension.ts"
+        "scripts/file.ts",
+        "scripts/handler.ts",
+        "scripts/handlerResult.ts",
+        "scripts/backgroundJob.ts",
+        "scripts/typeExtension.ts",
+        "scripts/file.ts",
+        "scripts/StringExtension.ts"
     ]
 }

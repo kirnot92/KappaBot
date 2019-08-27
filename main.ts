@@ -3,8 +3,8 @@ import * as Secret from './json/secret.json'
 import * as Config from './json/config.json'
 import * as Playing from './json/playing.json'
 import {Client, Message as MessageContainer} from "discord.js"
-import CommandHandler from "./handler"
-import BackgroundJob from "./backgroundJob"
+import CommandHandler from "./scripts/handler"
+import BackgroundJob from "./scripts/backgroundJob"
 
 class DiscordBot
 {
