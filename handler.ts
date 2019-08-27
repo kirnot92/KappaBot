@@ -8,31 +8,35 @@ export default class CommandHandler
 
     public async Handle(channel: AnyChannel, args: string[])
     {
-        switch(args[0])
+        var command = args[0];
+        if (!this.HasValue(command))
         {
-            case "등록":
-                await this.Save(channel, args[1], args.slice(2).join(' '))
-                break
-
-            case "목록":
-                await this.GetList(channel)
-                break
-
-            case "삭제":
-                await this.Delete(channel, args[1])
-                break
-
-            case "언제":
-                await this.Date(channel, args[1])
-                break
-
-            default:
-                var path = this.GetPath(args[0])
-                if (await File.IsExists(path)) 
-                {
-                    await this.Load(channel, args[0])
-                }
-                else { this.DefaultHelp(channel) }
+            this.DefaultHelp(channel)
+        }
+        else if (command == "등록" && this.HasValue(args[1], args[2]))
+        {
+            await this.Save(channel, args[1], args.slice(2).join(' '))
+        }
+        else if (command == "목록")
+        {
+            await this.GetList(channel)
+        }
+        else if (command == "삭제" && this.HasValue(args[1]))
+        {
+            await this.Delete(channel, args[1])
+        }
+        else if (command == "언제" && this.HasValue(args[1]))
+        {
+            await this.Date(channel, args[1])
+        }
+        else
+        {
+            var path = this.GetPath(command)
+            if (await File.IsExists(path)) 
+            {
+                await this.Load(channel, command)
+            }
+            else { this.DefaultHelp(channel) }
         }
     }
 
@@ -133,5 +137,17 @@ export default class CommandHandler
     {
         var help = "기본 명령어\n$등록 [이름] [내용]\n$삭제 [이름]\n$목록\n$언제 [이름]"
         channel.send(help)
+    }
+
+    private HasValue(...values: string[]): boolean
+    {
+        values.forEach((value) =>
+        {
+            if (value == null || value.length == 0)
+            {
+                return false;
+            }
+        })
+        return true;
     }
 }
