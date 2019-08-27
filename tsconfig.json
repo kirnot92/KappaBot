@@ -11,6 +11,11 @@
     "files": [
         "main.ts",
         "file.ts",
-        "handler.ts"
+        "handler.ts",
+        "handlerResult.ts",
+        "backgroundJob.ts",
+        "typeExtension.ts",
+        "file.ts",
+        "StringExtension.ts"
     ]
 }
