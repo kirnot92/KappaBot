@@ -49,9 +49,9 @@ export default class ScheduleHandler
             var command = await File.ReadFile('./schedule/' +fileName, "utf8");
 
             var jobCreater = await this.GetJobCreater(identifier, day, hour, command);
-            jobCreater.Create(() =>
+            jobCreater.Create(async () =>
             {
-                var msg = this.commandHandler.Handle(["$" + command], identifier)
+                var msg = await this.commandHandler.Handle(["$" + command], identifier)
                 var channel = this.client.channels.get(channelId);
                 var textChannel = (channel as TextChannel)
                 textChannel.send(msg)
