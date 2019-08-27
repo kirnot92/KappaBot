@@ -1,47 +1,47 @@
-import * as Utill from "util";
-import * as FileRaw from 'fs';
+import * as Utill from "util"
+import * as FileRaw from 'fs'
 
 export default class File
 {
     public static async IsExists(path: string)
     {
-        var isExists = Utill.promisify(FileRaw.exists);
-        return await isExists(path);
+        var isExists = Utill.promisify(FileRaw.exists)
+        return await isExists(path)
     }
 
     public static async ReadFile(path: string, encoding: string)
     {
-        var readFile = Utill.promisify<string, string, string>(FileRaw.readFile);
-        return await readFile(path, encoding);
+        var readFile = Utill.promisify<string, string, string>(FileRaw.readFile)
+        return await readFile(path, encoding)
     }
 
     public static async ReadDir(path: string)
     {
-        var readDir = Utill.promisify<string, string[]>(FileRaw.readdir);
-        return await readDir(path);
+        var readDir = Utill.promisify<string, string[]>(FileRaw.readdir)
+        return await readDir(path)
     }
 
     public static async Delete(path: string)
     {
-        var delFile = Utill.promisify<string>(FileRaw.unlink);
-        return await delFile(path);
+        var delFile = Utill.promisify<string>(FileRaw.unlink)
+        return await delFile(path)
     }
 
     public static async Write(path: string, content: string)
     {
-        var write = Utill.promisify<string, string>(FileRaw.writeFile);
-        return await write(path, content);
+        var write = Utill.promisify<string, string>(FileRaw.writeFile)
+        return await write(path, content)
     }
 
     public static async GetCreatedDate(path: string) : Promise<Date>
     {
-        var stats = await this.GetFileStats(path);
-        return stats.birthtime;
+        var stats = await this.GetFileStats(path)
+        return stats.birthtime
     }
 
     public static async GetFileStats(path: string): Promise<FileRaw.Stats>
     {
-        var stats = Utill.promisify<string, FileRaw.Stats>(FileRaw.stat);   
-        return await stats(path);
+        var stats = Utill.promisify<string, FileRaw.Stats>(FileRaw.stat)   
+        return await stats(path)
     }
 }
