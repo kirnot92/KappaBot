@@ -79,7 +79,7 @@ export default class CommandHandler
 
         while (await File.IsExists(this.GetOldPath(command, order)))
         {
-            order++
+            order = order + 1
         }
 
         var oldPath = this.GetOldPath(command, order)
