@@ -53,7 +53,8 @@ export default class ScheduleHandler
             {
                 var msg = this.commandHandler.Handle(["$" + command], identifier)
                 var channel = this.client.channels.get(channelId);
-                // textChannel.send(msg)
+                var textChannel = (channel as TextChannel)
+                textChannel.send(msg)
             })
         }
     }
