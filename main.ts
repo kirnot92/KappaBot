@@ -58,7 +58,9 @@ class DiscordBot
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
             var args = message.slice(Config.Prefix.length).split(' ')
-            await this.commandHandler.Handle(channel, args)
+            var result = await this.commandHandler.Handle(args)
+
+            channel.send(result.Message, result.Options);
         }
     }
 }

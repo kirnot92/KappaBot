@@ -1,6 +1,6 @@
 import {MessageOptions, RichEmbed, Attachment} from "discord.js"
 
-export class HandleResult
+export default class HandlerResult
 {
     constructor(message: string, options?: MessageOptions | RichEmbed | Attachment)
     {
