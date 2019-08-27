@@ -40,7 +40,7 @@ class DiscordBot
 
     async SetNextStatus()
     {
-        this.currentStatus = (this.currentStatus++) % this.statusList.length
+        this.currentStatus = (this.currentStatus + 1) % this.statusList.length
         await this.bot.user.setActivity(this.statusList[this.currentStatus], { type: "PLAYING"})
     }
 
