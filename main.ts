@@ -51,9 +51,9 @@ class DiscordBot
 
     async OnMessage(messageContainer: MessageContainer)
     {
-        let message = messageContainer.content
-        let channel = messageContainer.channel
-        let author = messageContainer.author
+        var message = messageContainer.content
+        var channel = messageContainer.channel
+        var author = messageContainer.author
 
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
