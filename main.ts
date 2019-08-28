@@ -59,6 +59,14 @@ class DiscordBot
         var author = messageContainer.author
         var channelId = channel.id;
 
+        if (author.id == Secret.AdminId)
+        {
+            if (message == "$재부팅")
+            {
+                channel.send("재부팅 프로세스 시작");
+            }
+        }
+
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
             var args = message.slice(Config.Prefix.length).split(' ')
