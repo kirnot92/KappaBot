@@ -17,7 +17,7 @@ class DiscordBot
     {
         this.bot = new Client()
         this.bot.on('message', (msg) => this.OnMessage(msg))
-        this.bot.on('ready', this.OnReady)
+        this.bot.on('ready', () => this.OnReady)
         this.commandHandler = new CommandHandler()
 
         this.statusList = new Array<string>()
@@ -47,6 +47,8 @@ class DiscordBot
     async OnReady()
     {
         ConsoleLog("Bot Ready")
+        var defaultChannel = (this.bot.channels.get(Secret.DefaultChannelId) as AnyChannel);
+        defaultChannel.send("갓파봇 부팅되었습니다")
     }
 
     async OnMessage(messageContainer: MessageContainer)
