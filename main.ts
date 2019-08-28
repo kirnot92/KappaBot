@@ -64,7 +64,7 @@ class DiscordBot
         {
             if (message == "$재부팅")
             {
-                Reboot();
+                // Reboot();
             }
             else
             {
