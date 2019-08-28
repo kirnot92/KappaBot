@@ -1,6 +1,7 @@
 
 export default class Dictionary<TKey, TValue>
 {
+    _map: Map<TKey,TValue> = new Map<TKey,  TValue>();
     _keys: Array<TKey> = new Array<TKey>();
     _values: Array<TValue> = new Array<TValue>();
 
@@ -10,41 +11,42 @@ export default class Dictionary<TKey, TValue>
 
         for (var x = 0; x < init.length; x++)
         {
-            this._keys.push(init[x].key);
-            this._values.push(init[x].value);
+            var component = init[x];
+            this.Add(component.key, component.value);
         }
     }
 
     Add(key: TKey, value: TValue)
     {
-        this._keys.push(key);
-        this._values.push(value);
+        this._map.set(key, value);
     }
 
     Remove(key: TKey)
     {
-        var index = this._keys.indexOf(key, 0);
-        this._keys.splice(index, 1);
-        this._values.splice(index, 1);
+        this._map.delete(key);
     }
 
-    Keys(): TKey[]
+    Keys(): IterableIterator<TKey>
     {
-        return this._keys;
+        return this._map.keys();
     }
 
     Values(): TValue[]
     {
-        return this._values;
+        var iter = this._map.values();
+        var values = new Array<TValue>();
+        while(true)
+        {
+            var comp = iter.next();
+            values.push(comp.value);
+            if(comp.done){break;}
+        }
+        return values;
     }
 
     ContainsKey(key: TKey): boolean
     {
-        if (this._keys.indexOf(key) == -1)
-        {
-            return false;
-        }
-        return true;
+        return this._map.has(key);
     }
 
     TryGet(key: TKey): TValue
@@ -58,6 +60,6 @@ export default class Dictionary<TKey, TValue>
 
     MustGet(key: TKey): TValue
     {
-        return this._values[this._keys.indexOf(key)];
+        return this._map.get(key);
     }
 }
