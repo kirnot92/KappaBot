@@ -6,7 +6,7 @@ import {Client, Message as MessageContainer} from "discord.js";
 import CommandHandler from "./scripts/handler";
 import BackgroundJob from "./scripts/backgroundJob";
 import {AnyChannel} from "./scripts/typeExtension";
-var cmd = require("node-cmd");
+var exec = require('child_process').exec;
 
 class DiscordBot
 {
@@ -67,7 +67,7 @@ class DiscordBot
             {
                 channel.send("재부팅 프로세스 시작");
                 this.isRebootProgress = true
-                cmd.run(Secret.RebootSequence);
+                exec(Secret.RebootSequence);
             }
         }
 
