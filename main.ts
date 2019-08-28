@@ -64,6 +64,7 @@ class DiscordBot
         if (message == "$재부팅")
         {
             this.TryReboot(author.id, channel);
+            return;
         }
 
         if (message.startsWith(Config.Prefix) && !author.bot)
@@ -90,7 +91,6 @@ class DiscordBot
             channel.send("재부팅 프로세스 시작");
             this.isRebootProgress = true;
             exec(Secret.RebootSequence);
-            return;
         }
     }
 }
