@@ -51,7 +51,7 @@ class DiscordBot
     {
         ConsoleLog("Bot Ready")
         var defaultChannel = (this.bot.channels.get(Secret.DefaultChannelId) as AnyChannel);
-        defaultChannel.send("갓파봇 부팅되었습니다")
+        defaultChannel.send("갓파봇 부팅되었습니다. 갓파파~")
     }
 
     async OnMessage(messageContainer: MessageContainer)
