@@ -1,8 +1,13 @@
 import File from "./file"
 import HandlerResult from './handlerResult';
+import Dictionary from "./dictionary";
 
 export default  class FileHandler
 {
+    // TODO 목록 채널별로 캐싱하게 하자. 파일 목록 늘어나면 점점 느려질 듯
+    // 캐싱 필요할 땐 그냥 키를 지워버리면 됨
+    cacheList: Dictionary<string, string> = new Dictionary<string, string>();
+
     public async GetList(identifier: string): Promise<HandlerResult>
     {
         var files = await File.ReadDir('./commands/')
