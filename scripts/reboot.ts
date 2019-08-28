@@ -5,5 +5,4 @@
      cmd.run("git pull")
      cmd.run("tsc -p tsconfig.json")
      cmd.run("forever restartall")
-     // dummy
  }
