@@ -6,6 +6,7 @@ import {Client, Message as MessageContainer} from "discord.js"
 import CommandHandler from "./scripts/handler"
 import BackgroundJob from "./scripts/backgroundJob"
 import {AnyChannel} from "./scripts/typeExtension"
+import {Reboot} from "./scripts/reboot";
 
 class DiscordBot
 {
@@ -18,7 +19,7 @@ class DiscordBot
     {
         this.bot = new Client()
         this.bot.on('message', (msg) => this.OnMessage(msg))
-        this.bot.on('ready', this.OnReady)
+        this.bot.on('ready', () => this.OnReady())
         this.commandHandler = new CommandHandler()
 
         this.statusList = new Array<string>()
@@ -48,8 +49,9 @@ class DiscordBot
     async OnReady()
     {
         ConsoleLog("Bot Ready")
-        var defaultChannel = (this.bot.channels.get(Secret.DefaultChannelId) as AnyChannel);
-        defaultChannel.send("갓파봇 부팅되었습니다")
+        var channel = this.bot.channels.get(Secret.DefaultChannelId);
+        var textChannel = channel as AnyChannel;
+        textChannel.send("갓파봇 부팅되었습니다")
     }
 
     async OnMessage(messageContainer: MessageContainer)
@@ -57,14 +59,19 @@ class DiscordBot
         var message = messageContainer.content
         var channel = messageContainer.channel
         var author = messageContainer.author
-        var channelId = channel.id;
 
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
-            var args = message.slice(Config.Prefix.length).split(' ')
-            var result = await this.commandHandler.Handle(args, channel)
-
-            channel.send(result.Message, result.Options);
+            if (message == "$재부팅")
+            {
+                Reboot();
+            }
+            else
+            {
+                var args = message.slice(Config.Prefix.length).split(' ')
+                var result = await this.commandHandler.Handle(args, channel)
+                channel.send(result.Message, result.Options);
+            }
         }
     }
 }

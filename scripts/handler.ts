@@ -33,11 +33,6 @@ export default class CommandHandler
         {
             return await this.fileHandler.Date(channelId, args[1])
         }
-        if (command == "재부팅")
-        {
-            channel.send("갓파파 재부팅")
-            this.RebootProcess()
-        }
         if (await this.fileHandler.IsValidCommand(channelId, command)) 
         {
             return await this.fileHandler.Load(channelId, command)
@@ -50,14 +45,5 @@ export default class CommandHandler
     {
         var content = "기본 명령어\n$등록 [이름] [내용]\n$삭제 [이름]\n$목록\n$언제 [이름]\n$[이름]"
         return new HandlerResult(content);
-    }
-
-    private RebootProcess()
-    {
-        var cmd = require('node-cmd');
-        cmd.run("cd /home/Bot/Kappabot");
-        cmd.run("git pull")
-        cmd.run("tsc -p tsconfig.json")
-        cmd.run("forever restartall")
     }
 }
