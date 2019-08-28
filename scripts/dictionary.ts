@@ -26,18 +26,24 @@ export default class Dictionary<TKey, TValue>
         this._map.delete(key);
     }
 
-    Keys(): IterableIterator<TKey>
+    Keys(): Array<TKey>
     {
-        return this._map.keys();
+        var iterator = this._map.keys();
+        return this.ToArray(iterator);
     }
 
-    Values(): TValue[]
+    Values(): Array<TValue>
     {
-        var iter = this._map.values();
-        var values = new Array<TValue>();
+        var iterator = this._map.values();
+        return this.ToArray(iterator);
+    }
+
+    ToArray<TIterValue>(iterator: IterableIterator<TIterValue>): Array<TIterValue>
+    {
+        var values = new Array<TIterValue>();
         while(true)
         {
-            var comp = iter.next();
+            var comp = iterator.next();
             values.push(comp.value);
             if(comp.done){break;}
         }
