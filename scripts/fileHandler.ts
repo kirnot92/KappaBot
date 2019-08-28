@@ -15,7 +15,12 @@ export default  class FileHandler
                     arr.push(element.replace('.txt', '').replace(identifier + ".", ""))
                 }
             })
+
         var fileList = arr.join(', ');
+        if (fileList.length == 0)
+        {
+            return new HandlerResult("이 채널에 등록된 명령어가 없습니다.")
+        }
 
         return new HandlerResult(fileList);
     }
