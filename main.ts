@@ -1,11 +1,12 @@
-const ConsoleLog = console.log
-import * as Secret from './json/secret.json'
-import * as Config from './json/config.json'
-import * as Playing from './json/playing.json'
-import {Client, Message as MessageContainer} from "discord.js"
-import CommandHandler from "./scripts/handler"
-import BackgroundJob from "./scripts/backgroundJob"
-import {AnyChannel} from "./scripts/typeExtension"
+const ConsoleLog = console.log;
+import * as Secret from './json/secret.json';
+import * as Config from './json/config.json';
+import * as Playing from './json/playing.json';
+import {Client, Message as MessageContainer} from "discord.js";
+import CommandHandler from "./scripts/handler";
+import BackgroundJob from "./scripts/backgroundJob";
+import {AnyChannel} from "./scripts/typeExtension";
+var cmd = require("node-cmd");
 
 class DiscordBot
 {
@@ -13,6 +14,7 @@ class DiscordBot
     private commandHandler: CommandHandler
     private currentStatus: number = 0
     private statusList: Array<string>
+    private isRebootProgress: boolean = false
 
     constructor()
     {
@@ -61,9 +63,11 @@ class DiscordBot
 
         if (author.id == Secret.AdminId)
         {
-            if (message == "$재부팅")
+            if (message == "$재부팅" && !this.isRebootProgress)
             {
                 channel.send("재부팅 프로세스 시작");
+                this.isRebootProgress = true
+                cmd.run(Secret.RebootSequence);
             }
         }
 
