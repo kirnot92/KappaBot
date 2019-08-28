@@ -17,7 +17,6 @@
         "scripts/typeExtension.ts",
         "scripts/file.ts",
         "scripts/stringExtension.ts",
-        "scripts/fileHandler.ts",
-        "scripts/reboot.ts"
+        "scripts/fileHandler.ts"
     ]
 }

@@ -1,17 +1,14 @@
 import HandlerResult from './handlerResult';
 import String from './stringExtension';
 import FileHandler from "./fileHandler";
-import * as Utill from "util";
-import {AnyChannel} from "./typeExtension";
 
 export default class CommandHandler
 {
     fileHandler: FileHandler = new FileHandler()
 
-    public async Handle(args: string[], channel: AnyChannel): Promise<HandlerResult>
+    public async Handle(args: string[], channelId: string): Promise<HandlerResult>
     {
         var command = args[0];
-        var channelId = channel.id;
 
         if (!String.HasValue(command))
         {
