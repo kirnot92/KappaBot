@@ -18,33 +18,33 @@ class DiscordBot
 
     constructor()
     {
-        this.bot = new Client()
-        this.bot.on('message', async (msg) => await this.OnMessage(msg))
-        this.bot.on('ready', async () => await this.OnReady())
-        this.commandHandler = new CommandHandler()
+        this.bot = new Client();
+        this.bot.on('message', async (msg) => await this.OnMessage(msg));
+        this.bot.on('ready', async () => await this.OnReady());
+        this.commandHandler = new CommandHandler();
 
-        this.statusList = new Array<string>()
+        this.statusList = new Array<string>();
         Playing.Message.forEach((elem: string) =>
         {
-            this.statusList.push(elem)
-        })
+            this.statusList.push(elem);
+        });
     }
 
     public async Login()
     {
-        await this.bot.login(Secret.Token)
-        await this.SetNextStatus()
+        await this.bot.login(Secret.Token);
+        await this.SetNextStatus();
 
         BackgroundJob.Run(() =>
         {
-           this.SetNextStatus()
-        }, BackgroundJob.HourInterval)
+           this.SetNextStatus();
+        }, BackgroundJob.HourInterval);
     }
 
     async SetNextStatus()
     {
-        this.currentStatus = (this.currentStatus + 1) % this.statusList.length
-        await this.bot.user.setActivity(this.statusList[this.currentStatus], { type: "PLAYING"})
+        this.currentStatus = (this.currentStatus + 1) % this.statusList.length;
+        await this.bot.user.setActivity(this.statusList[this.currentStatus], { type: "PLAYING"});
     }
 
     async OnReady()
@@ -56,28 +56,41 @@ class DiscordBot
 
     async OnMessage(messageContainer: MessageContainer)
     {
-        var message = messageContainer.content
-        var channel = messageContainer.channel
-        var author = messageContainer.author
+        var message = messageContainer.content;
+        var channel = messageContainer.channel;
+        var author = messageContainer.author;
         var channelId = channel.id;
 
-        if (author.id == Secret.AdminId)
+        if (message == "$재부팅")
         {
-            if (message == "$재부팅" && !this.isRebootProgress)
-            {
-                channel.send("재부팅 프로세스 시작");
-                this.isRebootProgress = true
-                exec(Secret.RebootSequence);
-                return;
-            }
+            this.TryReboot(author.id, channel);
         }
 
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
-            var args = message.slice(Config.Prefix.length).split(' ')
-            var result = await this.commandHandler.Handle(args, channelId)
+            var args = message.slice(Config.Prefix.length).split(' ');
+            var result = await this.commandHandler.Handle(args, channelId);
 
             channel.send(result.Message, result.Options);
+        }
+    }
+
+    TryReboot(authorId: string, channel: AnyChannel)
+    {
+        if (authorId != Secret.AdminId)
+        {
+            channel.send("나는 나보다 약한 자의 명령을 듣지 않는다.");
+        }
+        else if (this.isRebootProgress)
+        {
+            channel.send("현재 진행중입니다");
+        }
+        else
+        {
+            channel.send("재부팅 프로세스 시작");
+            this.isRebootProgress = true;
+            exec(Secret.RebootSequence);
+            return;
         }
     }
 }
