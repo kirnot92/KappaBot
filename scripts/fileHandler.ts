@@ -3,37 +3,21 @@ import HandlerResult from './handlerResult';
 
 export default  class FileHandler
 {
-    private cachedFileList: string = ""
-    private needToRefresh: boolean = true
-    
     public async GetList(identifier: string): Promise<HandlerResult>
     {
-        if (this.needToRefresh)
-        {
-            var files = await File.ReadDir('./commands/')
-            var arr = new Array<string>()
+        var files = await File.ReadDir('./commands/')
+        var arr = new Array<string>()
 
-            files.forEach(element =>
-                {
-                    if (element.includes(identifier))
-                    {
-                        arr.push(element.replace('.txt', '').replace(identifier + ".", ""))
-                    }
-                })
-            this.cachedFileList = arr.join(', ')
-            this.needToRefresh = false
-
-            if (this.cachedFileList.length == 0)
+        files.forEach(element =>
             {
-                return new HandlerResult("이 채널에 등록된 명령어가 없습니다.")
-            }
+                if (element.includes(identifier))
+                {
+                    arr.push(element.replace('.txt', '').replace(identifier + ".", ""))
+                }
+            })
+        var fileList = arr.join(', ');
 
-            return new HandlerResult(this.cachedFileList);
-        }
-        else
-        {
-            return new HandlerResult(this.cachedFileList);
-        }
+        return new HandlerResult(fileList);
     }
 
     public async Delete(identifier: string, command: string): Promise<HandlerResult>
@@ -45,7 +29,6 @@ export default  class FileHandler
             await File.Delete(path)
         }
 
-        this.needToRefresh = true
         return new HandlerResult("갓파파");
     }
 
@@ -60,7 +43,6 @@ export default  class FileHandler
 
         await File.Write(path, content)
 
-        this.needToRefresh = true
         return new HandlerResult("갓파파");
     }
 
@@ -71,7 +53,6 @@ export default  class FileHandler
 
         if (content.startsWith("https://") && this.IsImageExtension(content))
         {
-            this.needToRefresh = true
             return new HandlerResult("", {files: [content]});
         }
         else

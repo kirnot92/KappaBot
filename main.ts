@@ -17,8 +17,8 @@ class DiscordBot
     constructor()
     {
         this.bot = new Client()
-        this.bot.on('message', (msg) => this.OnMessage(msg))
-        this.bot.on('ready', () => this.OnReady)
+        this.bot.on('message', async (msg) => await this.OnMessage(msg))
+        this.bot.on('ready', async () => await this.OnReady())
         this.commandHandler = new CommandHandler()
 
         this.statusList = new Array<string>()
