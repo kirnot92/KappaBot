@@ -5,6 +5,7 @@ import * as Playing from './json/playing.json'
 import {Client, Message as MessageContainer} from "discord.js"
 import CommandHandler from "./scripts/handler"
 import BackgroundJob from "./scripts/backgroundJob"
+import {AnyChannel} from "./scripts/typeExtension"
 
 class DiscordBot
 {
