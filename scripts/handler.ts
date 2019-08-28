@@ -1,14 +1,17 @@
 import HandlerResult from './handlerResult';
 import String from './stringExtension';
 import FileHandler from "./fileHandler";
+import * as Utill from "util";
+import {AnyChannel} from "./typeExtension";
 
 export default class CommandHandler
 {
     fileHandler: FileHandler = new FileHandler()
 
-    public async Handle(args: string[], channelId: string): Promise<HandlerResult>
+    public async Handle(args: string[], channel: AnyChannel): Promise<HandlerResult>
     {
         var command = args[0];
+        var channelId = channel.id;
 
         if (!String.HasValue(command))
         {
@@ -32,6 +35,7 @@ export default class CommandHandler
         }
         if (command == "재부팅")
         {
+            channel.send("갓파파 재부팅")
             this.RebootProcess()
         }
         if (await this.fileHandler.IsValidCommand(channelId, command)) 
@@ -48,10 +52,12 @@ export default class CommandHandler
         return new HandlerResult(content);
     }
 
-    RebootProcess()
+    private RebootProcess()
     {
         var cmd = require('node-cmd');
-        cmd.get('cd /home/Bot/Kappabot', (err: any, data: any, stderr: any) => { console.log(data) });
-        cmd.get('git pull', (err: any, data: any, stderr: any) => { console.log(data) });
+        cmd.run("cd /home/Bot/Kappabot");
+        cmd.run("git pull")
+        cmd.run("tsc -p tsconfig.json")
+        cmd.run("forever restartall")
     }
 }

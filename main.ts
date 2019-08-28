@@ -5,6 +5,7 @@ import * as Playing from './json/playing.json'
 import {Client, Message as MessageContainer} from "discord.js"
 import CommandHandler from "./scripts/handler"
 import BackgroundJob from "./scripts/backgroundJob"
+import {AnyChannel} from "./scripts/typeExtension"
 
 class DiscordBot
 {
@@ -47,6 +48,8 @@ class DiscordBot
     async OnReady()
     {
         ConsoleLog("Bot Ready")
+        // var defaultChannel = (this.bot.channels.get(Secret.DefaultChannelId) as AnyChannel);
+        // defaultChannel.send("갓파봇 부팅되었습니다")
     }
 
     async OnMessage(messageContainer: MessageContainer)
@@ -59,7 +62,7 @@ class DiscordBot
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
             var args = message.slice(Config.Prefix.length).split(' ')
-            var result = await this.commandHandler.Handle(args, channelId)
+            var result = await this.commandHandler.Handle(args, channel)
 
             channel.send(result.Message, result.Options);
         }
