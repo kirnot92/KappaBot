@@ -97,10 +97,10 @@ export default  class FileHandler
 
     private IsImageExtension(content: string): boolean
     {
-        var candidates = ["png", "jpg", "jpeg"]
+        var candidates = ["png", "jpg", "jpeg", "gif", "webp"]
         for (var i = 0; i < candidates.length; ++i)
         {
-            if (content.endsWith(candidates[i]))
+            if (content.toLowerCase().endsWith(candidates[i]))
             {
                 return true;
             }
