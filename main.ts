@@ -79,7 +79,7 @@ class DiscordBot
     {
         if (authorId != Secret.AdminId)
         {
-            channel.send("나는 나보다 약한 자의 명령을 듣지 않는다.");
+            channel.send("나는 나보다 약한 자의 명령은 듣지 않는다.");
         }
         else if (this.isRebootProgress)
         {
