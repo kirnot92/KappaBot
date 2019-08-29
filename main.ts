@@ -54,11 +54,11 @@ class DiscordBot
         defaultChannel.send("갓파봇 부팅되었습니다. 갓파파~")
     }
 
-    async OnMessage(messageContainer: MessageContainer)
+    async OnMessage(container: MessageContainer)
     {
-        var message = messageContainer.content;
-        var channel = messageContainer.channel;
-        var author = messageContainer.author;
+        var message = container.content;
+        var channel = container.channel;
+        var author = container.author;
         var channelId = channel.id;
 
         if (message == "$재부팅")
