@@ -17,6 +17,14 @@
         "scripts/typeExtension.ts",
         "scripts/file.ts",
         "scripts/stringExtension.ts",
-        "scripts/fileHandler.ts"
+        "scripts/fileHandler.ts",
+        "scripts/behaviors/doNothing",
+        "scripts/behaviors/save",
+        "scripts/behaviors/reboot",
+        "scripts/behaviors/IBehavior",
+        "scripts/behaviors/save",
+        "scripts/behaviors/delete",
+        "scripts/behaviors/date",
+        "main_new.ts"
     ]
 }
