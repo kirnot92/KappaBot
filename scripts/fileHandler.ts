@@ -45,6 +45,8 @@ export default  class FileHandler
 
     public async Save(identifier: string, title: string, content: string): Promise<HandlerResult>
     {
+        title = title.replace("/", '').replace("\\", '');
+
         var path = this.GetPath(identifier, title)
         if (await File.IsExists(path))
         {
