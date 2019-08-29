@@ -2,8 +2,6 @@
 export default class Dictionary<TKey, TValue>
 {
     _map: Map<TKey,TValue> = new Map<TKey,  TValue>();
-    _keys: Array<TKey> = new Array<TKey>();
-    _values: Array<TValue> = new Array<TValue>();
 
     constructor(init?: { key: TKey; value: TValue; }[])
     {
@@ -16,56 +14,65 @@ export default class Dictionary<TKey, TValue>
         }
     }
 
-    Add(key: TKey, value: TValue)
+    public Add(key: TKey, value: TValue)
     {
+        if (this.ContainsKey(key))
+        {
+            throw new Error("키 중복");
+        }
         this._map.set(key, value);
     }
 
-    Remove(key: TKey)
+    public Remove(key: TKey): boolean
     {
-        this._map.delete(key);
+        if (this.ContainsKey(key))
+        {
+            this._map.delete(key);
+            return true;
+        }
+        return false;
     }
 
-    Keys(): Array<TKey>
+    public Keys(): Array<TKey>
     {
         var iterator = this._map.keys();
         return this.ToArray(iterator);
     }
 
-    Values(): Array<TValue>
+    public Values(): Array<TValue>
     {
         var iterator = this._map.values();
         return this.ToArray(iterator);
     }
 
-    ToArray<TIterValue>(iterator: IterableIterator<TIterValue>): Array<TIterValue>
-    {
-        var values = new Array<TIterValue>();
-        while(true)
-        {
-            var comp = iterator.next();
-            values.push(comp.value);
-            if(comp.done){break;}
-        }
-        return values;
-    }
-
-    ContainsKey(key: TKey): boolean
+    public ContainsKey(key: TKey): boolean
     {
         return this._map.has(key);
     }
 
-    TryGet(key: TKey): TValue
+    public TryGet(key: TKey): TValue
     {
         if (this.ContainsKey(key))
         {
-            return this.MustGet(key)
+            return this.MustGet(key);
         }
-        return null
+        return null;
     }
 
-    MustGet(key: TKey): TValue
+    public MustGet(key: TKey): TValue
     {
         return this._map.get(key);
+    }
+
+    private ToArray<TIterValue>(iterator: IterableIterator<TIterValue>): Array<TIterValue>
+    {
+        var values = new Array<TIterValue>();
+        while (true)
+        {
+            var comp = iterator.next();
+            if (comp.done) { break; }
+            values.push(comp.value);
+        }
+        return values;
     }
 }
