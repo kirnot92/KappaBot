@@ -3,8 +3,9 @@ import File from "./file"
 import HandlerResult from "./handlerResult";
 import Dictionary from "./dictionary";
 
-const COMMANDS = path.resolve(__dirname, "..", "..", "commands")
-const COMMANDS_OLD = path.resolve(__dirname, "..", "..", "commandsOld")
+const ROOT = path.resolve(__dirname, "..", "..")
+const COMMANDS = path.join(ROOT, "commands")
+const COMMANDS_OLD = path.join(ROOT, "commandsOld")
 
 export default class FileHandler
 {
