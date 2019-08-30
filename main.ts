@@ -90,7 +90,10 @@ class DiscordBot
         {
             channel.send("재부팅 프로세스 시작");
             this.isRebootProgress = true;
-            exec(Secret.RebootSequence);
+
+            if (Secret.RebootSequence !== null) {
+                exec(Secret.RebootSequence);
+            }
         }
     }
 }
