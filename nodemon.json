@@ -1,0 +1,8 @@
+{
+    "watch": [
+        "json/*.json",
+        "scripts/**/*.ts",
+        "main.ts"
+    ],
+    "exec": "ts-node main.ts"
+}
