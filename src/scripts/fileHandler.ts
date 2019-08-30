@@ -1,8 +1,12 @@
+import * as path from "path"
 import File from "./file"
-import HandlerResult from './handlerResult';
+import HandlerResult from "./handlerResult";
 import Dictionary from "./dictionary";
 
-export default  class FileHandler
+const COMMANDS = path.resolve(__dirname, "..", "..", "commands")
+const COMMANDS_OLD = path.resolve(__dirname, "..", "..", "commandsOld")
+
+export default class FileHandler
 {
     // TODO 목록 채널별로 캐싱하게 하자. 파일 목록 늘어나면 점점 느려질 듯
     // 캐싱 필요할 땐 그냥 키를 지워버리면 됨
@@ -10,18 +14,18 @@ export default  class FileHandler
 
     public async GetList(identifier: string): Promise<HandlerResult>
     {
-        var files = await File.ReadDir('../commands/')
+        var files = await File.ReadDir(COMMANDS)
         var arr = new Array<string>()
 
         files.forEach(element =>
             {
                 if (element.includes(identifier))
                 {
-                    arr.push(element.replace('.txt', '').replace(identifier + ".", ""))
+                    arr.push(element.replace(".txt", "").replace(identifier + ".", ""))
                 }
             })
 
-        var fileList = arr.join(', ');
+        var fileList = arr.join(", ");
         if (fileList.length == 0)
         {
             return new HandlerResult("이 채널에 등록된 명령어가 없습니다.")
@@ -45,7 +49,7 @@ export default  class FileHandler
 
     public async Save(identifier: string, title: string, content: string): Promise<HandlerResult>
     {
-        title = title.replace("/", '').replace("\\", '');
+        title = title.replace("/", "").replace("\\", "");
 
         var path = this.GetPath(identifier, title)
         if (await File.IsExists(path))
@@ -103,7 +107,7 @@ export default  class FileHandler
 
     private GetPath(identifier: string, command: string): string
     {
-        return "../commands/" + identifier + "." + command + ".txt"
+        return path.join(COMMANDS, identifier + "." + command + ".txt")
     }
     
     private async ArchiveCommand(identifier: string, command: string)
@@ -123,6 +127,6 @@ export default  class FileHandler
 
     private GetOldPath(identifier: string, command: string, order: number): string
     {
-        return "../commandsOld/" + identifier + "." + command + order + ".txt"
+        return path.join(COMMANDS_OLD, identifier + "." + command + order + ".txt")
     }
 }
