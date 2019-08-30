@@ -1,4 +1,4 @@
-import Schedule, { RecurrenceRule, JobCallback, Job } from "node-schedule";
+import { RecurrenceRule, Job, scheduleJob } from "node-schedule";
 import File from "./file";
 import Dictionary from "./dictionary";
 import CommandHandler from "./handler"
@@ -7,7 +7,7 @@ import {Client, Channel, MessageOptions, TextChannel } from 'discord.js'
 export default class ScheduleHandler
 {
     commandHandler: CommandHandler
-    onRunning: Dictionary<string, Schedule.Job> = new Dictionary<string, Schedule.Job>()
+    onRunning: Dictionary<string, Job> = new Dictionary<string, Job>()
     client: Client
 
     constructor(fileHandler: CommandHandler, client: Client)
@@ -44,7 +44,7 @@ export default class ScheduleHandler
         for (var i=0; i < fileNames.length; ++i)
         {
             var fileName = fileNames[i].replace('.txt', '');
-            var identifier, day, hour, others = fileName.split('.');
+            var identifier: any, day, hour, others = fileName.split('.');
             var channelId = identifier;
             var command = await File.ReadFile('./schedule/' +fileName, "utf8");
 
@@ -61,7 +61,7 @@ export default class ScheduleHandler
 
     public GetRule(day: string, hour: string): RecurrenceRule
     {
-        var rule = new Schedule.RecurrenceRule();
+        var rule = new RecurrenceRule();
         rule.dayOfWeek =  this.Parse(day);
         rule.hour = parseInt(hour);
         rule.minute = 0
@@ -87,7 +87,7 @@ export default class ScheduleHandler
         }
 
         var rule = this.GetRule(day, hour)
-        return new JobCreater(rule, (job:Schedule.Job)=>
+        return new JobCreater(rule, (job:Job)=>
         {
             this.onRunning.Add(path, job);
         })
@@ -97,9 +97,9 @@ export default class ScheduleHandler
 export class JobCreater
 {
     rule: RecurrenceRule
-    onCreate: (job: Schedule.Job) => void
+    onCreate: (job: Job) => void
 
-    constructor(rule: RecurrenceRule, onCreate: (job:Schedule.Job) => void)
+    constructor(rule: RecurrenceRule, onCreate: (job:Job) => void)
     {
         this.rule = rule;
         this.onCreate = onCreate;
@@ -107,7 +107,7 @@ export class JobCreater
 
     public Create(func: Function)
     {
-        var job = Schedule.scheduleJob(this.rule, () => func());
+        var job = scheduleJob(this.rule, () => func());
         this.onCreate(job);
     }
 }

@@ -6,18 +6,8 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": true,
-        "outDir": "dist"
-    },
-    "files": [
-        "main.ts",
-        "scripts/file.ts",
-        "scripts/handler.ts",
-        "scripts/handlerResult.ts",
-        "scripts/backgroundJob.ts",
-        "scripts/typeExtension.ts",
-        "scripts/file.ts",
-        "scripts/stringExtension.ts",
-        "scripts/fileHandler.ts"
-    ]
+        "rootDir": "src",
+        "outDir": "dist",
+        "sourceMap": true
+    }
 }

@@ -10,7 +10,7 @@ export default  class FileHandler
 
     public async GetList(identifier: string): Promise<HandlerResult>
     {
-        var files = await File.ReadDir('./commands/')
+        var files = await File.ReadDir('../commands/')
         var arr = new Array<string>()
 
         files.forEach(element =>
@@ -103,7 +103,7 @@ export default  class FileHandler
 
     private GetPath(identifier: string, command: string): string
     {
-        return "./commands/" + identifier + "." + command + ".txt"
+        return "../commands/" + identifier + "." + command + ".txt"
     }
     
     private async ArchiveCommand(identifier: string, command: string)
@@ -123,6 +123,6 @@ export default  class FileHandler
 
     private GetOldPath(identifier: string, command: string, order: number): string
     {
-        return "./commandsOld/" + identifier + "." + command + order + ".txt"
+        return "../commandsOld/" + identifier + "." + command + order + ".txt"
     }
 }
