@@ -9,7 +9,7 @@
     "start": "nodemon --config nodemon.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "kirnot92",
+  "author": "Beretta <kirnot92@gmail.com>",
   "contributors": [
     "cumul <gg6123@naver.com>"
   ],
