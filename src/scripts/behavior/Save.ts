@@ -1,4 +1,4 @@
-import HandlerResult from "../handlerResult";
+import HandlerResult from "../HandlerResult";
 import String from '../Extension/StringExtension';
 import FileProcedure from "../Procedure/File";
 import { IBehavior } from "./IBehavior";
