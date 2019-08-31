@@ -7,13 +7,13 @@ const ROOT = path.resolve(__dirname, "..", "..")
 const COMMANDS = path.join(ROOT, "commands")
 const COMMANDS_OLD = path.join(ROOT, "commandsOld")
 
-export default class FileHandler
+export default class FileProcedure
 {
     // TODO 목록 채널별로 캐싱하게 하자. 파일 목록 늘어나면 점점 느려질 듯
     // 캐싱 필요할 땐 그냥 키를 지워버리면 됨
-    cacheList: Dictionary<string, string> = new Dictionary<string, string>();
+    static cacheList: Dictionary<string, string> = new Dictionary<string, string>();
 
-    public async GetList(identifier: string): Promise<HandlerResult>
+    public static async GetList(identifier: string): Promise<HandlerResult>
     {
         var files = await File.ReadDir(COMMANDS)
         var arr = new Array<string>()
@@ -35,7 +35,7 @@ export default class FileHandler
         return new HandlerResult(fileList);
     }
 
-    public async Delete(identifier: string, command: string): Promise<HandlerResult>
+    public static async Delete(identifier: string, command: string): Promise<HandlerResult>
     {
         var path = this.GetPath(identifier, command)
         if (await File.IsExists(path))
@@ -48,7 +48,7 @@ export default class FileHandler
     }
 
 
-    public async Save(identifier: string, title: string, content: string): Promise<HandlerResult>
+    public static async Save(identifier: string, title: string, content: string): Promise<HandlerResult>
     {
         title = title.replace("/", "").replace("\\", "");
 
@@ -63,7 +63,7 @@ export default class FileHandler
         return new HandlerResult("갓파파");
     }
 
-    public async Load(identifier: string, command: string): Promise<HandlerResult>
+    public static async Load(identifier: string, command: string): Promise<HandlerResult>
     {
         var path = this.GetPath(identifier, command)
         var content = await File.ReadFile(path, "utf8")
@@ -78,7 +78,7 @@ export default class FileHandler
         }
     }
 
-    public async Date(identifier: string, command: string)
+    public static async Date(identifier: string, command: string)
     {
         var path = this.GetPath(identifier, command)
         var date = await File.GetCreatedDate(path)
@@ -87,19 +87,19 @@ export default class FileHandler
         return new HandlerResult(content);
     }
 
-    public DefaultHelp()
+    public static DefaultHelp()
     {
         var content = "기본 명령어\n$등록 [이름] [내용]\n$삭제 [이름]\n$목록\n$언제 [이름]\n$[이름]"
         return new HandlerResult(content);
     }
 
-    public async IsValidCommand(identifier: string, command: string): Promise<boolean>
+    public static async IsValidCommand(identifier: string, command: string): Promise<boolean>
     {
         var path = this.GetPath(identifier, command);
         return await File.IsExists(path);
     }
 
-    private IsImageExtension(content: string): boolean
+    private static IsImageExtension(content: string): boolean
     {
         var candidates = ["png", "jpg", "jpeg", "gif", "webp"]
         for (var i = 0; i < candidates.length; ++i)
@@ -112,12 +112,12 @@ export default class FileHandler
         return false;
     }
 
-    private GetPath(identifier: string, command: string): string
+    private static GetPath(identifier: string, command: string): string
     {
         return path.join(COMMANDS, identifier + "." + command + ".txt")
     }
 
-    private async ArchiveCommand(identifier: string, command: string)
+    private static async ArchiveCommand(identifier: string, command: string)
     {
         var path = this.GetPath(identifier, command)
         var content = await File.ReadFile(path, "utf8")
@@ -132,7 +132,7 @@ export default class FileHandler
         await File.Write(oldPath, content)
     }
 
-    private GetOldPath(identifier: string, command: string, order: number): string
+    private static GetOldPath(identifier: string, command: string, order: number): string
     {
         return path.join(COMMANDS_OLD, identifier + "." + command + order + ".txt")
     }

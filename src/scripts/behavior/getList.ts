@@ -1,14 +1,13 @@
 import HandlerResult from "../handlerResult";
-import FileHandler from "../fileHandler";
+import FileProcedure from "../fileHandler";
 import { IBehavior } from "./IBehavior";
 
 export class GetList implements IBehavior
 {
-    fileHandler: FileHandler;
     channelId: string;
-    constructor(fileHandler: FileHandler, channelId: string)
+    
+    constructor(channelId: string)
     {
-        this.fileHandler = fileHandler;
         this.channelId = channelId;
     }
 
@@ -19,11 +18,11 @@ export class GetList implements IBehavior
 
     async Result(): Promise<HandlerResult>
     {
-        return await this.fileHandler.GetList(this.channelId);
+        return await FileProcedure.GetList(this.channelId);
     }
 
     public OnFail(): HandlerResult
     {
-        return this.fileHandler.DefaultHelp();
+        return FileProcedure.DefaultHelp();
     }
 }
