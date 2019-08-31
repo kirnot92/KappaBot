@@ -5,6 +5,7 @@ import {Client, Message as MessageContainer, Message} from "discord.js";
 import BackgroundJob from "./scripts/backgroundJob";
 import {AnyChannel} from "./scripts/extension/typeExtension";
 import BehaviorFactory from "./scripts/behavior/behaviorFactory";
+import Math from "./scripts/extension/mathExtension";
 
 class DiscordBot
 {
@@ -23,23 +24,23 @@ class DiscordBot
         {
             this.statusList.push(elem);
         });
+        this.currentStatus = Math.Range(0, this.statusList.length);
     }
 
     public async Login()
     {
         await this.bot.login(Secret.Token);
-        await this.SetNextStatus();
 
-        BackgroundJob.Run(() =>
+        BackgroundJob.Run(async () =>
         {
-           this.SetNextStatus();
+           await this.SetNextStatus();
         }, BackgroundJob.HourInterval);
     }
 
     async SetNextStatus()
     {
-        this.currentStatus = (this.currentStatus + 1) % this.statusList.length;
         await this.bot.user.setActivity(this.statusList[this.currentStatus], { type: "PLAYING"});
+        this.currentStatus = (this.currentStatus + 1) % this.statusList.length;
     }
 
     async OnReady()
