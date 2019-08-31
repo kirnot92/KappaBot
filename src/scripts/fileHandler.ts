@@ -87,6 +87,12 @@ export default class FileHandler
         return new HandlerResult(content);
     }
 
+    public DefaultHelp()
+    {
+        var content = "기본 명령어\n$등록 [이름] [내용]\n$삭제 [이름]\n$목록\n$언제 [이름]\n$[이름]"
+        return new HandlerResult(content);
+    }
+
     public async IsValidCommand(identifier: string, command: string): Promise<boolean>
     {
         var path = this.GetPath(identifier, command);
@@ -110,7 +116,7 @@ export default class FileHandler
     {
         return path.join(COMMANDS, identifier + "." + command + ".txt")
     }
-    
+
     private async ArchiveCommand(identifier: string, command: string)
     {
         var path = this.GetPath(identifier, command)
