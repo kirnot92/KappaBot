@@ -1,21 +1,22 @@
 import HandlerResult from "../handlerResult";
 import FileProcedure from "../fileHandler";
 import { IBehavior } from "./IBehavior";
+import String from "../extension/stringExtension";
 
 export class Load implements IBehavior
 {
     command: string;
     channelId: string;
 
-    constructor(command: string, channelId: string)
+    constructor(args: string[], channelId: string)
     {
-        this.command = command;
+        this.command = args[0]
         this.channelId = channelId;
     }
 
     async IsValid(): Promise<boolean>
     {
-        return await FileProcedure.IsValidCommand(this.channelId, this.command);
+        return String.HasValue(this.command) && await FileProcedure.IsValidCommand(this.channelId, this.command);
     }
 
     async Result(): Promise<HandlerResult>

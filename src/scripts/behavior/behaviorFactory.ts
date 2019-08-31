@@ -26,7 +26,7 @@ export default class BehaviorFactory
             case "재부팅":
                 return new Reboot(authorId, bot);
             default:
-                return new Load(args[0], channelId);
+                return new Load(args, channelId);
         }
     }
 }
