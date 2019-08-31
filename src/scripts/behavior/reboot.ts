@@ -23,7 +23,7 @@ export class Reboot implements IBehavior
 
     public async Result(): Promise<HandlerResult>
     {
-        this.bot.user.setActivity("재부팅 중...", { type: "PLAYING" });
+        this.bot.user.setActivity("재부팅", { type: "PLAYING" });
         Reboot.isProgress = true;
         exec(Secret.RebootSequence);
         return new HandlerResult("재부팅 프로세스 시작");
