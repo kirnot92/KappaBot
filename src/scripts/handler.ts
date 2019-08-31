@@ -1,5 +1,5 @@
 import HandlerResult from './handlerResult';
-import String from './stringExtension';
+import String from './extension/stringExtension';
 import FileHandler from "./fileHandler";
 
 export default class CommandHandler

@@ -2,13 +2,13 @@
 import FileHandler from "../fileHandler";
 import {Client} from "discord.js"
 import { IBehavior } from "./IBehavior";
-import { DoNothing } from "./DoNothing";
-import { Save } from "./Save";
-import { Reboot } from "./Reboot";
-import { Load } from "./Load";
-import { GetList } from "./GetList";
-import { Delete } from "./Delete";
-import { Date } from "./Date";
+import { DoNothing } from "./doNothing";
+import { Save } from "./save";
+import { Reboot } from "./reboot";
+import { Load } from "./load";
+import { GetList } from "./getList";
+import { Delete } from "./delete";
+import { Date } from "./date";
 export var exec = require('child_process').exec;
 
 export default class BehaviorFactory

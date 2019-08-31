@@ -3,7 +3,7 @@ import * as Config from './json/config.json';
 import * as Playing from './json/playing.json';
 import {Client, Message as MessageContainer} from "discord.js";
 import BackgroundJob from "./scripts/backgroundJob";
-import {AnyChannel} from "./scripts/typeExtension";
+import {AnyChannel} from "./scripts/extension/typeExtension";
 import BehaviorFactory from "./scripts/behavior/behaviorFactory";
 
 class DiscordBot
