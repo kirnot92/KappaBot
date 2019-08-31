@@ -3,7 +3,7 @@ import * as Config from './json/config.json';
 import * as Playing from './json/playing.json';
 import {Client, Message as MessageContainer, Message} from "discord.js";
 import BackgroundJob from "./scripts/backgroundJob";
-import {AnyChannel} from "./scripts/extension/typeExtension";
+import {AnyChannel, User} from "./scripts/extension/typeExtension";
 import BehaviorFactory from "./scripts/behavior/behaviorFactory";
 import Math from "./scripts/extension/mathExtension";
 
@@ -52,10 +52,18 @@ class DiscordBot
 
     async OnMessage(container: MessageContainer)
     {
-        var message = container.content;
-        var channel = container.channel;
-        var author = container.author;
+        try
+        {
+            this.HandleMessage(container.content, container.channel, container.author);
+        }
+        catch (e)
+        {
+            container.channel.send("Exception 발생: " + e);
+        }
+    }
 
+    async HandleMessage(message: string, channel: AnyChannel, author: User)
+    {
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
             var args = message.slice(Config.Prefix.length).split(' ');
