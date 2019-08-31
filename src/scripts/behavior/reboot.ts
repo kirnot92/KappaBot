@@ -18,7 +18,7 @@ export class Reboot implements IBehavior
 
     public IsValid(): boolean
     {
-        return this.isAdmin && Reboot.isProgress;
+        return this.isAdmin && !Reboot.isProgress;
     }
 
     public async Result(): Promise<HandlerResult>
