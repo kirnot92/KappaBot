@@ -6,6 +6,7 @@ export default class BackgroundJob
 
     static Run(callback: Function, millisecondInterval: number)
     {
+        callback();
         setInterval(callback, millisecondInterval)
     }
 }
