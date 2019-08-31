@@ -1,6 +1,6 @@
-import HandlerResult from "../handlerResult";
+import BehaviorResult from "./behaviorResult";
 import String from '../extension/stringExtension';
-import FileProcedure from "../fileHandler";
+import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
 
 export class Date implements IBehavior
@@ -19,12 +19,12 @@ export class Date implements IBehavior
         return String.HasValue(this.args[1]);
     }
 
-    async Result(): Promise<HandlerResult>
+    async Result(): Promise<BehaviorResult>
     {
         return await FileProcedure.Date(this.channelId, this.args[1]);
     }
 
-    public OnFail(): HandlerResult
+    public OnFail(): BehaviorResult
     {
         return FileProcedure.DefaultHelp();
     }

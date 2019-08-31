@@ -1,5 +1,5 @@
-import HandlerResult from "../handlerResult";
-import FileProcedure from "../fileHandler";
+import BehaviorResult from "./behaviorResult";
+import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
 
 export class GetList implements IBehavior
@@ -16,12 +16,12 @@ export class GetList implements IBehavior
         return true;
     }
 
-    async Result(): Promise<HandlerResult>
+    async Result(): Promise<BehaviorResult>
     {
         return await FileProcedure.GetList(this.channelId);
     }
 
-    public OnFail(): HandlerResult
+    public OnFail(): BehaviorResult
     {
         return FileProcedure.DefaultHelp();
     }

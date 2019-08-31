@@ -1,4 +1,4 @@
-import HandlerResult from "../handlerResult";
+import BehaviorResult from "./behaviorResult";
 import { Client } from "discord.js";
 import { IBehavior } from "./IBehavior";
 import { exec } from "./behaviorFactory";
@@ -21,16 +21,16 @@ export class Reboot implements IBehavior
         return this.isAdmin && !Reboot.isProgress;
     }
 
-    public async Result(): Promise<HandlerResult>
+    public async Result(): Promise<BehaviorResult>
     {
         this.bot.user.setActivity("재부팅", { type: "PLAYING" });
         Reboot.isProgress = true;
         exec(Secret.RebootSequence);
-        return new HandlerResult("재부팅 프로세스 시작");
+        return new BehaviorResult("재부팅 프로세스 시작");
     }
 
-    OnFail(): HandlerResult
+    OnFail(): BehaviorResult
     {
-        return Reboot.isProgress ? new HandlerResult("현재 재부팅 진행중입니다") : new HandlerResult("나는 나보다 약한 자의 명령은 듣지 않는다");
+        return Reboot.isProgress ? new BehaviorResult("현재 재부팅 진행중입니다") : new BehaviorResult("나는 나보다 약한 자의 명령은 듣지 않는다");
     }
 }

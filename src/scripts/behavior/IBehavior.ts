@@ -1,8 +1,8 @@
-import HandlerResult from "../handlerResult";
+import BehaviorResult from "./behaviorResult";
 
 export interface IBehavior
 {
     IsValid(): Promise<boolean>;
-    Result(): Promise<HandlerResult>;
-    OnFail(): HandlerResult;
+    Result(): Promise<BehaviorResult>;
+    OnFail(): BehaviorResult;
 }

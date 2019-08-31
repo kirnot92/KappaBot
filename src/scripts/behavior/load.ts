@@ -1,5 +1,5 @@
-import HandlerResult from "../handlerResult";
-import FileProcedure from "../fileHandler";
+import BehaviorResult from "./behaviorResult";
+import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
 import String from "../extension/stringExtension";
 
@@ -19,12 +19,12 @@ export class Load implements IBehavior
         return String.HasValue(this.command) && await FileProcedure.IsValidCommand(this.channelId, this.command);
     }
 
-    async Result(): Promise<HandlerResult>
+    async Result(): Promise<BehaviorResult>
     {
         return await FileProcedure.Load(this.channelId, this.command);
     }
 
-    public OnFail(): HandlerResult
+    public OnFail(): BehaviorResult
     {
         return FileProcedure.DefaultHelp();
     }

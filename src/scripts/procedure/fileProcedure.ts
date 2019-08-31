@@ -1,7 +1,7 @@
 import * as path from "path"
-import File from "./file"
-import HandlerResult from "./handlerResult";
-import Dictionary from "./dictionary";
+import File from "../promisifier/file"
+import BehaviorResult from "../behavior/behaviorResult";
+import Dictionary from "../collection/dictionary";
 
 const ROOT = path.resolve(__dirname, "..", "..")
 const COMMANDS = path.join(ROOT, "commands")
@@ -13,7 +13,7 @@ export default class FileProcedure
     // 캐싱 필요할 땐 그냥 키를 지워버리면 됨
     static cacheList: Dictionary<string, string> = new Dictionary<string, string>();
 
-    public static async GetList(identifier: string): Promise<HandlerResult>
+    public static async GetList(identifier: string): Promise<BehaviorResult>
     {
         var files = await File.ReadDir(COMMANDS)
         var arr = new Array<string>()
@@ -29,13 +29,13 @@ export default class FileProcedure
         var fileList = arr.join(", ");
         if (fileList.length == 0)
         {
-            return new HandlerResult("이 채널에 등록된 명령어가 없습니다.")
+            return new BehaviorResult("이 채널에 등록된 명령어가 없습니다.")
         }
 
-        return new HandlerResult(fileList);
+        return new BehaviorResult(fileList);
     }
 
-    public static async Delete(identifier: string, command: string): Promise<HandlerResult>
+    public static async Delete(identifier: string, command: string): Promise<BehaviorResult>
     {
         var path = this.GetPath(identifier, command)
         if (await File.IsExists(path))
@@ -44,11 +44,11 @@ export default class FileProcedure
             await File.Delete(path)
         }
 
-        return new HandlerResult("갓파파");
+        return new BehaviorResult("갓파파");
     }
 
 
-    public static async Save(identifier: string, title: string, content: string): Promise<HandlerResult>
+    public static async Save(identifier: string, title: string, content: string): Promise<BehaviorResult>
     {
         title = title.replace("/", "").replace("\\", "");
 
@@ -60,21 +60,21 @@ export default class FileProcedure
 
         await File.Write(path, content)
 
-        return new HandlerResult("갓파파");
+        return new BehaviorResult("갓파파");
     }
 
-    public static async Load(identifier: string, command: string): Promise<HandlerResult>
+    public static async Load(identifier: string, command: string): Promise<BehaviorResult>
     {
         var path = this.GetPath(identifier, command)
         var content = await File.ReadFile(path, "utf8")
 
         if (content.startsWith("https://") && this.IsImageExtension(content))
         {
-            return new HandlerResult("", {files: [content]});
+            return new BehaviorResult("", {files: [content]});
         }
         else
         {
-            return new HandlerResult(content);
+            return new BehaviorResult(content);
         }
     }
 
@@ -84,13 +84,13 @@ export default class FileProcedure
         var date = await File.GetCreatedDate(path)
         var content = "["+command+"]: " +date.toLocaleDateString("ko-kr")+" " + date.toTimeString()+"에 등록된 명령어입니다."
 
-        return new HandlerResult(content);
+        return new BehaviorResult(content);
     }
 
     public static DefaultHelp()
     {
         var content = "기본 명령어\n$등록 [이름] [내용]\n$삭제 [이름]\n$목록\n$언제 [이름]\n$[이름]"
-        return new HandlerResult(content);
+        return new BehaviorResult(content);
     }
 
     public static async IsValidCommand(identifier: string, command: string): Promise<boolean>
