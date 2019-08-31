@@ -1,17 +1,15 @@
 import HandlerResult from "../handlerResult";
-import String from '../stringExtension';
-import FileHandler from "../fileHandler";
+import String from '../Extension/StringExtension';
+import FileProcedure from "../Procedure/Procedure";
 import { IBehavior } from "./IBehavior";
 
 export class Delete implements IBehavior
 {
-    fileHandler: FileHandler;
     args: string[];
     channelId: string;
 
-    constructor(fileHandler: FileHandler, args: string[], channelId: string)
+    constructor(args: string[], channelId: string)
     {
-        this.fileHandler = fileHandler;
         this.args = args;
         this.channelId = channelId;
     }
@@ -23,11 +21,11 @@ export class Delete implements IBehavior
 
     async Result(): Promise<HandlerResult>
     {
-        return await this.fileHandler.Delete(this.channelId, this.args[1]);
+        return await FileProcedure.Delete(this.channelId, this.args[1]);
     }
 
     public OnFail(): HandlerResult
     {
-        return this.fileHandler.DefaultHelp();
+        return FileProcedure.DefaultHelp();
     }
 }

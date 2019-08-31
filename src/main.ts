@@ -2,9 +2,9 @@ import * as Secret from './json/secret.json';
 import * as Config from './json/config.json';
 import * as Playing from './json/playing.json';
 import {Client, Message as MessageContainer} from "discord.js";
-import BackgroundJob from "./scripts/backgroundJob";
-import {AnyChannel} from "./scripts/typeExtension";
-import BehaviorFactory from "./scripts/behavior/behaviorFactory";
+import BackgroundJob from "./scripts/BackgroundJob";
+import {AnyChannel} from "./scripts/Extension/TypeExtension";
+import BehaviorFactory from "./scripts/Behavior/behaviorFactory";
 
 class DiscordBot
 {
