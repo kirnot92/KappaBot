@@ -1,15 +1,17 @@
 import HandlerResult from "../handlerResult";
-import String from '../Extension/StringExtension';
-import FileProcedure from "../Procedure/File";
+import String from '../stringExtension';
+import FileHandler from "../fileHandler";
 import { IBehavior } from "./IBehavior";
 
 export class Date implements IBehavior
 {
+    fileHandler: FileHandler;
     args: string[];
     channelId: string;
 
-    constructor(args: string[], channelId: string)
+    constructor(fileHandler: FileHandler, args: string[], channelId: string)
     {
+        this.fileHandler = fileHandler;
         this.args = args;
         this.channelId = channelId;
     }
@@ -21,11 +23,11 @@ export class Date implements IBehavior
 
     async Result(): Promise<HandlerResult>
     {
-        return await FileProcedure.Date(this.channelId, this.args[1]);
+        return await this.fileHandler.Date(this.channelId, this.args[1]);
     }
 
     public OnFail(): HandlerResult
     {
-        return FileProcedure.DefaultHelp();
+        return this.fileHandler.DefaultHelp();
     }
 }

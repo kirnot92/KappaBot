@@ -1,7 +1,7 @@
-import HandlerResult from "../HandlerResult";
+import HandlerResult from "../handlerResult";
 import { Client } from "discord.js";
 import { IBehavior } from "./IBehavior";
-import { exec } from "./BehaviorFactory";
+import { exec } from "./behaviorFactory";
 import * as Secret from "../../json/secret.json";
 
 export class Reboot implements IBehavior

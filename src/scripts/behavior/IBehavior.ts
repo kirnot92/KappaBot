@@ -1,4 +1,4 @@
-import HandlerResult from "../HandlerResult";
+import HandlerResult from "../handlerResult";
 
 export interface IBehavior
 {

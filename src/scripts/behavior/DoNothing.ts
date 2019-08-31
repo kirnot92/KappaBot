@@ -1,9 +1,16 @@
-import HandlerResult from "../HandlerResult";
+import HandlerResult from "../handlerResult";
 import { IBehavior } from "./IBehavior";
-import FileProcedure from "../Procedure/File";
+import FileHandler from "../fileHandler";
 
 export class DoNothing implements IBehavior
 {
+    fileHandler: FileHandler;
+
+    constructor(fileHandler: FileHandler)
+    {
+        this.fileHandler = fileHandler;
+    }
+
     IsValid(): boolean
     {
         return false;
@@ -16,6 +23,6 @@ export class DoNothing implements IBehavior
 
     public OnFail(): HandlerResult
     {
-        return FileProcedure.DefaultHelp();
+        return this.fileHandler.DefaultHelp();
     }
 }

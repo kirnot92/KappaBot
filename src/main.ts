@@ -2,10 +2,9 @@ import * as Secret from './json/secret.json';
 import * as Config from './json/config.json';
 import * as Playing from './json/playing.json';
 import {Client, Message as MessageContainer} from "discord.js";
-import BackgroundJob from "./scripts/BackgroundJob";
-import {AnyChannel} from "./scripts/Extension/TypeExtension";
-import BehaviorFactory from "./scripts/Behavior/BehaviorFactory";
-import String from "./scripts/Extension/StringExtension";
+import BackgroundJob from "./scripts/backgroundJob";
+import {AnyChannel} from "./scripts/typeExtension";
+import BehaviorFactory from "./scripts/behavior/behaviorFactory";
 
 class DiscordBot
 {
@@ -18,7 +17,12 @@ class DiscordBot
         this.bot = new Client();
         this.bot.on('message', async (msg) => await this.OnMessage(msg));
         this.bot.on('ready', async () => await this.OnReady());
-        this.statusList = String.ToArray(Playing.Message);
+
+        this.statusList = new Array<string>();
+        Playing.Message.forEach((elem: string) =>
+        {
+            this.statusList.push(elem);
+        });
     }
 
     public async Login()

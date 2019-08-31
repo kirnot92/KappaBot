@@ -1,15 +1,17 @@
-import HandlerResult from "../HandlerResult";
-import String from '../Extension/StringExtension';
-import FileProcedure from "../Procedure/File";
+import HandlerResult from "../handlerResult";
+import String from '../stringExtension';
+import FileHandler from "../fileHandler";
 import { IBehavior } from "./IBehavior";
 
 export class Save implements IBehavior
 {
+    fileHandler: FileHandler;
     args: string[];
     channelId: string;
 
-    constructor(args: string[], channelId: string)
+    constructor(fileHandler: FileHandler, args: string[], channelId: string)
     {
+        this.fileHandler = fileHandler;
         this.args = args;
         this.channelId = channelId;
     }
@@ -21,11 +23,11 @@ export class Save implements IBehavior
 
     public async Result(): Promise<HandlerResult>
     {
-        return await FileProcedure.Save(this.channelId, this.args[1], this.args.slice(2).join(' '));
+        return await this.fileHandler.Save(this.channelId, this.args[1], this.args.slice(2).join(' '));
     }
 
     public OnFail(): HandlerResult
     {
-        return FileProcedure.DefaultHelp();
+        return this.fileHandler.DefaultHelp();
     }
 }
