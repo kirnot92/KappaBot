@@ -31,6 +31,6 @@ export class Reboot implements IBehavior
 
     OnFail(): HandlerResult
     {
-        return Reboot.isProgress ? new HandlerResult("현재 리부팅 진행중입니다") : new HandlerResult("나는 나보다 약한 자의 명령은 듣지 않는다");
+        return Reboot.isProgress ? new HandlerResult("현재 재부팅 진행중입니다") : new HandlerResult("나는 나보다 약한 자의 명령은 듣지 않는다");
     }
 }
