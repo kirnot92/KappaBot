@@ -6,7 +6,7 @@ export class Load implements IBehavior
 {
     command: string;
     channelId: string;
-    
+
     constructor(command: string, channelId: string)
     {
         this.command = command;
@@ -15,7 +15,7 @@ export class Load implements IBehavior
 
     async IsValid(): Promise<boolean>
     {
-        return true;
+        return await FileProcedure.IsValidCommand(this.channelId, this.command);
     }
 
     async Result(): Promise<HandlerResult>

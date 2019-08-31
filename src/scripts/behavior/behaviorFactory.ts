@@ -1,8 +1,6 @@
 
-import FileProcedure from "../fileHandler";
 import {Client} from "discord.js"
 import { IBehavior } from "./IBehavior";
-import { DoNothing } from "./doNothing";
 import { Save } from "./save";
 import { Reboot } from "./reboot";
 import { Load } from "./load";
@@ -28,11 +26,7 @@ export default class BehaviorFactory
             case "재부팅":
                 return new Reboot(authorId, bot);
             default:
-                if (await FileProcedure.IsValidCommand(channelId, args[0]))
-                {
-                    return new Load(args[0], channelId);
-                }
-                return new DoNothing();
+                return new Load(args[0], channelId);
         }
     }
 }
