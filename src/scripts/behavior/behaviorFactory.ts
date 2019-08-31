@@ -33,6 +33,6 @@ export default class BehaviorFactory
                     return new Load(args[0], channelId);
                 }
                 return new DoNothing();
-            }
+        }
     }
 }

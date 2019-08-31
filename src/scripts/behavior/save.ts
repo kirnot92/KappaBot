@@ -14,7 +14,7 @@ export class Save implements IBehavior
         this.channelId = channelId;
     }
 
-    public IsValid(): boolean
+    public async IsValid(): Promise<boolean>
     {
         return String.HasValue(this.args[0], this.args[1], this.args[2]);
     }

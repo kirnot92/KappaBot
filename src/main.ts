@@ -1,7 +1,7 @@
 import * as Secret from './json/secret.json';
 import * as Config from './json/config.json';
 import * as Playing from './json/playing.json';
-import {Client, Message as MessageContainer} from "discord.js";
+import {Client, Message as MessageContainer, Message} from "discord.js";
 import BackgroundJob from "./scripts/backgroundJob";
 import {AnyChannel} from "./scripts/extension/typeExtension";
 import BehaviorFactory from "./scripts/behavior/behaviorFactory";
@@ -59,7 +59,7 @@ class DiscordBot
         {
             var args = message.slice(Config.Prefix.length).split(' ');
             var behavior = await BehaviorFactory.Create(args, author.id, channel.id, this.bot);
-            var result = behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
+            var result = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
             channel.send(result.Message, result.Options);
         }
     }

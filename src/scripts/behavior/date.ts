@@ -14,7 +14,7 @@ export class Date implements IBehavior
         this.channelId = channelId;
     }
 
-    IsValid(): boolean
+    async IsValid(): Promise<boolean>
     {
         return String.HasValue(this.args[1]);
     }

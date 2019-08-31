@@ -2,7 +2,7 @@ import HandlerResult from "../handlerResult";
 
 export interface IBehavior
 {
-    IsValid(): boolean;
+    IsValid(): Promise<boolean>;
     Result(): Promise<HandlerResult>;
     OnFail(): HandlerResult;
 }

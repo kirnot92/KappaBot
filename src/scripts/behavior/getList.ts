@@ -11,7 +11,7 @@ export class GetList implements IBehavior
         this.channelId = channelId;
     }
 
-    IsValid(): boolean
+    async IsValid(): Promise<boolean>
     {
         return true;
     }

@@ -13,7 +13,7 @@ export class Load implements IBehavior
         this.channelId = channelId;
     }
 
-    IsValid(): boolean
+    async IsValid(): Promise<boolean>
     {
         return true;
     }

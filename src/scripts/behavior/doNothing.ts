@@ -4,7 +4,7 @@ import FileProcedure from "../fileHandler";
 
 export class DoNothing implements IBehavior
 {
-    IsValid(): boolean
+    async IsValid(): Promise<boolean>
     {
         return false;
     }

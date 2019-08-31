@@ -16,7 +16,7 @@ export class Reboot implements IBehavior
         this.isAdmin = Secret.AdminId == authorId;
     }
 
-    public IsValid(): boolean
+    public async IsValid(): Promise<boolean>
     {
         return this.isAdmin && !Reboot.isProgress;
     }
