@@ -3,7 +3,7 @@ import File from "../promisifier/file"
 import BehaviorResult from "../behavior/behaviorResult";
 import Dictionary from "../collection/dictionary";
 
-const ROOT = path.resolve(__dirname, "..", "..")
+const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "commands")
 const COMMANDS_OLD = path.join(ROOT, "commandsOld")
 
