@@ -1,6 +1,6 @@
 import HandlerResult from "../handlerResult";
 import String from '../Extension/StringExtension';
-import FileProcedure from "../Procedure/Procedure";
+import FileProcedure from "../Procedure/File";
 import { IBehavior } from "./IBehavior";
 
 export class Delete implements IBehavior

@@ -13,4 +13,14 @@ export default class StringExtension
         }
         return true;
     }
+
+    public static ToArray(values: string[]): Array<string>
+    {
+        var arr = new Array<string>();
+        values.forEach((elem: string) =>
+        {
+            arr.push(elem);
+        });
+        return arr;
+    }
 }

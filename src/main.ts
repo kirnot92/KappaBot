@@ -5,6 +5,7 @@ import {Client, Message as MessageContainer} from "discord.js";
 import BackgroundJob from "./scripts/BackgroundJob";
 import {AnyChannel} from "./scripts/Extension/TypeExtension";
 import BehaviorFactory from "./scripts/Behavior/behaviorFactory";
+import String from "./scripts/Extension/StringExtension";
 
 class DiscordBot
 {
@@ -17,12 +18,7 @@ class DiscordBot
         this.bot = new Client();
         this.bot.on('message', async (msg) => await this.OnMessage(msg));
         this.bot.on('ready', async () => await this.OnReady());
-
-        this.statusList = new Array<string>();
-        Playing.Message.forEach((elem: string) =>
-        {
-            this.statusList.push(elem);
-        });
+        this.statusList = String.ToArray(Playing.Message);
     }
 
     public async Login()

@@ -1,5 +1,5 @@
 
-import FileProcedure from "../Procedure/Procedure";
+import FileProcedure from "../Procedure/File";
 import {Client} from "discord.js"
 import { IBehavior } from "./IBehavior";
 import { DoNothing } from "./DoNothing";
