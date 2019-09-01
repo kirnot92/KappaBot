@@ -5,12 +5,14 @@ export default class Dictionary<TKey, TValue>
 
     constructor(init?: { key: TKey; value: TValue; }[])
     {
-        if (init == null) { return }
-
-        for (var x = 0; x < init.length; x++)
+        if (init === undefined)
         {
-            var component = init[x];
-            this.Add(component.key, component.value);
+            return
+        }
+
+        for (const { key, value } of init)
+        {
+            this.Add(key, value);
         }
     }
 
@@ -35,14 +37,12 @@ export default class Dictionary<TKey, TValue>
 
     public Keys(): Array<TKey>
     {
-        var iterator = this._map.keys();
-        return this.ToArray(iterator);
+        return Array.from(this._map.keys());
     }
 
     public Values(): Array<TValue>
     {
-        var iterator = this._map.values();
-        return this.ToArray(iterator);
+        return Array.from(this._map.values());
     }
 
     public ContainsKey(key: TKey): boolean
@@ -62,17 +62,5 @@ export default class Dictionary<TKey, TValue>
     public MustGet(key: TKey): TValue
     {
         return this._map.get(key);
-    }
-
-    private ToArray<TIterValue>(iterator: IterableIterator<TIterValue>): Array<TIterValue>
-    {
-        var values = new Array<TIterValue>();
-        while (true)
-        {
-            var comp = iterator.next();
-            if (comp.done) { break; }
-            values.push(comp.value);
-        }
-        return values;
     }
 }
