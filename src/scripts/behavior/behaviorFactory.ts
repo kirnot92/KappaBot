@@ -7,6 +7,8 @@ import { Load } from "./load";
 import { GetList } from "./getList";
 import { Delete } from "./delete";
 import { Date } from "./date";
+import * as Command from "../../json/command.json";
+
 export var exec = require("child_process").exec;
 
 export default class BehaviorFactory
@@ -15,15 +17,15 @@ export default class BehaviorFactory
     {
         switch(args[0])
         {
-            case "등록":
+            case Command.등록.Key:
                 return new Save(args, channelId);
-            case "목록":
+            case Command.목록.Key:
                 return new GetList(channelId);
-            case "언제":
+            case Command.언제.Key:
                 return new Date(args, channelId);
-            case "삭제":
+            case Command.삭제.Key:
                 return new Delete(args, channelId);
-            case "재부팅":
+            case Command.재부팅.Key:
                 return new Reboot(authorId, bot);
             default:
                 return new Load(args, channelId);

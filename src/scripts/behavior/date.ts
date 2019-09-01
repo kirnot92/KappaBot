@@ -2,6 +2,7 @@ import BehaviorResult from "./behaviorResult";
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
+import * as Command from "../../json/command.json";
 
 export class Date implements IBehavior
 {
@@ -17,7 +18,7 @@ export class Date implements IBehavior
 
     async IsValid(): Promise<boolean>
     {
-        return String.HasValue(this.args[1])  && await FileProcedure.IsValidCommand(this.channelId, this.args[1]);
+        return String.HasValue(this.args, Command.언제.ArgCount)  && await FileProcedure.IsValidCommand(this.channelId, this.args[1]);
     }
 
     async Result(): Promise<BehaviorResult>

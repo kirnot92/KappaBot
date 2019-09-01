@@ -3,6 +3,7 @@ import { Client } from "discord.js";
 import { IBehavior } from "./IBehavior";
 import { exec } from "./behaviorFactory";
 import * as Secret from "../../json/secret.json";
+import * as SystemMessage from "../../json/systemMessge.json";
 
 export class Reboot implements IBehavior
 {
@@ -23,14 +24,15 @@ export class Reboot implements IBehavior
 
     public async Result(): Promise<BehaviorResult>
     {
-        this.bot.user.setActivity("재부팅", { type: "PLAYING" });
+        this.bot.user.setActivity(SystemMessage.OnReboot, { type: "PLAYING" });
         Reboot.isProgress = true;
         exec(Secret.RebootSequence);
-        return new BehaviorResult("재부팅 프로세스 시작");
+        return new BehaviorResult(SystemMessage.StartReboot);
     }
 
     OnFail(): BehaviorResult
     {
-        return Reboot.isProgress ? new BehaviorResult("현재 재부팅 진행중입니다") : new BehaviorResult("나는 나보다 약한 자의 명령은 듣지 않는다");
+        var failReason = Reboot.isProgress ? SystemMessage.RebootOnProgress : SystemMessage.TooWeak;
+        return new BehaviorResult(failReason);
     }
 }

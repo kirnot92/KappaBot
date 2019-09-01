@@ -1,9 +1,9 @@
 
 export default class StringExtension
 {
-    public static HasValue(...values: string[]): boolean
+    public static HasValue(values: string[], count: number): boolean
     {
-        for (var i = 0; i < values.length; ++i)
+        for (var i = 0; i < count; ++i)
         {
             var value = values[i];
             if (value == null || value.length == 0)

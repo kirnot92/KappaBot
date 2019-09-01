@@ -2,6 +2,8 @@ import BehaviorResult from "./behaviorResult";
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
+import * as Command from "../../json/command.json";
+import * as SystemMessage from "../../json/systemMessge.json";
 
 export class Save implements IBehavior
 {
@@ -17,7 +19,7 @@ export class Save implements IBehavior
 
     public async IsValid(): Promise<boolean>
     {
-        var hasValues = String.HasValue(this.args[0], this.args[1], this.args[2]);
+        var hasValues = String.HasValue(this.args, Command.등록.ArgCount);
         this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[1]);
         return hasValues && !this.isSystemCommand;
     }
@@ -34,6 +36,6 @@ export class Save implements IBehavior
 
     CannotRegisterSystemCommand(): BehaviorResult
     {
-        return new BehaviorResult("시스템 기본 명령어는 등록할 수 없습니다.");
+        return new BehaviorResult(SystemMessage.IsSystemMessage);
     }
 }

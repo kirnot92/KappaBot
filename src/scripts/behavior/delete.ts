@@ -2,6 +2,7 @@ import BehaviorResult from "./behaviorResult";
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
+import * as Command from "../../json/command.json";
 
 export class Delete implements IBehavior
 {
@@ -16,7 +17,7 @@ export class Delete implements IBehavior
 
     async IsValid(): Promise<boolean>
     {
-        return String.HasValue(this.args[1]);
+        return String.HasValue(this.args, Command.삭제.ArgCount);
     }
 
     async Result(): Promise<BehaviorResult>

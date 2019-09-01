@@ -2,6 +2,8 @@ import * as path from "path"
 import File from "../promisifier/file"
 import BehaviorResult from "../behavior/behaviorResult";
 import Dictionary from "../collection/dictionary";
+import * as Command from "../../json/command.json";
+import * as SystemMessage from "../../json/systemMessge.json";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "commands")
@@ -29,7 +31,7 @@ export default class FileProcedure
         var fileList = arr.join(", ");
         if (fileList.length == 0)
         {
-            return new BehaviorResult("이 채널에 등록된 명령어가 없습니다.")
+            return new BehaviorResult(SystemMessage.NothingSaved);
         }
 
         return new BehaviorResult(fileList);
@@ -44,7 +46,7 @@ export default class FileProcedure
             await File.Delete(path)
         }
 
-        return new BehaviorResult("갓파파");
+        return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
 
@@ -60,7 +62,7 @@ export default class FileProcedure
 
         await File.Write(path, content)
 
-        return new BehaviorResult("갓파파");
+        return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
     public static async Load(identifier: string, command: string): Promise<BehaviorResult>
@@ -89,14 +91,19 @@ export default class FileProcedure
 
     public static DefaultHelp()
     {
-        var content = "기본 명령어\n$등록 [이름] [내용]\n$삭제 [이름]\n$목록\n$언제 [이름]\n$[이름]"
+        var content = "기본 명령어\n"
+        var commands = JSON.parse(JSON.stringify(Command));
+        for (var key in Command)
+        {
+            if (commands[key].IsAdminCommand) { continue; }
+            content = content + commands[key].Usage + "\n";
+        }
         return new BehaviorResult(content);
     }
 
     public static IsSystemCommand(command: string)
     {
-        // 규모가 적으니 일단은 수동으로 관리하자
-        var sysCommands = ["등록", "삭제", "목록", "언제", "재부팅"];
+        var sysCommands = Object.keys(Command);
         return sysCommands.includes(command)
     }
 

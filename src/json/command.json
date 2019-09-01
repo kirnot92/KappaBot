@@ -1,0 +1,44 @@
+{
+    "등록":
+    {
+        "Key": "등록",
+        "ArgCount": 3,
+        "Usage": "$등록 [이름] [내용]",
+        "IsAdminCommand": false
+    },
+    "언제":
+    {
+        "Key": "언제",
+        "ArgCount": 2,
+        "Usage": "$언제 [이름]",
+        "IsAdminCommand": false
+    },
+    "목록":
+    {
+        "Key": "목록",
+        "ArgCount": 1,
+        "Usage": "$목록",
+        "IsAdminCommand": false
+    },
+    "삭제":
+    {
+        "Key": "삭제",
+        "ArgCount": 2,
+        "Usage": "$삭제 [이름]",
+        "IsAdminCommand": false
+    },
+    "로드":
+    {
+        "Key": "로드",
+        "ArgCount": 2,
+        "Usage": "$[이름]",
+        "IsAdminCommand": false
+    },
+    "재부팅":
+    {
+        "Key": "재부팅",
+        "ArgCount": 1,
+        "Usage": "",
+        "IsAdminCommand": true
+    }
+}
