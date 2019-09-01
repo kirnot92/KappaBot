@@ -93,6 +93,13 @@ export default class FileProcedure
         return new BehaviorResult(content);
     }
 
+    public static IsSystemCommand(command: string)
+    {
+        // 규모가 적으니 일단은 수동으로 관리하자
+        var sysCommands = ["등록", "삭제", "목록", "언제", "재부팅"];
+        return sysCommands.includes(command)
+    }
+
     public static async IsValidCommand(identifier: string, command: string): Promise<boolean>
     {
         var path = this.GetPath(identifier, command);

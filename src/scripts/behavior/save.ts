@@ -7,6 +7,7 @@ export class Save implements IBehavior
 {
     args: string[];
     channelId: string;
+    isSystemCommand: boolean;
 
     constructor(args: string[], channelId: string)
     {
@@ -16,7 +17,7 @@ export class Save implements IBehavior
 
     public async IsValid(): Promise<boolean>
     {
-        return String.HasValue(this.args[0], this.args[1], this.args[2]);
+        return String.HasValue(this.args[0], this.args[1], this.args[2]) && !(this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[1]));
     }
 
     public async Result(): Promise<BehaviorResult>
@@ -26,6 +27,11 @@ export class Save implements IBehavior
 
     public OnFail(): BehaviorResult
     {
-        return FileProcedure.DefaultHelp();
+        return this.isSystemCommand ? this.CannotRegisterSystemCommand() : FileProcedure.DefaultHelp();
+    }
+
+    CannotRegisterSystemCommand(): BehaviorResult
+    {
+        return new BehaviorResult("시스템 기본 명령어는 등록할 수 없습니다.");
     }
 }
