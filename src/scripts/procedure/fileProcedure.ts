@@ -3,6 +3,7 @@ import File from "../promisifier/file"
 import BehaviorResult from "../behavior/behaviorResult";
 import Dictionary from "../collection/dictionary";
 import * as Command from "../../json/command.json";
+import * as Config from "../../json/config.json";
 import * as SystemMessage from "../../json/systemMessge.json";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
@@ -96,7 +97,7 @@ export default class FileProcedure
         for (var key in Command)
         {
             if (commands[key].IsAdminCommand) { continue; }
-            content = content + commands[key].Usage + "\n";
+            content = content + Config.Prefix + commands[key].Usage + "\n";
         }
         return new BehaviorResult(content);
     }
