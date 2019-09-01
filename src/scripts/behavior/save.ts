@@ -17,7 +17,9 @@ export class Save implements IBehavior
 
     public async IsValid(): Promise<boolean>
     {
-        return String.HasValue(this.args[0], this.args[1], this.args[2]) && !(this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[1]));
+        var hasValues = String.HasValue(this.args[0], this.args[1], this.args[2]);
+        this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[1]);
+        return hasValues && !this.isSystemCommand;
     }
 
     public async Result(): Promise<BehaviorResult>
