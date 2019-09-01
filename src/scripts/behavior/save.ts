@@ -21,7 +21,7 @@ export class Save implements IBehavior
 
     public async Result(): Promise<BehaviorResult>
     {
-        return await FileProcedure.Save(this.channelId, this.args[1], this.args.slice(2).join(' '));
+        return await FileProcedure.Save(this.channelId, this.args[1], this.args[2]);
     }
 
     public OnFail(): BehaviorResult
