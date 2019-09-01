@@ -92,7 +92,7 @@ export default class FileProcedure
     public static DefaultHelp()
     {
         var content = "기본 명령어\n"
-        var commands = JSON.parse(JSON.stringify(Command));
+        var commands = Command as any;
         for (var key in Command)
         {
             if (commands[key].IsAdminCommand) { continue; }
