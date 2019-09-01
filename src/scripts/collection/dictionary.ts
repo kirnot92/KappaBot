@@ -5,11 +5,13 @@ export default class Dictionary<TKey, TValue>
 
     constructor(init?: { key: TKey; value: TValue; }[])
     {
-        if (init === undefined) {
+        if (init === undefined)
+        {
             return
         }
 
-        for (const { key, value } of init) {
+        for (const { key, value } of init)
+        {
             this.Add(key, value);
         }
     }
