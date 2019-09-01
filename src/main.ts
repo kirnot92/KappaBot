@@ -12,8 +12,8 @@ import String from "./scripts/extension/stringExtension";
 class DiscordBot
 {
     private bot : Client
-    private currentStatus: number = 0
-    private statusList: Array<string>
+    private currentActivityIndex: number = 0
+    private activityList: Array<string>
 
     constructor()
     {
@@ -21,12 +21,12 @@ class DiscordBot
         this.bot.on("message", async (msg) => await this.OnMessage(msg));
         this.bot.on("ready", async () => await this.OnReady());
 
-        this.statusList = new Array<string>();
+        this.activityList = new Array<string>();
         Playing.Message.forEach((elem: string) =>
         {
-            this.statusList.push(elem);
+            this.activityList.push(elem);
         });
-        this.currentStatus = Math.Range(0, this.statusList.length);
+        this.currentActivityIndex = Math.Range(0, this.activityList.length);
     }
 
     public async Login()
@@ -35,14 +35,16 @@ class DiscordBot
 
         BackgroundJob.Run(async () =>
         {
-            await this.SetNextStatus();
+            await this.SetNextActivitymessage();
         }, BackgroundJob.HourInterval);
     }
 
-    async SetNextStatus()
+    async SetNextActivitymessage()
     {
-        await this.bot.user.setActivity(this.statusList[this.currentStatus], { type: "PLAYING"});
-        this.currentStatus = (this.currentStatus + 1) % this.statusList.length;
+        // 명령어 호출용 prefix를 달아서 호출 방법을 안내하게 하는 목적
+        var currentActivity = Config.Prefix + this.activityList[this.currentActivityIndex];
+        await this.bot.user.setActivity(currentActivity, { type: "PLAYING"});
+        this.currentActivityIndex = (this.currentActivityIndex + 1) % this.activityList.length;
     }
 
     async OnReady()
