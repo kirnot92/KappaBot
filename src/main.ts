@@ -26,7 +26,7 @@ class DiscordBot
         {
             this.activityList.push(elem);
         });
-        this.currentActivityIndex = Math.Range(0, this.activityList.length);
+        this.currentActivityIndex = Math.Range(0, this.activityList.length - 1);
     }
 
     public async Login()
