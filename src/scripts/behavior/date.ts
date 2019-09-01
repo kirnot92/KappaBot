@@ -10,13 +10,14 @@ export class Date implements IBehavior
 
     constructor(args: string[], channelId: string)
     {
+        
         this.args = args;
         this.channelId = channelId;
     }
 
     async IsValid(): Promise<boolean>
     {
-        return String.HasValue(this.args[1]);
+        return String.HasValue(this.args[1])  && await FileProcedure.IsValidCommand(this.channelId, this.args[1]);
     }
 
     async Result(): Promise<BehaviorResult>
