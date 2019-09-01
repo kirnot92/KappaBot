@@ -1,6 +1,6 @@
-import * as Secret from './json/secret.json';
-import * as Config from './json/config.json';
-import * as Playing from './json/playing.json';
+import * as Secret from "./json/secret.json";
+import * as Config from "./json/config.json";
+import * as Playing from "./json/playing.json";
 import {Client, Message as MessageContainer, User} from "discord.js";
 import BackgroundJob from "./scripts/backgroundJob";
 import {AnyChannel} from "./scripts/extension/typeExtension";
@@ -17,8 +17,8 @@ class DiscordBot
     constructor()
     {
         this.bot = new Client();
-        this.bot.on('message', async (msg) => await this.OnMessage(msg));
-        this.bot.on('ready', async () => await this.OnReady());
+        this.bot.on("message", async (msg) => await this.OnMessage(msg));
+        this.bot.on("ready", async () => await this.OnReady());
 
         this.statusList = new Array<string>();
         Playing.Message.forEach((elem: string) =>
@@ -34,7 +34,7 @@ class DiscordBot
 
         BackgroundJob.Run(async () =>
         {
-           await this.SetNextStatus();
+            await this.SetNextStatus();
         }, BackgroundJob.HourInterval);
     }
 
