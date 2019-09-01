@@ -7,7 +7,7 @@ import { Load } from "./load";
 import { GetList } from "./getList";
 import { Delete } from "./delete";
 import { Date } from "./date";
-export var exec = require('child_process').exec;
+export var exec = require("child_process").exec;
 
 export default class BehaviorFactory
 {

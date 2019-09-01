@@ -1,5 +1,5 @@
 import BehaviorResult from "./behaviorResult";
-import String from '../extension/stringExtension';
+import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
 

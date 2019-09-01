@@ -19,12 +19,12 @@ export default class FileProcedure
         var arr = new Array<string>()
 
         files.forEach(element =>
+        {
+            if (element.includes(identifier))
             {
-                if (element.includes(identifier))
-                {
-                    arr.push(element.replace(".txt", "").replace(identifier + ".", ""))
-                }
-            })
+                arr.push(element.replace(".txt", "").replace(identifier + ".", ""))
+            }
+        })
 
         var fileList = arr.join(", ");
         if (fileList.length == 0)

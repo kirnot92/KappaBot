@@ -1,0 +1,29 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint/eslint-plugin"
+    ],
+    "rules": {
+        "quotes": [
+            "warn",
+            "double"
+        ],
+        "indent": [
+            "warn",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "brace-style": [
+            "warn",
+            "allman",
+            {
+                "allowSingleLine": true
+            }
+        ]
+    }
+}

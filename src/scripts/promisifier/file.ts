@@ -1,5 +1,5 @@
 import * as Utill from "util"
-import * as FileRaw from 'fs'
+import * as FileRaw from "fs"
 
 export default class File
 {
