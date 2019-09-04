@@ -16,13 +16,18 @@ export default class Dictionary<TKey, TValue>
         }
     }
 
+    public Set(key: TKey, value: TValue)
+    {
+        this._map.set(key, value);
+    }
+
     public Add(key: TKey, value: TValue)
     {
         if (this.ContainsKey(key))
         {
             throw new Error("키 중복");
         }
-        this._map.set(key, value);
+        this.Set(key, value);
     }
 
     public Remove(key: TKey): boolean

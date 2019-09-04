@@ -12,24 +12,26 @@ const COMMANDS_OLD = path.join(ROOT, "commandsOld")
 
 export default class FileProcedure
 {
-    // TODO 목록 채널별로 캐싱하게 하자. 파일 목록 늘어나면 점점 느려질 듯
-    // 캐싱 필요할 땐 그냥 키를 지워버리면 됨
     static cacheList: Dictionary<string, string> = new Dictionary<string, string>();
 
     public static async GetList(identifier: string): Promise<BehaviorResult>
     {
         var files = await File.ReadDir(COMMANDS);
-        var arr = new Array<string>();
 
-        files.forEach(element =>
+        if (!this.cacheList.ContainsKey(identifier))
         {
-            if (element.includes(identifier))
+            var arr = new Array<string>();
+            files.forEach(element =>
             {
-                arr.push(element.replace(".txt", "").replace(identifier + ".", ""));
-            }
-        })
+                if (element.includes(identifier))
+                {
+                    arr.push(element.replace(".txt", "").replace(identifier + ".", ""));
+                }
+            })
+            this.cacheList.Add(identifier, arr.join(", "));
+        }
 
-        var fileList = arr.join(", ");
+        var fileList = this.cacheList.MustGet(identifier);
         if (fileList.length == 0)
         {
             return new BehaviorResult(SystemMessage.NothingSaved);
@@ -47,6 +49,7 @@ export default class FileProcedure
             await File.Delete(path);
         }
 
+        this.cacheList.Remove(identifier);
         return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
@@ -63,6 +66,7 @@ export default class FileProcedure
 
         await File.Write(path, content);
 
+        this.cacheList.Remove(identifier);
         return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
