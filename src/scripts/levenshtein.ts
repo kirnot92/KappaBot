@@ -15,7 +15,7 @@ const moum_list = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ'
 // https://lovit.github.io/nlp/2018/08/28/levenshtein_hangle/
 export default class Levenshtein
 {
-    Compose(chosung:string , jungsung:string, jongsung:string)
+    public static Compose(chosung:string , jungsung:string, jongsung:string)
     {
         var char = String.fromCharCode(
             korBegin +
@@ -25,7 +25,7 @@ export default class Levenshtein
         return char;
     }
 
-    Decompose(c:string): string
+    public static Decompose(c:string): string
     {
         var i = c.charCodeAt(0);
         if (jaumBegin <= i && i <= jaumEnd) { return c + " " + " " }
@@ -38,13 +38,13 @@ export default class Levenshtein
         return chosung_list[cho]+ jungsung_list[jung]+ jongsung_list[jong];
     }
 
-    CalculateSubstitutionCost(c1: string, c2:string)
+    public static CalculateSubstitutionCost(c1: string, c2:string)
     {
         if (c1[0] == c2[0]) {return 0;}
         return this.GetDistanceInternal(this.Decompose(c1), this.Decompose(c2))/3
     }
-    
-    GetDistanceInternal(s1: string, s2:string)
+
+    public static GetDistanceInternal(s1: string, s2:string)
     {
         if (s1.length < s2.length) { this.GetDistanceInternal(s2, s1); }
         if (s2.length == 0) { return s1.length; }
@@ -77,11 +77,11 @@ export default class Levenshtein
         return prevRow[prevRow.length-1];
     }
 
-    GetDistance(s1:string, s2 :string)
+    public static GetDistance(s1:string, s2 :string)
     {
         if (s1.length < s2.length) { this.GetDistance(s2, s1); }
         if (s2.length == 0) { return s1.length; }
-        
+
         var prevRow = new Array<number>(s2.length + 1);
         for(var x = 0; x< prevRow.length; ++x)
         {

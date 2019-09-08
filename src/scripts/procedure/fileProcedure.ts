@@ -5,6 +5,7 @@ import Dictionary from "../collection/dictionary";
 import * as Command from "../../json/command.json";
 import * as Config from "../../json/config.json";
 import * as SystemMessage from "../../json/systemMessge.json";
+import Levenshtein from "../levenshtein";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "commands")
@@ -13,6 +14,48 @@ const COMMANDS_OLD = path.join(ROOT, "commandsOld")
 export default class FileProcedure
 {
     static cacheList: Dictionary<string, string> = new Dictionary<string, string>();
+
+    public static async 거리가_가까운_명령어_찾기(identifier: string, command: string): Promise<string>
+    {
+        var list = await this.GetListAsArray(identifier);
+
+        var minDistance = Number.MAX_SAFE_INTEGER;
+        var minDistanceCommand = "";
+        for(var i=0; i<list.length; ++i)
+        {
+            var component = list[i];
+            var distance = Levenshtein.GetDistance(command, component);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                minDistanceCommand = component;
+            }
+        }
+
+        // 거리가 2보다 멀면 너무 잘못 친걸로 간주한다
+        if (minDistanceCommand.length != 0 && minDistance <= 2)
+        {
+            return minDistanceCommand;
+        }
+        return "";
+    }
+
+    static async GetListAsArray(identifier: string): Promise<Array<string>>
+    {
+        var files = await File.ReadDir(COMMANDS);
+
+        var arr = new Array<string>();
+        files.forEach(element =>
+        {
+            if (element.includes(identifier))
+            {
+                arr.push(element.replace(".txt", "").replace(identifier + ".", ""));
+            }
+        })
+
+        return arr;
+    }
 
     public static async GetList(identifier: string): Promise<BehaviorResult>
     {

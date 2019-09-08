@@ -6,23 +6,43 @@ import * as Command from "../../json/command.json";
 
 export class Load implements IBehavior
 {
+    prefixMessage: string;
     command: string;
     channelId: string;
 
     constructor(args: string[], channelId: string)
     {
+        this.prefixMessage = "";
         this.command = args[0]
         this.channelId = channelId;
     }
 
     async IsValid(): Promise<boolean>
     {
-        return String.HasValue([this.command], Command.로드.ArgCount) && await FileProcedure.IsValidCommand(this.channelId, this.command);
+        var hasValue = String.HasValue([this.command], Command.로드.ArgCount);
+        if (!hasValue) { return false; }
+
+        var isValid = await FileProcedure.IsValidCommand(this.channelId, this.command);
+        if (isValid) { return true; }
+
+        var similiar = await FileProcedure.거리가_가까운_명령어_찾기(this.channelId, this.command);
+        if (similiar.length > 0) 
+        {
+            this.prefixMessage = "[$"+ similiar +"]\n";
+            this.command = similiar;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     async Result(): Promise<BehaviorResult>
     {
-        return await FileProcedure.Load(this.channelId, this.command);
+        var result =  await FileProcedure.Load(this.channelId, this.command);
+        result.Message = this.prefixMessage + result.Message;
+        return result;
     }
 
     public OnFail(): BehaviorResult
