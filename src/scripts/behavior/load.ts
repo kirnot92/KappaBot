@@ -25,17 +25,12 @@ export class Load implements IBehavior
         var isValid = await FileProcedure.IsValidCommand(this.channelId, this.command);
         if (isValid) { return true; }
 
-        var similiar = await FileProcedure.거리가_가까운_명령어_찾기(this.channelId, this.command);
-        if (similiar.length > 0) 
-        {
-            this.prefixMessage = "[$"+ similiar +"]\n";
-            this.command = similiar;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        var similar = await FileProcedure.FindSimilarCommand(this.channelId, this.command);
+        if (similar.length == 0) { return false; }
+
+        this.prefixMessage = "[$"+ similar +"]\n";
+        this.command = similar;
+        return true;
     }
 
     async Result(): Promise<BehaviorResult>

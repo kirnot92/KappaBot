@@ -15,7 +15,7 @@ export default class FileProcedure
 {
     static cacheList: Dictionary<string, string> = new Dictionary<string, string>();
 
-    public static async 거리가_가까운_명령어_찾기(identifier: string, command: string): Promise<string>
+    public static async FindSimilarCommand(identifier: string, invalidCommand: string): Promise<string>
     {
         var list = await this.GetListAsArray(identifier);
 
@@ -23,7 +23,7 @@ export default class FileProcedure
         for (var i=0; i<list.length; ++i)
         {
             var component = list[i];
-            var searchResult = component.search(command);
+            var searchResult = component.search(invalidCommand);
             if (searchResult != -1)
             {
                 return component;
@@ -36,7 +36,7 @@ export default class FileProcedure
         for(var i=0; i<list.length; ++i)
         {
             var component = list[i];
-            var distance = Levenshtein.GetDistance(command, component);
+            var distance = Levenshtein.GetDistance(invalidCommand, component);
             if (distance < minDistance)
             {
                 minDistance = distance;
