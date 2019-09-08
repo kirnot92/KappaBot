@@ -65,7 +65,7 @@ export default class Levenshtein
                 var c2 = s2[k];
 
                 var insertions = prevRow[k+1] + 1;
-                var deletions = currRow[k] + 1;
+                var deletions = (currRow[k] + 1) * 0.9; // 보통 한 글자를 빼먹는 경우가 많아서 보정 넣어봄...
                 var substitutions = prevRow[k] + ((c1 != c2) ? 1 : 0);
 
                 currRow.push(Math.min(insertions, deletions, substitutions));
