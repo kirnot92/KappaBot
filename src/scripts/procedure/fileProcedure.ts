@@ -37,7 +37,6 @@ export default class FileProcedure
         {
             var component = list[i];
             var distance = Levenshtein.GetDistance(command, component);
-            console.log(distance + ' ' + command+ ' ' + component);
             if (distance < minDistance)
             {
                 minDistance = distance;
