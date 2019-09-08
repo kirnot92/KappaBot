@@ -19,13 +19,25 @@ export default class FileProcedure
     {
         var list = await this.GetListAsArray(identifier);
 
+        // 글자를 모자라게 적은 경우 substring으로 판단
+        for (var i=0; i<list.length; ++i)
+        {
+            var component = list[i];
+            var searchResult = component.search(command);
+            if (searchResult != -1)
+            {
+                return component;
+            }
+        }
+
+        // 자음, 모음을 잘못 쓴 경우 단어 거리를 판단
         var minDistance = Number.MAX_SAFE_INTEGER;
         var minDistanceCommand = "";
         for(var i=0; i<list.length; ++i)
         {
             var component = list[i];
             var distance = Levenshtein.GetDistance(command, component);
-
+            console.log(distance + ' ' + command+ ' ' + component);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -33,8 +45,8 @@ export default class FileProcedure
             }
         }
 
-        // 거리가 2보다 멀면 너무 잘못 친걸로 간주한다
-        if (minDistanceCommand.length != 0 && minDistance <= 2)
+        // 거리가 1보다 멀면 너무 잘못 친걸로 간주한다
+        if (minDistanceCommand.length != 0 && minDistance <= 1)
         {
             return minDistanceCommand;
         }
