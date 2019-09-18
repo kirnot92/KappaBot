@@ -1,0 +1,10 @@
+{
+    "IsSystemMessage": "시스템 명령어는 등록할 수 없습니다.",
+    "TooWeak": "나는 나보다 약한 자의 명령은 듣지 않는다.",
+    "RebootOnProgress": "현재 재부팅 진행중입니다.",
+    "NothingSaved": "이 채널에 등록된 명령어가 없습니다.",
+    "Comfirmed": "완료",
+    "StartReboot": "재부팅 프로세스 시작",
+    "OnReboot": "재부팅",
+    "RebootCompleted": "부팅 완료"
+}
