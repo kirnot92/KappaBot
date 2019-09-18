@@ -7,11 +7,11 @@ var jsonExt = ".json";
 class Repository
 {
     fileName: string
-    repo: Dictionary<string, string>
+    repo: Dictionary<string, any>
 
     constructor(fileName: string)
     {
-        this.repo = new Dictionary<string, string>();
+        this.repo = new Dictionary<string, any>();
         var customJsonPath = jsonFolder + fileName + jsonExt;
         var defaultJsonPath = jsonFolder + fileName + examplePostfix + jsonExt;
 
@@ -23,6 +23,16 @@ class Repository
             var value = hasCustomValue ? defaultJson[key] : customJson[key];
             this.repo.Add(key, value);
         }
+    }
+
+    public Values(): Array<any>
+    {
+        return this.repo.Values();
+    }
+
+    public MustGet(key: string)
+    {
+        return this.repo.MustGet(key);
     }
 }
 
