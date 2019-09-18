@@ -73,7 +73,7 @@ class DiscordBot
             var args = String.Slice([message.slice(Config.Prefix.length)], /\s|\n/, 2);
             var behavior = await BehaviorFactory.Create(args, author.id, channel.id, this.bot);
             var result = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
-            channel.send(result.Message, result.Options);
+            await channel.send(result.Message, result.Options);
         }
     }
 }
