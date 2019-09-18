@@ -3,7 +3,7 @@ import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
-import * as SystemMessage from "../../json/systemMessge.json";
+import * as SystemMessage from "../../json/systemMessage.json";
 
 export class Save implements IBehavior
 {

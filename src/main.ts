@@ -1,7 +1,7 @@
 import * as Secret from "./json/secret.json";
 import * as Config from "./json/config.json";
 import * as Playing from "./json/playing.json";
-import * as SystemMessge from "./json/systemMessge.json";
+import * as SystemMessage from "./json/systemMessage.json";
 import {Client, Message as MessageContainer, User} from "discord.js";
 import BackgroundJob from "./scripts/backgroundJob";
 import {AnyChannel} from "./scripts/extension/typeExtension";
@@ -51,7 +51,7 @@ class DiscordBot
     {
         console.log("Bot Ready");
         var defaultChannel = (this.bot.channels.get(Secret.DefaultChannelId) as AnyChannel);
-        defaultChannel.send(SystemMessge.RebootCompleted);
+        defaultChannel.send(SystemMessage.RebootCompleted);
     }
 
     async OnMessage(container: MessageContainer)

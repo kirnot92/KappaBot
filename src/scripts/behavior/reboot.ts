@@ -3,7 +3,7 @@ import { Client } from "discord.js";
 import { IBehavior } from "./IBehavior";
 import { exec } from "./behaviorFactory";
 import * as Secret from "../../json/secret.json";
-import * as SystemMessage from "../../json/systemMessge.json";
+import * as SystemMessage from "../../json/systemMessage.json";
 
 export class Reboot implements IBehavior
 {

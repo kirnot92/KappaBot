@@ -4,7 +4,7 @@ import BehaviorResult from "../behavior/behaviorResult";
 import Dictionary from "../collection/dictionary";
 import * as Command from "../../json/command.json";
 import * as Config from "../../json/config.json";
-import * as SystemMessage from "../../json/systemMessge.json";
+import * as SystemMessage from "../../json/systemMessage.json";
 import Levenshtein from "../levenshtein";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
