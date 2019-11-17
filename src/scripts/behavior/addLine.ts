@@ -5,7 +5,7 @@ import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
 
-export class Save implements IBehavior
+export class AddLine implements IBehavior
 {
     args: string[];
     channelId: string;
@@ -26,7 +26,7 @@ export class Save implements IBehavior
 
     public async Result(): Promise<BehaviorResult>
     {
-        return await FileProcedure.Save(this.channelId, this.args[1], this.args[2]);
+        return await FileProcedure.AddLine(this.channelId, this.args[1], this.args[2]);
     }
 
     public OnFail(): BehaviorResult

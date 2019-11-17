@@ -110,6 +110,47 @@ export default class FileProcedure
         return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
+    public static async RemoveLastLine(identifier: string, command: string): Promise<BehaviorResult>
+    {
+        var path = this.GetPath(identifier, command);
+
+        if (await File.IsExists(path))
+        {
+            var content = await File.ReadFile(path, "utf8");
+            var lines = content.split('\n');
+
+            await this.ArchiveCommand(identifier, command);
+
+            if (lines.length == 1)
+            {
+                await File.Delete(path);
+            }
+            else
+            {
+                lines.pop();
+                var nextContent = lines.join('\n');
+                await File.Write(path, nextContent);
+            }
+        }
+
+        this.cacheList.Remove(identifier);
+        return new BehaviorResult(SystemMessage.Comfirmed);
+    }
+
+    public static async AddLine(identifier: string, title: string, content: string): Promise<BehaviorResult>
+    {
+        var prevContent = "";
+        var path = this.GetPath(identifier, title);
+
+        if (await File.IsExists(path))
+        {
+            prevContent = await File.ReadFile(path, "utf8") + "\n";
+        }
+
+        var nextContent = prevContent + content;
+
+        return await this.Save(identifier, title, nextContent);
+    }
 
     public static async Save(identifier: string, title: string, content: string): Promise<BehaviorResult>
     {

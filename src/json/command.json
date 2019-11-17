@@ -3,7 +3,21 @@
     {
         "Key": "등록",
         "ArgCount": 3,
-        "Usage": "등록 [이름] [내용]",
+        "Usage": "등록 [이름] [내용] : 한 줄을 추가합니다.",
+        "IsAdminCommand": false
+    },
+    "덮어쓰기":
+    {
+        "Key": "덮어쓰기",
+        "ArgCount": 3,
+        "Usage": "덮어쓰기 [이름] [내용] : 내용을 덮어씌웁니다",
+        "IsAdminCommand": false
+    },
+    "마지막줄삭제":
+    {
+        "Key": "마지막줄삭제",
+        "ArgCount": 2,
+        "Usage": "마지막줄삭제 [이름]",
         "IsAdminCommand": false
     },
     "언제":
