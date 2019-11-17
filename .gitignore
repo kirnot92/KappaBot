@@ -1,5 +1,13 @@
-# Created by https://www.gitignore.io/api/node,macos,windows
-# Edit at https://www.gitignore.io/?templates=node,macos,windows
+
+# Created by https://www.gitignore.io/api/node,macos,windows,code
+# Edit at https://www.gitignore.io/?templates=node,macos,windows,code
+
+### Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 ### macOS ###
 # General
@@ -107,6 +115,9 @@ typings/
 # nuxt.js build output
 .nuxt
 
+# react / gatsby 
+public/
+
 # vuepress build output
 .vuepress/dist
 
@@ -145,4 +156,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/node,macos,windows
+# End of https://www.gitignore.io/api/node,macos,windows,code
