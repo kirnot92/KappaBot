@@ -41,10 +41,9 @@ export class Avatar implements IBehavior
     async Result(): Promise<BehaviorResult>
     {
         var user = this.bot.users.get(this.userTag);
-        var userName = user.username;
         var avatarURL = this.RemoveAfterQuestionMark(user.displayAvatarURL);
 
-        return new BehaviorResult(userName + "의 프로필", {files: [avatarURL]});
+        return new BehaviorResult("프로필:", {files: [avatarURL]});
     }
 
     public OnFail(): BehaviorResult
