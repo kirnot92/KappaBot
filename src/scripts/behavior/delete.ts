@@ -17,7 +17,7 @@ export class Delete implements IBehavior
 
     async IsValid(): Promise<boolean>
     {
-        return String.HasValue(this.args, Command.삭제.ArgCount);
+        return String.HasValue(this.args, Command.삭제.ArgCount) && FileProcedure.IsValidCommand(this.channelId, this.args[1]);
     }
 
     async Result(): Promise<BehaviorResult>
