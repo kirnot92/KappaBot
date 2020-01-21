@@ -58,7 +58,14 @@ class DiscordBot
     {
         try
         {
-            this.HandleMessage(container.content, container.channel, container.author);
+            var content = container.content;
+            var attachments = container.attachments.array();
+            if (attachments.length != 0)
+            {
+                content = content + " " + attachments[0].url;
+            }
+
+            this.HandleMessage(content, container.channel, container.author);
         }
         catch (e)
         {
