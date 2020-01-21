@@ -54,12 +54,5 @@
         "ArgCount": 1,
         "Usage": "",
         "IsAdminCommand": true
-    },
-    "아바타":
-    {
-        "Key": "아바타",
-        "ArgCount": 1,
-        "Usage": "[유저멘션]",
-        "IsAdminCommand": false
     }
 }

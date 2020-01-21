@@ -10,7 +10,6 @@ import { Date } from "./date";
 import { Override } from "./override";
 import { RemoveLastLine } from "./removeLastLine";
 import * as Command from "../../json/command.json";
-import { Avatar } from "./avatar";
 
 export var exec = require("child_process").exec;
 
@@ -34,8 +33,6 @@ export default class BehaviorFactory
                 return new Delete(args, channelId);
             case Command.재부팅.Key:
                 return new Reboot(authorId, bot);
-            case Command.아바타.Key:
-                return new Avatar(args, channelId, bot);
             default:
                 return new Load(args, channelId);
         }
