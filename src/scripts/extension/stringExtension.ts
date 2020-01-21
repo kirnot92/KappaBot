@@ -14,6 +14,20 @@ export default class StringExtension
         return true;
     }
 
+    public static IndexOf(value: string, str: string): number
+    {
+        for (var i = 0; i< value.length; ++i)
+        {
+            var char = value[i];
+            if (str == char)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public static Slice(args: Array<string>, regExp: RegExp, times: number): Array<string>
     {
         if (times == 0) { return args; }

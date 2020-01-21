@@ -28,7 +28,7 @@ export class Avatar implements IBehavior
         }
 
         var userTagStr = this.args[1];
-        if (!(userTagStr.startsWith('<@') && userTagStr.endsWith('>')))
+        if (!(userTagStr.startsWith("<@") && userTagStr.endsWith(">")))
         {
             return false;
         }
@@ -42,13 +42,24 @@ export class Avatar implements IBehavior
     {
         var user = this.bot.users.get(this.userTag);
         var userName = user.username;
-        var displayAvatarURL = user.displayAvatarURL;
+        var avatarURL = this.RemoveAfterQuestionMark(user.displayAvatarURL);
 
-        return new BehaviorResult(userName + "의 프로필", {files: [displayAvatarURL]});
+        return new BehaviorResult(userName + "의 프로필", {files: [avatarURL]});
     }
 
     public OnFail(): BehaviorResult
     {
         return FileProcedure.DefaultHelp();
+    }
+
+    RemoveAfterQuestionMark(url: string): string
+    {
+        var index = String.IndexOf(url, "?");
+        if (index != -1)
+        {
+            return url.substr(0, index);
+        }
+
+        return url;
     }
 }
