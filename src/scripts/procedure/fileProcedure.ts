@@ -47,6 +47,8 @@ export default class FileProcedure
         // 거리가 1보다 멀고 50% 이상 틀렸으면 너무 잘못 친걸로 간주한다
         var length = minDistanceCommand.length;
         var isAcceptableDistance = minDistance <= 1;
+
+        var gg = (minDistance / length) ;
         var isAcceptableErrorRate = length != 0 ? (minDistance / length) <= 0.5 : false;
         if (isAcceptableDistance && isAcceptableErrorRate)
         {

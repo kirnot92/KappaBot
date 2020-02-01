@@ -2,6 +2,7 @@ import * as Secret from "./json/secret.json";
 import * as Config from "./json/config.json";
 import * as Playing from "./json/playing.json";
 import * as SystemMessage from "./json/systemMessage.json";
+import * as Blacklist from "./json/blacklist.json";
 import {Client, Message as MessageContainer, User} from "discord.js";
 import BackgroundJob from "./scripts/backgroundJob";
 import {AnyChannel} from "./scripts/extension/typeExtension";
@@ -77,11 +78,31 @@ class DiscordBot
     {
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
+            if (this.IsBlacklist(author.id))
+            {
+                await channel.send("블랙리스트 유저입니다.");
+                return;
+            }
+
             var args = String.Slice([message.slice(Config.Prefix.length)], /\s|\n/, 2);
             var behavior = await BehaviorFactory.Create(args, author.id, channel.id, this.bot);
             var result = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
             await channel.send(result.Message, result.Options);
         }
+    }
+
+    IsBlacklist(authorId: string): boolean
+    {
+        var blacklist = Blacklist as any;
+        for (var blacklistId in blacklist)
+        {
+            if (blacklistId == authorId)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
