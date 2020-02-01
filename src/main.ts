@@ -94,8 +94,9 @@ class DiscordBot
     IsBlacklist(authorId: string): boolean
     {
         var blacklist = Blacklist as any;
-        for (var blacklistId in blacklist)
+        for (var key in blacklist)
         {
+            var blacklistId = blacklist[key];
             if (blacklistId == authorId)
             {
                 return true;
