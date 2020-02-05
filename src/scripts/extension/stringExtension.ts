@@ -25,4 +25,9 @@ export default class StringExtension
         args.push(target.slice(match.index + 1));
         return this.Slice(args, regExp, times -1);
     }
+
+    public static Join(seperator: string, ...values: string[] ): string
+    {
+        return values.join(seperator);
+    }
 }
