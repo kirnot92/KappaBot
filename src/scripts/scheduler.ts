@@ -1,8 +1,13 @@
 import { RecurrenceRule, Job, scheduleJob } from "node-schedule";
+import * as Path from "path"
 import File from "../scripts/promisifier/file";
 import Dictionary from "../scripts/collection/dictionary";
 import BehaviorFactory from "./behavior/behaviorFactory";
-import {Client, Channel, MessageOptions, TextChannel } from 'discord.js'
+import {Client, Channel, MessageOptions, TextChannel } from "discord.js"
+import String from "../scripts/extension/stringExtension";
+
+const ROOT = Path.resolve(__dirname, "..", "..", "..")
+const SCHEDULE_PATH = Path.join(ROOT, "schedule")
 
 export default class ScheduleHandler
 {
@@ -14,54 +19,83 @@ export default class ScheduleHandler
         this.client = client;
     }
 
-    public async 밖에서사용하는경우예제(identifier: string, day: string, hour: string, command: string)
-    {
-        await this.WriteSchedule(identifier, day, hour, command);
-        await this.RegisterSchedule(identifier, day, hour, command);
-    }
-
     public async LoadSchedule() // 부팅 시 한 번 불림
     {
-        var fileNames = await File.ReadDir("./schedule/")
+        var fileNames = await File.ReadDir(SCHEDULE_PATH);
+
         for (var i=0; i < fileNames.length; ++i)
         {
-            var fileName = fileNames[i].replace('.txt', '');
-            var identifier, day, hour, others = fileName.split('.');
-            var command = await File.ReadFile('./schedule/' + fileName, "utf8");
+            var fileName = fileNames[i];
+            var filePath = Path.join(SCHEDULE_PATH, fileName);
+            var command = await File.ReadFile(filePath, "utf8");
+            
+            var identifier, day, hour, others = fileName.replace(".txt","").split(".");
             await this.RegisterSchedule(identifier, day, hour, command);
         }
     }
 
-    public async WriteSchedule(channelId: string, day: string, hour: string, command: string)
+    async WriteSchedule(channelId: string, dayRaw: string, hourRaw: string, command: string)
     {
-        var path = "./schedule/" + channelId + "." + day + "." + hour
-        await File.Write(path, command)
+        var day = this.ParseDayOfWeek(dayRaw);
+        var hour = this.ParseHour(hourRaw);
+        var path = this.GetPath(channelId, day, hour);
+
+        this.RegisterSchedule(channelId, day, hour, command);
+       
+        await File.Write(Path.join(SCHEDULE_PATH, path), command);
     }
 
-    async RegisterSchedule(identifier: string, day: string, hour: string, command: string)
+    public RegisterSchedule(channelId: string, day: number, hour: number, command: string)
     {
-        var jobCreater = await this.GetJobCreater(identifier, day, hour, command);
-        jobCreater.Create(async () =>
+        var rule = this.CreateRule(day, hour);
+
+        var job = scheduleJob("* * * * *", async () =>
         {
-            var annonymousAuthorId = "-1";
-            var behavior = await BehaviorFactory.Create([command], annonymousAuthorId, identifier, this.client);
-            var message = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
-
-            var channel = (this.client.channels.get(identifier) as TextChannel);
-            channel.send(message);
+            this.OnSchedule(channelId, command);
         });
+
+        var path = this.GetPath(channelId, day, hour);
+        
+        if (this.onRunning.ContainsKey(path))
+        {
+            var runningJob = this.onRunning.MustGet(path);
+            runningJob.cancel();
+        }
+
+        this.onRunning.Add(path, job);
     }
 
-    GetRule(day: string, hour: string): RecurrenceRule
+    async OnSchedule(channelId: string, command: string)
+    {
+        var annonymousAuthorId = "-1";
+        var behavior = await BehaviorFactory.Create([command], annonymousAuthorId, channelId, this.client);
+        var message = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
+
+        var channel = (this.client.channels.get(channelId) as TextChannel);
+        channel.send(message);
+        // 흑흑 샌드까지 되는데
+    }
+
+    GetPath(channelId: string, day: number, hour: number): string
+    {
+        return String.Join(".", channelId, day.toString(), hour.toString());
+    }
+
+
+    CreateRule(day: number, hour: number): RecurrenceRule
     {
         var rule = new RecurrenceRule();
-        rule.dayOfWeek =  this.Parse(day);
-        rule.hour = parseInt(hour.replace("시", ""));
-        rule.minute = 0
-        return rule
+        if (day != -1)
+        {
+            rule.dayOfWeek = day;
+        }
+        rule.hour = hour;
+        //rule.minute = 0; 테스트로 임시
+
+        return rule;
     }
 
-    Parse(day: string): number
+    ParseDayOfWeek(day: string): number
     {
         switch(day)
         {
@@ -79,41 +113,12 @@ export default class ScheduleHandler
             case "금": return 5;
             case "토": return 6;
             case "일": return 7;
+            case "매일": return -1;
         }
     }
 
-    async GetJobCreater(identifier: string, day: string, hour: string, command: string): Promise<JobCreater>
+    ParseHour(hour: string): number
     {
-        var path = "./schedule/" + identifier + "." + day + "." + hour
-
-        if (this.onRunning.ContainsKey(path))
-        {
-            var scheduleJob = this.onRunning.MustGet(path)
-            scheduleJob.cancel()
-        }
-
-        var rule = this.GetRule(day, hour)
-        return new JobCreater(rule, (job:Job)=>
-        {
-            this.onRunning.Add(path, job);
-        })
-    }
-}
-
-export class JobCreater
-{
-    rule: RecurrenceRule
-    onCreate: (job: Job) => void
-
-    constructor(rule: RecurrenceRule, onCreate: (job:Job) => void)
-    {
-        this.rule = rule;
-        this.onCreate = onCreate;
-    }
-
-    public Create(func: Function)
-    {
-        var job = scheduleJob(this.rule, () => func());
-        this.onCreate(job);
+        return parseInt(hour.replace("시", ""));
     }
 }
