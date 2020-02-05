@@ -48,7 +48,6 @@ export default class FileProcedure
         var length = minDistanceCommand.length;
         var isAcceptableDistance = minDistance <= 1;
 
-        var gg = (minDistance / length) ;
         var isAcceptableErrorRate = length != 0 ? (minDistance / length) <= 0.5 : false;
         if (isAcceptableDistance && isAcceptableErrorRate)
         {
