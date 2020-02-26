@@ -174,9 +174,19 @@ export default class FileProcedure
         var path = this.GetPath(identifier, command);
         var content = await File.ReadFile(path, "utf8");
 
-        if (content.startsWith("https://") && this.IsImageExtension(content))
+        var splited = content.split('\n');
+        var files = new Array<string>();
+        for (var line in splited)
         {
-            return new BehaviorResult("", {files: [content]});
+            if (line.startsWith("https://") && this.IsImageExtension(line))
+            {
+                files.push(line);
+            }
+        }
+
+        if (files.length == splited.length)
+        {
+            return new BehaviorResult("", {files});
         }
         else
         {
