@@ -176,13 +176,14 @@ export default class FileProcedure
 
         var splited = content.split('\n');
         var files = new Array<string>();
-        for (var line in splited)
+
+        splited.forEach(line =>
         {
             if (line.startsWith("https://") && this.IsImageExtension(line))
             {
                 files.push(line);
             }
-        }
+        });
 
         if (files.length == splited.length)
         {
