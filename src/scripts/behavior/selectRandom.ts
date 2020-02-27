@@ -21,7 +21,7 @@ export class SelectRandom implements IBehavior
     async Result(): Promise<BehaviorResult>
     {
         // "랜덤" 제외하고 나머지 중에 하나
-        var randomIndex = Math.Range(1, this.args.length - 1);
+        var randomIndex = Math.Range(0, this.args.length - 1);
         var result = this.args[randomIndex];
 
         return new BehaviorResult(result);
