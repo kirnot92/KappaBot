@@ -84,8 +84,12 @@ class DiscordBot
                 return;
             }
 
-            var args = String.Slice([message.slice(Config.Prefix.length)], /\s|\n/, 2);
-            var behavior = await BehaviorFactory.Create(args, author.id, channel.id, this.bot);
+            var prefixRemoved = message.slice(Config.Prefix.length);
+            var args = String.Slice([prefixRemoved], /\s|\n/, 1);
+            var command = args[0];
+            var others = args[1];
+
+            var behavior = await BehaviorFactory.Create(command, others, author.id, channel.id, this.bot);
             var result = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
             await channel.send(result.Message, result.Options);
         }

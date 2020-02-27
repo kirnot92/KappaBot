@@ -11,9 +11,9 @@ export class RemoveLastLine implements IBehavior
     channelId: string;
     isSystemCommand: boolean;
 
-    constructor(args: string[], channelId: string)
+    constructor(args: string, channelId: string)
     {
-        this.args = args;
+        this.args = String.Slice([args], /\s|\n/, Command.마지막줄삭제.ArgCount);;
         this.channelId = channelId;
     }
 
@@ -24,7 +24,7 @@ export class RemoveLastLine implements IBehavior
 
     public async Result(): Promise<BehaviorResult>
     {
-        return await FileProcedure.RemoveLastLine(this.channelId, this.args[1]);
+        return await FileProcedure.RemoveLastLine(this.channelId, this.args[0]);
     }
 
     public OnFail(): BehaviorResult

@@ -11,22 +11,22 @@ export class Override implements IBehavior
     channelId: string;
     isSystemCommand: boolean;
 
-    constructor(args: string[], channelId: string)
+    constructor(args: string, channelId: string)
     {
-        this.args = args;
+        this.args = this.args = String.Slice([args], /\s|\n/, Command.덮어쓰기.ArgCount);;
         this.channelId = channelId;
     }
 
     public async IsValid(): Promise<boolean>
     {
         var hasValues = String.HasValue(this.args, Command.덮어쓰기.ArgCount);
-        this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[1]);
+        this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[0]);
         return hasValues && !this.isSystemCommand;
     }
 
     public async Result(): Promise<BehaviorResult>
     {
-        return await FileProcedure.Save(this.channelId, this.args[1], this.args[2]);
+        return await FileProcedure.Save(this.channelId, this.args[0], this.args[1]);
     }
 
     public OnFail(): BehaviorResult

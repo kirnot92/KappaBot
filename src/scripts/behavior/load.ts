@@ -10,10 +10,10 @@ export class Load implements IBehavior
     command: string;
     channelId: string;
 
-    constructor(args: string[], channelId: string)
+    constructor(command: string, channelId: string)
     {
         this.prefixMessage = "";
-        this.command = args[0]
+        this.command = command;
         this.channelId = channelId;
     }
 

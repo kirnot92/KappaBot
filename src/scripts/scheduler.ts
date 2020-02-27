@@ -68,7 +68,7 @@ export default class ScheduleHandler
     async OnSchedule(channelId: string, command: string)
     {
         var annonymousAuthorId = "-1";
-        var behavior = await BehaviorFactory.Create([command], annonymousAuthorId, channelId, this.client);
+        var behavior = await BehaviorFactory.Create(command, "", annonymousAuthorId, channelId, this.client);
         var message = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
 
         var channel = (this.client.channels.get(channelId) as TextChannel);

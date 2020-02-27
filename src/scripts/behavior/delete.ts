@@ -9,20 +9,21 @@ export class Delete implements IBehavior
     args: string[];
     channelId: string;
 
-    constructor(args: string[], channelId: string)
+    constructor(args: string, channelId: string)
     {
-        this.args = args;
+        this.args = String.Slice([args], /\s|\n/, Command.삭제.ArgCount);
         this.channelId = channelId;
     }
 
     async IsValid(): Promise<boolean>
     {
-        return String.HasValue(this.args, Command.삭제.ArgCount) && FileProcedure.IsValidCommand(this.channelId, this.args[1]);
+        return String.HasValue(this.args, Command.삭제.ArgCount)
+            && FileProcedure.IsValidCommand(this.channelId, this.args[0]);
     }
 
     async Result(): Promise<BehaviorResult>
     {
-        return await FileProcedure.Delete(this.channelId, this.args[1]);
+        return await FileProcedure.Delete(this.channelId, this.args[0]);
     }
 
     public OnFail(): BehaviorResult
