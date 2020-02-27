@@ -54,5 +54,12 @@
         "ArgCount": 1,
         "Usage": "",
         "IsAdminCommand": true
+    },
+    "랜덤":
+    {
+        "Key": "랜덤",
+        "ArgCount": 3,
+        "Usage": "랜덤 [대상1] [대상2] ... : 대상 중 하나를 골라줍니다.",
+        "IsAdminCommand": false
     }
 }
