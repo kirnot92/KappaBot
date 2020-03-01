@@ -179,7 +179,7 @@ export default class FileProcedure
 
         splited.forEach(line =>
         {
-            if (line.startsWith("https://") && this.IsImageExtension(line))
+            if (line.startsWith("https://") && this.HasFileExtension(line))
             {
                 files.push(line);
             }
@@ -228,9 +228,9 @@ export default class FileProcedure
         return await File.IsExists(path);
     }
 
-    private static IsImageExtension(content: string): boolean
+    private static HasFileExtension(content: string): boolean
     {
-        var candidates = ["png", "jpg", "jpeg", "gif", "webp"]
+        var candidates = ["png", "jpg", "jpeg", "gif", "webp", "mp3"]
         for (var i = 0; i < candidates.length; ++i)
         {
             if (content.toLowerCase().endsWith(candidates[i]))
