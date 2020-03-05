@@ -77,9 +77,12 @@ export default class Levenshtein
         return prevRow[prevRow.length-1];
     }
 
-    public static GetDistance(s1:string, s2 :string)
+    public static GetDistance(s1:string, s2 :string): number
     {
-        if (s1.length < s2.length) { this.GetDistance(s2, s1); }
+        if (s1.length < s2.length)
+        {
+            return this.GetDistance(s2, s1);
+        }
         if (s2.length == 0) { return s1.length; }
 
         var prevRow = new Array<number>(s2.length + 1);
