@@ -11,7 +11,7 @@ export class Date implements IBehavior
 
     constructor(args: string, channelId: string)
     {
-        this.args = String.Slice([args], /\s|\n/, Command.언제.ArgCount);
+        this.args = String.Slice([args], /\s|\n/, Command.언제.ArgCount-1);
         this.channelId = channelId;
     }
 

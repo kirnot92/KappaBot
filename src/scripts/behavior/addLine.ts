@@ -13,7 +13,7 @@ export class AddLine implements IBehavior
 
     constructor(args: string, channelId: string)
     {
-        this.args = String.Slice([args], /\s|\n/, Command.등록.ArgCount);
+        this.args = String.Slice([args], /\s|\n/, Command.등록.ArgCount-1);
         this.channelId = channelId;
     }
 

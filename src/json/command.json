@@ -61,5 +61,12 @@
         "ArgCount": -1,
         "Usage": "랜덤 [대상1] [대상2] ... : 대상 중 하나를 골라줍니다.",
         "IsAdminCommand": false
+    },
+    "서치":
+    {
+        "Key": "서치",
+        "ArgCount": 1,
+        "Usage": "서치 [이름]",
+        "IsAdminCommand": false
     }
 }

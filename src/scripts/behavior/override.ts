@@ -13,7 +13,7 @@ export class Override implements IBehavior
 
     constructor(args: string, channelId: string)
     {
-        this.args = this.args = String.Slice([args], /\s|\n/, Command.덮어쓰기.ArgCount);;
+        this.args = this.args = String.Slice([args], /\s|\n/, Command.덮어쓰기.ArgCount-1);
         this.channelId = channelId;
     }
 

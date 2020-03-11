@@ -13,7 +13,7 @@ export class RemoveLastLine implements IBehavior
 
     constructor(args: string, channelId: string)
     {
-        this.args = String.Slice([args], /\s|\n/, Command.마지막줄삭제.ArgCount);;
+        this.args = String.Slice([args], /\s|\n/, Command.마지막줄삭제.ArgCount-1);
         this.channelId = channelId;
     }
 
