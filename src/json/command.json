@@ -20,13 +20,6 @@
         "Usage": "마지막줄삭제 [이름]",
         "IsAdminCommand": false
     },
-    "언제":
-    {
-        "Key": "언제",
-        "ArgCount": 1,
-        "Usage": "언제 [이름]",
-        "IsAdminCommand": false
-    },
     "목록":
     {
         "Key": "목록",
@@ -41,32 +34,11 @@
         "Usage": "삭제 [이름]",
         "IsAdminCommand": false
     },
-    "로드":
-    {
-        "Key": "로드",
-        "ArgCount": 0,
-        "Usage": "[이름]",
-        "IsAdminCommand": false
-    },
     "재부팅":
     {
         "Key": "재부팅",
         "ArgCount": 0,
         "Usage": "",
         "IsAdminCommand": true
-    },
-    "랜덤":
-    {
-        "Key": "랜덤",
-        "ArgCount": -1,
-        "Usage": "랜덤 [대상1] [대상2] ... : 대상 중 하나를 골라줍니다.",
-        "IsAdminCommand": false
-    },
-    "서치":
-    {
-        "Key": "서치",
-        "ArgCount": 1,
-        "Usage": "서치 [이름]",
-        "IsAdminCommand": false
     }
 }

@@ -6,10 +6,8 @@ import { Reboot } from "./reboot";
 import { Load } from "./load";
 import { GetList } from "./getList";
 import { Delete } from "./delete";
-import { Date } from "./date";
 import { Override } from "./override";
 import { RemoveLastLine } from "./removeLastLine";
-import { SelectRandom } from "./selectRandom";
 import * as Command from "../../json/command.json";
 
 
@@ -29,14 +27,10 @@ export default class BehaviorFactory
                 return new RemoveLastLine(others, channelId);
             case Command.목록.Key:
                 return new GetList(channelId);
-            case Command.언제.Key:
-                return new Date(others, channelId);
             case Command.삭제.Key:
                 return new Delete(others, channelId);
             case Command.재부팅.Key:
                 return new Reboot(authorId, bot);
-            case Command.랜덤.Key:
-                return new SelectRandom(others);
             default:
                 return new Load(command, channelId);
         }
