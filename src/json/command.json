@@ -3,7 +3,14 @@
     {
         "Key": "등록",
         "ArgCount": 2,
-        "Usage": "등록 [이름] [내용] : 한 줄을 추가합니다.",
+        "Usage": "등록 [이름] [내용] : 새 명령어를 만듭니다",
+        "IsAdminCommand": false
+    },
+    "추가":
+    {
+        "Key": "추가",
+        "ArgCount": 2,
+        "Usage": "추가 [이름] [내용] : 한 줄을 추가합니다.",
         "IsAdminCommand": false
     },
     "덮어쓰기":

@@ -9,6 +9,7 @@ import { Override } from "./override";
 import { RemoveLastLine } from "./removeLastLine";
 import * as Command from "../../json/command.json";
 import { ServerStartedDate } from "./serverStartedDate";
+import { Register } from "./register";
 
 export default class BehaviorFactory
 {
@@ -17,6 +18,8 @@ export default class BehaviorFactory
         switch(command)
         {
             case Command.등록.Key:
+                return new Register(others, channelId);
+            case Command.추가.Key:
                 return new AddLine(others, channelId);
             case Command.덮어쓰기.Key:
                 return new Override(others, channelId);
