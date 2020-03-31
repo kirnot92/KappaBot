@@ -68,13 +68,8 @@ export default class Application
             var command = args[0];
             var others = args[1];
 
-            // 최종적인 BF의 모양새는...
-            // Result를 받지 않고 맨 밑에서 Global.SendMessage 하는 형태
-            // 이러려면 channelId를 모두에게서 받아야겠네
-            // 이거까지는 ok (보통 다 받고 있으니)
-            var behavior = await BehaviorFactory.Create(command, others, author.id, channel.id, null); // null 없에기
-            var result = await behavior.IsValid() ? await behavior.Result() : behavior.OnFail();
-            await channel.send(result.Message, result.Options);
+            var behavior = BehaviorFactory.Create(command, others, author.id, channel.id);
+            await behavior.Run();
         }
     }
 }
