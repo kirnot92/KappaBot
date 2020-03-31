@@ -18,7 +18,7 @@ export default class Assert
 
     public static ShowDefaultMessageIfFalse(cond: boolean)
     {
-        if (cond)
+        if (!cond)
         {
             throw new MessageUndefinedError();
         }
