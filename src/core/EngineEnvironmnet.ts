@@ -23,6 +23,6 @@ export class EngineEnvironmnet
         Global.Client.SendMessage(Secret.DefaultChannelId, SystemMessage.RebootCompleted);
 
         this.application = new Application();
-        this.application.Initialize(Global.System);
+        this.application.Initialize();
     }
 }

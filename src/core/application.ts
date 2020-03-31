@@ -1,5 +1,5 @@
-import SystemAPI from "./systemAPI";
 import Global from "./global";
+import Log from "./log";
 import Math from "../scripts/extension/mathExtension";
 import String from "../scripts/extension/stringExtension";
 import BackgroundJob from "../scripts/backgroundJob";
@@ -10,6 +10,7 @@ import {Channel} from "../scripts/extension/typeExtension";
 import * as Playing from "../json/playing.json";
 import * as Config from "../json/config.json";
 
+
 export default class Application
 {
     // 실제 사용자용 로직이 들어가는 클래스
@@ -19,12 +20,14 @@ export default class Application
     private currentActivityIndex: number = 0
     private activityList: Array<string>
 
-    public Initialize(systemAPI: SystemAPI)
+    public Initialize()
     {
         // 그냥 this.OnMessage를 넘기면 함수 내부의 this 참조가 고장난다
         // 그래서 람다로 한 번 더 감싸서 보내줘야 함...
-        systemAPI.AddMessageListener((msg) => this.OnMessage(msg));
+        Global.System.AddMessageListener((msg) => this.OnMessage(msg));
         this.InitializeActivity();
+
+        Log.Info("Application Initialized");
     }
 
     InitializeActivity()
