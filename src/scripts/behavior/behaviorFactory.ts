@@ -9,8 +9,6 @@ import { Override } from "./override";
 import { RemoveLastLine } from "./removeLastLine";
 import * as Command from "../../json/command.json";
 
-export var exec = require("child_process").exec;
-
 export default class BehaviorFactory
 {
     static Create(command: string, others: string, authorId: string, channelId: string): IBehavior

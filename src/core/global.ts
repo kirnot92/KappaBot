@@ -14,7 +14,7 @@ export default class Global
         this.Client = new ClientAPI(client);
 
         // 현재는 메세지 도착만을 랩핑해서 쓰기 위해 있다
-        // 나중에 전역적인 시스템 상태를 넣기 위해 사용할듯
+        // 재부팅 같은 API와 관련 전역 상태도 들어가있음
         // 자세한 내용은 SystemAPI 내의 주석 참조
         this.System = new SystemAPI(client);
     }

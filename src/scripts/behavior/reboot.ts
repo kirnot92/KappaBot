@@ -1,5 +1,4 @@
 import { IBehavior } from "./IBehavior";
-import { exec } from "./behaviorFactory";
 import * as Secret from "../../json/secret.json";
 import * as SystemMessage from "../../json/systemMessage.json";
 import Global from "../../core/global";
@@ -25,7 +24,7 @@ export class Reboot implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        if (Reboot.isProgress)
+        if (Global.System.IsRebootProgress())
         {
             return SystemMessage.RebootOnProgress;
         }
@@ -35,9 +34,8 @@ export class Reboot implements IBehavior
             return SystemMessage.TooWeak;
         }
 
-        Global.Client.SetActivity(SystemMessage.OnReboot);      
-        Reboot.isProgress = true;
-        exec(Secret.RebootSequence);
+        Global.Client.SetActivity(SystemMessage.OnReboot);
+        Global.System.Reboot();
 
         return SystemMessage.StartReboot;
     }

@@ -1,8 +1,12 @@
 import {Message} from "discord.js";
 import {Client} from "discord.js";
+import * as Secret from "../json/secret.json";
+import Assert from "../scripts/assert.js";
+
 
 export default class SystemAPI
 {
+    private isRebootProgress: boolean = false;
     private messageHandlers: Array<(msg: Message) => Promise<void>>;
 
     private client: Client = null;
@@ -32,5 +36,20 @@ export default class SystemAPI
     public AddMessageListener(handler: (msg: Message) => Promise<void>)
     {
         this.messageHandlers.push(handler);
+    }
+
+    public Reboot()
+    {
+        Assert.IsFalse(this.isRebootProgress);
+
+        this.isRebootProgress = true;
+
+        var cmd = require("child_process").exec;
+        cmd(Secret.RebootSequence);
+    }
+
+    public IsRebootProgress(): boolean
+    {
+        return this.isRebootProgress;
     }
 }
