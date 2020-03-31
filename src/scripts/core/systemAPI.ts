@@ -3,12 +3,14 @@ import {Client} from "discord.js";
 import {Channel} from "../extension/typeExtension";
 import * as Secret from "../../json/secret.json";
 import Assert from "./assert.js";
+import Log from "./log";
 
 
 export default class SystemAPI
 {
     private isRebootProgress: boolean = false;
     private messageHandlers: Array<(msg: Message) => Promise<void>>;
+    private serverStartedDate: string;
 
     private client: Client = null;
     constructor(client: Client)
@@ -16,6 +18,9 @@ export default class SystemAPI
         this.messageHandlers = new Array<(msg: Message) => Promise<void>>();
         this.client = client;
         this.client.on("message", async (msg) => await this.OnMessage(msg))
+        this.serverStartedDate = Date().toString();
+
+        Log.Info("Server Started At " + this.serverStartedDate);
     }
 
     async OnMessage(message: Message)
@@ -63,5 +68,10 @@ export default class SystemAPI
     public IsRebootProgress(): boolean
     {
         return this.isRebootProgress;
+    }
+
+    public GetServerStartedDate(): string
+    {
+        return this.serverStartedDate;
     }
 }

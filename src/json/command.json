@@ -47,5 +47,12 @@
         "ArgCount": 0,
         "Usage": "",
         "IsAdminCommand": true
+    },
+    "부팅시간":
+    {
+        "Key": "부팅시간",
+        "ArgCount": 0,
+        "Usage": "",
+        "IsAdminCommand": true
     }
 }

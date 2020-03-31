@@ -8,6 +8,7 @@ import { Delete } from "./delete";
 import { Override } from "./override";
 import { RemoveLastLine } from "./removeLastLine";
 import * as Command from "../../json/command.json";
+import { ServerStartedDate } from "./serverStartedDate";
 
 export default class BehaviorFactory
 {
@@ -27,6 +28,8 @@ export default class BehaviorFactory
                 return new Delete(others, channelId);
             case Command.재부팅.Key:
                 return new Reboot(authorId, channelId);
+            case Command.부팅시간.Key:
+                return new ServerStartedDate(channelId);
             default:
                 return new Load(command, channelId);
         }
