@@ -11,6 +11,7 @@ import * as Playing from "../../json/playing.json";
 import * as Config from "../../json/config.json";
 import * as Command from "../../json/command.json";
 import * as Secret from "../../json/secret.json";
+import BlacklistRepository from "../procedure/blackListRepository";
 
 export default class Application
 {
@@ -67,6 +68,11 @@ export default class Application
 
     async HandleMessage(message: string, channelId: string, author: User)
     {
+        if (BlacklistRepository.IsBlackList(author.id))
+        {
+            return;
+        }
+
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
             var prefixRemoved = message.slice(Config.Prefix.length);

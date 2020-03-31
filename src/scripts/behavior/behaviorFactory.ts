@@ -11,6 +11,8 @@ import * as Command from "../../json/command.json";
 import { ServerStartedDate } from "./serverStartedDate";
 import { Register } from "./register";
 import { GetListDM } from "./getListDM";
+import { AddBlacklist } from "./addBlacklist";
+import { RemoveBlacklist } from "./removeBlacklist";
 
 export default class BehaviorFactory
 {
@@ -36,6 +38,10 @@ export default class BehaviorFactory
                 return new Reboot(authorId, channelId);
             case Command.부팅시간.Key:
                 return new ServerStartedDate(channelId);
+            case Command.블랙리스트등록.Key:
+                return new AddBlacklist(others, channelId, authorId);
+            case Command.블랙리스트삭제.Key:
+                return new RemoveBlacklist(others, channelId, authorId);
             default:
                 return new Load(command, channelId);
         }

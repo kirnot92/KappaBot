@@ -1,4 +1,4 @@
-import {Client} from "discord.js";
+import {Client, User} from "discord.js";
 import {MessageOptions} from "discord.js"
 import {RichEmbed} from "discord.js"
 import {Attachment} from "discord.js"
@@ -36,5 +36,10 @@ export default class ClientAPI
     public GetChannel(channelId: string): Channel
     {
         return (this.client.channels.get(channelId)) as Channel;
+    }
+
+    public GetUser(userId: string): User
+    {
+        return (this.client.users.get(userId)) as User;
     }
 }
