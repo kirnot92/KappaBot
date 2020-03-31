@@ -6,7 +6,6 @@ import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
 import { Message } from "discord.js";
 import { User } from "discord.js";
-import { Channel } from "../extension/typeExtension";
 import { MessageUndefinedError } from "./assert";
 import * as Playing from "../../json/playing.json";
 import * as Config from "../../json/config.json";

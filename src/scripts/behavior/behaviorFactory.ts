@@ -10,6 +10,7 @@ import { RemoveLastLine } from "./removeLastLine";
 import * as Command from "../../json/command.json";
 import { ServerStartedDate } from "./serverStartedDate";
 import { Register } from "./register";
+import { GetListDM } from "./getListDM";
 
 export default class BehaviorFactory
 {
@@ -27,6 +28,8 @@ export default class BehaviorFactory
                 return new RemoveLastLine(others, channelId);
             case Command.목록.Key:
                 return new GetList(channelId);
+            case Command.목록디엠으로.Key:
+                return new GetListDM(channelId, authorId);
             case Command.삭제.Key:
                 return new Delete(others, channelId);
             case Command.재부팅.Key:
