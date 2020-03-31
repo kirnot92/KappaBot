@@ -85,8 +85,9 @@ export default class Application
                 // behavior가 직접 채널에 메세지를 쏘는 구조로 되어있다
                 // 메세지를 리턴받아서 처리하는 방안을 고려해봤지만
                 // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
+                // 이렇게 해보니까 결과값을 DM으로 보내기도 편한듯
                 var behavior = BehaviorFactory.Create(command, others, author.id, channelId);
-
+                
                 await behavior.Run();
             }
             catch (error)

@@ -1,6 +1,5 @@
 import {Message, User} from "discord.js";
 import {Client} from "discord.js";
-import {Channel} from "../extension/typeExtension";
 import * as Secret from "../../json/secret.json";
 import Assert from "./assert.js";
 import Log from "./log";
