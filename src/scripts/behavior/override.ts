@@ -1,5 +1,5 @@
 import String from "../extension/stringExtension";
-import FileProcedure from "../procedure/fileProcedure";
+import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
@@ -30,16 +30,16 @@ export class Override implements IBehavior
         if (!hasValues)
         {
             // 이거 여기있는게 이상한데
-            return FileProcedure.DefaultHelpString();
+            return CommandRepository.DefaultHelpString();
         }
 
-        var isValid = await FileProcedure.IsValidCommand(this.channelId, this.args[0]);
-        if (!isValid)
+        var isExists = await CommandRepository.IsExists(this.channelId, this.args[0]);
+        if (!isExists)
         {
             return "없는 커맨드입니다.";
         }
 
-        await FileProcedure.Save(this.channelId, this.args[0], this.args[1]);
+        await CommandRepository.Save(this.channelId, this.args[0], this.args[1]);
 
         return SystemMessage.Comfirmed;
     }

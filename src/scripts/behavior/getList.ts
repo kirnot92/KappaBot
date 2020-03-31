@@ -1,4 +1,4 @@
-import FileProcedure from "../procedure/fileProcedure";
+import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as SystemMessage from "../../json/systemMessage.json";
@@ -22,7 +22,7 @@ export class GetList implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        var fileList = await FileProcedure.GetList(this.channelId);;
+        var fileList = await CommandRepository.GetList(this.channelId);;
         if (fileList == null)
         {
             return SystemMessage.NothingSaved;

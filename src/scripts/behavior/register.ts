@@ -1,5 +1,5 @@
 import String from "../extension/stringExtension";
-import FileProcedure from "../procedure/fileProcedure";
+import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
@@ -29,21 +29,21 @@ export class Register implements IBehavior
         var hasValues = String.HasValue(this.args, Command.등록.ArgCount);
         if (!hasValues)
         {
-            return FileProcedure.DefaultHelpString();
+            return CommandRepository.DefaultHelpString();
         }
 
-        var isAlreadyRegistered = await FileProcedure.IsValidCommand(this.channelId, this.args[0]);
+        var isAlreadyRegistered = await CommandRepository.IsExists(this.channelId, this.args[0]);
         if (isAlreadyRegistered)
         {
             return "이미 등록된 명령어입니다.\n한 줄을 추가하려면 [추가] 명령어를 사용해주세요.";
         }
 
-        if (FileProcedure.IsSystemCommand(this.args[0]))
+        if (CommandRepository.IsSystemCommand(this.args[0]))
         {
             return SystemMessage.IsSystemMessage;
         }
 
-        await FileProcedure.AddLine(this.channelId, this.args[0], this.args[1]);
+        await CommandRepository.AddLine(this.channelId, this.args[0], this.args[1]);
 
         return SystemMessage.Comfirmed;
     }

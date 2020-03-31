@@ -10,11 +10,11 @@ const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "commands")
 const COMMANDS_OLD = path.join(ROOT, "commandsOld")
 
-export default class FileProcedure
+export default class CommandRepository
 {
     static cacheList: Dictionary<string, string> = new Dictionary<string, string>();
 
-    public static async FindSimilarCommand(identifier: string, invalidCommand: string): Promise<string>
+    public static async FindSimilar(identifier: string, invalidCommand: string): Promise<string>
     {
         var list = await this.GetListAsArray(identifier);
 
@@ -102,7 +102,7 @@ export default class FileProcedure
         var path = this.GetPath(identifier, command);
         if (await File.IsExists(path))
         {
-            await this.ArchiveCommand(identifier, command);
+            await this.Archive(identifier, command);
             await File.Delete(path);
         }
 
@@ -118,7 +118,7 @@ export default class FileProcedure
             var content = await File.ReadFile(path, "utf8");
             var lines = content.split("\n");
 
-            await this.ArchiveCommand(identifier, command);
+            await this.Archive(identifier, command);
 
             if (lines.length == 1)
             {
@@ -157,14 +157,13 @@ export default class FileProcedure
         var path = this.GetPath(identifier, title);
         if (await File.IsExists(path))
         {
-            await this.ArchiveCommand(identifier, title)
+            await this.Archive(identifier, title)
         }
 
         await File.Write(path, content);
 
         this.cacheList.Remove(identifier);
     }
-
 
     public static async Load(identifier: string, command: string): Promise<CommandContext>
     {
@@ -214,7 +213,7 @@ export default class FileProcedure
         return sysCommands.includes(command);
     }
 
-    public static async IsValidCommand(identifier: string, command: string): Promise<boolean>
+    public static async IsExists(identifier: string, command: string): Promise<boolean>
     {
         var path = this.GetPath(identifier, command);
         return await File.IsExists(path);
@@ -238,7 +237,7 @@ export default class FileProcedure
         return path.join(COMMANDS, identifier + "." + command + ".txt");
     }
 
-    private static async ArchiveCommand(identifier: string, command: string)
+    private static async Archive(identifier: string, command: string)
     {
         var path = this.GetPath(identifier, command);
         var content = await File.ReadFile(path, "utf8");

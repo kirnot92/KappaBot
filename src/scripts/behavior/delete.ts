@@ -1,5 +1,5 @@
 import String from "../extension/stringExtension";
-import FileProcedure from "../procedure/fileProcedure";
+import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
@@ -28,16 +28,16 @@ export class Delete implements IBehavior
         var hasValue = String.HasValue(this.args, Command.삭제.ArgCount)
         if (!hasValue)
         {
-            return FileProcedure.DefaultHelpString();
+            return CommandRepository.DefaultHelpString();
         }
 
-        var isValid = FileProcedure.IsValidCommand(this.channelId, this.args[0])
-        if (!isValid)
+        var isExists = CommandRepository.IsExists(this.channelId, this.args[0])
+        if (!isExists)
         {
             return "없는 커맨드입니다.";
         }
 
-        await FileProcedure.Delete(this.channelId, this.args[0]);
+        await CommandRepository.Delete(this.channelId, this.args[0]);
 
         return SystemMessage.Comfirmed;
     }

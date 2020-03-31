@@ -1,4 +1,4 @@
-import FileProcedure from "../procedure/fileProcedure";
+import CommandRepository from "../procedure/commandRepository";
 import String from "../extension/stringExtension";
 import CommandContext from "./commandContext";
 import Global from "../core/global";
@@ -28,28 +28,28 @@ export class Load implements IBehavior
         var hasValue = String.HasValue([this.command], Command.로드.ArgCount);
         if (!hasValue)
         {
-            return new CommandContext(FileProcedure.DefaultHelpString());
+            return new CommandContext(CommandRepository.DefaultHelpString());
         }
 
-        var isValid = await FileProcedure.IsValidCommand(this.channelId, this.command);
-        if (isValid)
+        var isExists = await CommandRepository.IsExists(this.channelId, this.command);
+        if (isExists)
         {
             // 있는 명령어라면 바로 로드함
-            return await FileProcedure.Load(this.channelId, this.command);
+            return await CommandRepository.Load(this.channelId, this.command);
         }
 
         // 없는 명령어면 비슷한 걸 찾아본다
-        var similar = await FileProcedure.FindSimilarCommand(this.channelId, this.command);
+        var similar = await CommandRepository.FindSimilar(this.channelId, this.command);
         if (similar == null)
         {
             // 없으면 기본 명령어
-            return new CommandContext(FileProcedure.DefaultHelpString());
+            return new CommandContext(CommandRepository.DefaultHelpString());
         }
 
         // 비슷한게 있으면 그걸 리턴함
         // 뭔 메세지로 보정했는지 prefix를 달아준다
         var prefixMessage = "[$"+ similar +"]\n";
-        var context = await FileProcedure.Load(this.channelId, similar);
+        var context = await CommandRepository.Load(this.channelId, similar);
         context.Message = prefixMessage + context.Message;
         return context;
     }
