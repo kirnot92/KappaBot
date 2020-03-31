@@ -1,5 +1,4 @@
 
-import {Client} from "discord.js"
 import { IBehavior } from "./IBehavior";
 import { AddLine } from "./addLine";
 import { Reboot } from "./reboot";
@@ -10,12 +9,11 @@ import { Override } from "./override";
 import { RemoveLastLine } from "./removeLastLine";
 import * as Command from "../../json/command.json";
 
-
 export var exec = require("child_process").exec;
 
 export default class BehaviorFactory
 {
-    static async Create(command: string, others: string, authorId: string, channelId: string, bot: Client): Promise<IBehavior>
+    static Create(command: string, others: string, authorId: string, channelId: string): IBehavior
     {
         switch(command)
         {
@@ -30,7 +28,7 @@ export default class BehaviorFactory
             case Command.삭제.Key:
                 return new Delete(others, channelId);
             case Command.재부팅.Key:
-                return new Reboot(authorId, bot);
+                return new Reboot(authorId, channelId);
             default:
                 return new Load(command, channelId);
         }

@@ -38,9 +38,9 @@ class Repository
 
 var Playing = new Repository("playing");
 var Config = new Repository("config");
-var SystemMessage = new Repository("systemMessage");
+var SystemMessage2 = new Repository("systemMessage");
 
 export { Playing };
 export { Config };
-export { SystemMessage };
+export { SystemMessage2 };
 

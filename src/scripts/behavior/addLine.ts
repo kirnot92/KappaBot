@@ -1,6 +1,6 @@
-import BehaviorResult from "./behaviorResult";
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
+import Global from "../../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
@@ -17,25 +17,28 @@ export class AddLine implements IBehavior
         this.channelId = channelId;
     }
 
-    public async IsValid(): Promise<boolean>
+    public async Run()
+    {
+        var result = await this.GetResult();
+
+        Global.Client.SendMessage(this.channelId, result);
+    }
+
+    async GetResult(): Promise<string>
     {
         var hasValues = String.HasValue(this.args, Command.등록.ArgCount);
-        this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[0]);
-        return hasValues && !this.isSystemCommand;
-    }
+        if (!hasValues)
+        {
+            return FileProcedure.DefaultHelpString();
+        }
 
-    public async Result(): Promise<BehaviorResult>
-    {
-        return await FileProcedure.AddLine(this.channelId, this.args[0], this.args[1]);
-    }
+        if (FileProcedure.IsSystemCommand(this.args[0]))
+        {
+            return SystemMessage.IsSystemMessage;
+        }
 
-    public OnFail(): BehaviorResult
-    {
-        return this.isSystemCommand ? this.CannotRegisterSystemCommand() : FileProcedure.DefaultHelp();
-    }
+        await FileProcedure.AddLine(this.channelId, this.args[0], this.args[1]);
 
-    CannotRegisterSystemCommand(): BehaviorResult
-    {
-        return new BehaviorResult(SystemMessage.IsSystemMessage);
+        return SystemMessage.Comfirmed;
     }
 }

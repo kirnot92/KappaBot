@@ -1,8 +1,9 @@
-import BehaviorResult from "./behaviorResult";
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
+import Global from "../../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
+import * as SystemMessage from "../../json/systemMessage.json";
 
 export class Delete implements IBehavior
 {
@@ -15,19 +16,29 @@ export class Delete implements IBehavior
         this.channelId = channelId;
     }
 
-    async IsValid(): Promise<boolean>
+    public async Run()
     {
-        return String.HasValue(this.args, Command.삭제.ArgCount)
-            && FileProcedure.IsValidCommand(this.channelId, this.args[0]);
+        var result = await this.GetResult();
+
+        Global.Client.SendMessage(this.channelId, result);
     }
 
-    async Result(): Promise<BehaviorResult>
+    async GetResult(): Promise<string>
     {
-        return await FileProcedure.Delete(this.channelId, this.args[0]);
-    }
+        var hasValue = String.HasValue(this.args, Command.삭제.ArgCount)
+        if (!hasValue)
+        {
+            return FileProcedure.DefaultHelpString();
+        }
 
-    public OnFail(): BehaviorResult
-    {
-        return FileProcedure.DefaultHelp();
+        var isValid = FileProcedure.IsValidCommand(this.channelId, this.args[0])
+        if (!isValid)
+        {
+            return "없는 커맨드입니다.";
+        }
+
+        await FileProcedure.Delete(this.channelId, this.args[0]);
+
+        return SystemMessage.Comfirmed;
     }
 }

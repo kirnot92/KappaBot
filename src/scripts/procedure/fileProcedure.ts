@@ -1,11 +1,10 @@
 import * as path from "path"
 import File from "../promisifier/file"
-import BehaviorResult from "../behavior/behaviorResult";
 import Dictionary from "../collection/dictionary";
 import * as Command from "../../json/command.json";
 import * as Config from "../../json/config.json";
-import * as SystemMessage from "../../json/systemMessage.json";
 import Levenshtein from "../levenshtein";
+import CommandContext from "../behavior/commandContext";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "commands")
@@ -53,7 +52,7 @@ export default class FileProcedure
         {
             return minDistanceCommand;
         }
-        return "";
+        return null;
     }
 
     static async GetListAsArray(identifier: string): Promise<Array<string>>
@@ -72,7 +71,7 @@ export default class FileProcedure
         return arr;
     }
 
-    public static async GetList(identifier: string): Promise<BehaviorResult>
+    public static async GetList(identifier: string): Promise<string>
     {
         var files = await File.ReadDir(COMMANDS);
 
@@ -92,13 +91,13 @@ export default class FileProcedure
         var fileList = this.cacheList.MustGet(identifier);
         if (fileList.length == 0)
         {
-            return new BehaviorResult(SystemMessage.NothingSaved);
+            return null;
         }
 
-        return new BehaviorResult(fileList);
+        return fileList;
     }
 
-    public static async Delete(identifier: string, command: string): Promise<BehaviorResult>
+    public static async Delete(identifier: string, command: string)
     {
         var path = this.GetPath(identifier, command);
         if (await File.IsExists(path))
@@ -108,10 +107,9 @@ export default class FileProcedure
         }
 
         this.cacheList.Remove(identifier);
-        return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
-    public static async RemoveLastLine(identifier: string, command: string): Promise<BehaviorResult>
+    public static async RemoveLastLine(identifier: string, command: string)
     {
         var path = this.GetPath(identifier, command);
 
@@ -135,10 +133,9 @@ export default class FileProcedure
         }
 
         this.cacheList.Remove(identifier);
-        return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
-    public static async AddLine(identifier: string, title: string, content: string): Promise<BehaviorResult>
+    public static async AddLine(identifier: string, title: string, content: string)
     {
         var prevContent = "";
         var path = this.GetPath(identifier, title);
@@ -150,10 +147,10 @@ export default class FileProcedure
 
         var nextContent = prevContent + content;
 
-        return await this.Save(identifier, title, nextContent);
+        await this.Save(identifier, title, nextContent);
     }
 
-    public static async Save(identifier: string, title: string, content: string): Promise<BehaviorResult>
+    public static async Save(identifier: string, title: string, content: string)
     {
         title = title.replace("/", "").replace("\\", "");
 
@@ -166,15 +163,15 @@ export default class FileProcedure
         await File.Write(path, content);
 
         this.cacheList.Remove(identifier);
-        return new BehaviorResult(SystemMessage.Comfirmed);
     }
 
-    public static async Load(identifier: string, command: string): Promise<BehaviorResult>
+
+    public static async Load(identifier: string, command: string): Promise<CommandContext>
     {
         var path = this.GetPath(identifier, command);
         var content = await File.ReadFile(path, "utf8");
 
-        var splited = content.split('\n');
+        var splited = content.split("\n");
         var files = new Array<string>();
 
         splited.forEach(line =>
@@ -185,14 +182,9 @@ export default class FileProcedure
             }
         });
 
-        if (files.length == splited.length)
-        {
-            return new BehaviorResult("", {files});
-        }
-        else
-        {
-            return new BehaviorResult(content);
-        }
+        return files.length == splited.length
+            ? new CommandContext("", {files})
+            : new CommandContext(content);
     }
 
     public static async Date(identifier: string, command: string)
@@ -201,10 +193,10 @@ export default class FileProcedure
         var date = await File.GetCreatedDate(path);
         var content = "["+command+"]: " +date.toLocaleDateString("ko-kr")+" " + date.toTimeString()+"에 등록된 명령어입니다.";
 
-        return new BehaviorResult(content);
+        return content;
     }
 
-    public static DefaultHelp()
+    public static DefaultHelpString(): string
     {
         var content = "기본 명령어\n";
         var commands = Command as any;
@@ -213,7 +205,7 @@ export default class FileProcedure
             if (commands[key].IsAdminCommand) { continue; }
             content = content + Config.Prefix + commands[key].Usage + "\n";
         }
-        return new BehaviorResult(content);
+        return content;
     }
 
     public static IsSystemCommand(command: string)

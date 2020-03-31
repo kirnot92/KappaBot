@@ -1,6 +1,6 @@
-import BehaviorResult from "./behaviorResult";
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
+import Global from "../../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
@@ -17,23 +17,28 @@ export class RemoveLastLine implements IBehavior
         this.channelId = channelId;
     }
 
-    public async IsValid(): Promise<boolean>
+    public async Run()
     {
-        return String.HasValue(this.args, Command.마지막줄삭제.ArgCount);
+        var result = await this.GetResult();
+
+        Global.Client.SendMessage(this.channelId, result);
     }
 
-    public async Result(): Promise<BehaviorResult>
+    async GetResult(): Promise<string>
     {
-        return await FileProcedure.RemoveLastLine(this.channelId, this.args[0]);
-    }
+        if (String.HasValue(this.args, Command.마지막줄삭제.ArgCount))
+        {
+            return FileProcedure.DefaultHelpString();
+        }
 
-    public OnFail(): BehaviorResult
-    {
-        return this.isSystemCommand ? this.CannotRegisterSystemCommand() : FileProcedure.DefaultHelp();
-    }
+        var isValid = await FileProcedure.IsValidCommand(this.channelId, this.args[0]);
+        if (!isValid)
+        {
+            return "없는 커맨드입니다.";
+        }
 
-    CannotRegisterSystemCommand(): BehaviorResult
-    {
-        return new BehaviorResult(SystemMessage.IsSystemMessage);
+        await FileProcedure.RemoveLastLine(this.channelId, this.args[0]);
+
+        return SystemMessage.Comfirmed;
     }
 }

@@ -1,6 +1,6 @@
-import BehaviorResult from "./behaviorResult";
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
+import Global from "../../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
@@ -13,29 +13,34 @@ export class Override implements IBehavior
 
     constructor(args: string, channelId: string)
     {
-        this.args = this.args = String.Slice([args], /\s|\n/, Command.덮어쓰기.ArgCount-1);
+        this.args = String.Slice([args], /\s|\n/, Command.덮어쓰기.ArgCount-1);
         this.channelId = channelId;
     }
 
-    public async IsValid(): Promise<boolean>
+    public async Run()
+    {
+        var result = await this.GetResult();
+
+        Global.Client.SendMessage(this.channelId, result);
+    }
+
+    async GetResult(): Promise<string>
     {
         var hasValues = String.HasValue(this.args, Command.덮어쓰기.ArgCount);
-        this.isSystemCommand = FileProcedure.IsSystemCommand(this.args[0]);
-        return hasValues && !this.isSystemCommand;
-    }
+        if (!hasValues)
+        {
+            // 이거 여기있는게 이상한데
+            return FileProcedure.DefaultHelpString();
+        }
 
-    public async Result(): Promise<BehaviorResult>
-    {
-        return await FileProcedure.Save(this.channelId, this.args[0], this.args[1]);
-    }
+        var isValid = await FileProcedure.IsValidCommand(this.channelId, this.args[0]);
+        if (!isValid)
+        {
+            return "없는 커맨드입니다.";
+        }
 
-    public OnFail(): BehaviorResult
-    {
-        return this.isSystemCommand ? this.CannotRegisterSystemCommand() : FileProcedure.DefaultHelp();
-    }
+        await FileProcedure.Save(this.channelId, this.args[0], this.args[1]);
 
-    CannotRegisterSystemCommand(): BehaviorResult
-    {
-        return new BehaviorResult(SystemMessage.IsSystemMessage);
+        return SystemMessage.Comfirmed;
     }
 }

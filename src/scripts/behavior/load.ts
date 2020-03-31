@@ -1,8 +1,9 @@
-import BehaviorResult from "./behaviorResult";
 import FileProcedure from "../procedure/fileProcedure";
-import { IBehavior } from "./IBehavior";
 import String from "../extension/stringExtension";
-import * as Command from "../../json/command.json";
+import CommandContext from "./commandContext";
+import Global from "../../core/global";
+import { IBehavior } from "./IBehavior";
+import * as Command from "../../json/command.json"
 
 export class Load implements IBehavior
 {
@@ -17,31 +18,37 @@ export class Load implements IBehavior
         this.channelId = channelId;
     }
 
-    async IsValid(): Promise<boolean>
+    public async Run()
+    {
+        var result = await this.GetResult();
+
+        Global.Client.SendMessage(this.channelId, result.Message, result.Options);
+    }
+
+    async GetResult(): Promise<CommandContext>
     {
         var hasValue = String.HasValue([this.command], Command.로드.ArgCount);
-        if (!hasValue) { return false; }
+        if (!hasValue)
+        {
+            return new CommandContext(FileProcedure.DefaultHelpString());
+        }
 
         var isValid = await FileProcedure.IsValidCommand(this.channelId, this.command);
-        if (isValid) { return true; }
+        if (isValid)
+        {
+            // 있는 명령어라면 바로 로드함
+            return await FileProcedure.Load(this.channelId, this.command);
+        }
 
+        // 없는 명령어면 비슷한 걸 찾아본다
         var similar = await FileProcedure.FindSimilarCommand(this.channelId, this.command);
-        if (similar.length == 0) { return false; }
+        if (similar == null)
+        {
+            // 없으면 기본 명령어
+            return new CommandContext(FileProcedure.DefaultHelpString());
+        }
 
-        this.prefixMessage = "[$"+ similar +"]\n";
-        this.command = similar;
-        return true;
-    }
-
-    async Result(): Promise<BehaviorResult>
-    {
-        var result =  await FileProcedure.Load(this.channelId, this.command);
-        result.Message = this.prefixMessage + result.Message;
-        return result;
-    }
-
-    public OnFail(): BehaviorResult
-    {
-        return FileProcedure.DefaultHelp();
+        // 비슷한게 있으면 그걸 리턴함
+        return await FileProcedure.Load(this.channelId, similar);
     }
 }
