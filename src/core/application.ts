@@ -15,13 +15,15 @@ export default class Application
     // 실제 사용자용 로직이 들어가는 클래스
     // Global 초기화 이후 불리므로 Global 쓸 수 있음
     // 상태도 가질 수 있다
-   
+
     private currentActivityIndex: number = 0
     private activityList: Array<string>
 
     public Initialize(systemAPI: SystemAPI)
     {
-        systemAPI.AddMessageListener(this.OnMessage);
+        // 그냥 this.OnMessage를 넘기면 함수 내부의 this 참조가 고장난다
+        // 그래서 람다로 한 번 더 감싸서 보내줘야 함...
+        systemAPI.AddMessageListener((msg) => this.OnMessage(msg));
         this.InitializeActivity();
     }
 

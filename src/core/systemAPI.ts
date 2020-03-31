@@ -3,11 +3,12 @@ import {Client} from "discord.js";
 
 export default class SystemAPI
 {
-    private messageHandlers: ((msg: Message) => Promise<void>)[];
+    private messageHandlers: Array<(msg: Message) => Promise<void>>;
 
     private client: Client = null;
     constructor(client: Client)
     {
+        this.messageHandlers = new Array<(msg: Message) => Promise<void>>();
         this.client = client;
         this.client.on("message", async (msg) => await this.OnMessage(msg))
     }
