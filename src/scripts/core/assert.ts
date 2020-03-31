@@ -15,7 +15,10 @@ export default class Assert
             throw new Error(msg);
         }
     }
+}
 
+export class LogicHalt
+{   
     public static ShowDefaultMessageIfFalse(cond: boolean)
     {
         if (!cond)

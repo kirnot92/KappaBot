@@ -1,8 +1,8 @@
 import String from "../extension/stringExtension";
 import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
-import Assert from "../core/assert";
 import { IBehavior } from "./IBehavior";
+import { LogicHalt } from "../core/assert";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
 
@@ -18,7 +18,7 @@ export class Delete implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue(this.args, Command.삭제.ArgCount);
-        Assert.ShowDefaultMessageIfFalse(hasValue);
+        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
     }
 
     public async Run()
