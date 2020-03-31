@@ -1,6 +1,6 @@
 import { IBehavior } from "./IBehavior";
 import Global from "../core/global";
-import BlacklistRepository from "../procedure/blackListRepository";
+import BlacklistRepository from "../procedure/blacklistRepository";
 import * as SystemMessage from "../../json/systemMessage.json";
 import * as Secret from "../../json/secret.json";
 

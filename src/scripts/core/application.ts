@@ -11,7 +11,7 @@ import * as Playing from "../../json/playing.json";
 import * as Config from "../../json/config.json";
 import * as Command from "../../json/command.json";
 import * as Secret from "../../json/secret.json";
-import BlacklistRepository from "../procedure/blackListRepository";
+import BlacklistRepository from "../procedure/blacklistRepository";
 
 export default class Application
 {
