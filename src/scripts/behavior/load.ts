@@ -1,7 +1,7 @@
 import FileProcedure from "../procedure/fileProcedure";
 import String from "../extension/stringExtension";
 import CommandContext from "./commandContext";
-import Global from "../../core/global";
+import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json"
 

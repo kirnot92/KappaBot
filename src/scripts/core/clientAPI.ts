@@ -2,7 +2,7 @@ import {Client} from "discord.js";
 import {MessageOptions} from "discord.js"
 import {RichEmbed} from "discord.js"
 import {Attachment} from "discord.js"
-import {Channel} from "../scripts/extension/typeExtension";
+import {Channel} from "../extension/typeExtension";
 
 export default class ClientAPI
 {

@@ -1,7 +1,7 @@
 import { IBehavior } from "./IBehavior";
 import * as Secret from "../../json/secret.json";
 import * as SystemMessage from "../../json/systemMessage.json";
-import Global from "../../core/global";
+import Global from "../core/global";
 
 export class Reboot implements IBehavior
 {

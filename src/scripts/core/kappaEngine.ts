@@ -2,8 +2,8 @@ import Global from "./global";
 import Application from "./application";
 import Log from "./log";
 import {Client} from "discord.js";
-import * as Secret from "../json/secret.json";
-import * as SystemMessage from "../json/systemMessage.json";
+import * as Secret from "../../json/secret.json";
+import * as SystemMessage from "../../json/systemMessage.json";
 
 export class KappaEngine
 {

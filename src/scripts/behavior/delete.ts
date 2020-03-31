@@ -1,6 +1,6 @@
 import String from "../extension/stringExtension";
 import FileProcedure from "../procedure/fileProcedure";
-import Global from "../../core/global";
+import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";

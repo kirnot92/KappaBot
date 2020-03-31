@@ -1,14 +1,14 @@
 import Global from "./global";
 import Log from "./log";
-import Math from "../scripts/extension/mathExtension";
-import String from "../scripts/extension/stringExtension";
-import BackgroundJob from "../scripts/backgroundJob";
-import BehaviorFactory from "../scripts/behavior/behaviorFactory";
+import Math from "../extension/mathExtension";
+import String from "../extension/stringExtension";
+import BackgroundJob from "../backgroundJob";
+import BehaviorFactory from "../behavior/behaviorFactory";
 import {Message} from "discord.js";
 import {User} from "discord.js";
-import {Channel} from "../scripts/extension/typeExtension";
-import * as Playing from "../json/playing.json";
-import * as Config from "../json/config.json";
+import {Channel} from "../extension/typeExtension";
+import * as Playing from "../../json/playing.json";
+import * as Config from "../../json/config.json";
 
 
 export default class Application

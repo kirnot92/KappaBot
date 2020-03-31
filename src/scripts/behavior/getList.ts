@@ -1,5 +1,5 @@
 import FileProcedure from "../procedure/fileProcedure";
-import Global from "../../core/global";
+import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as SystemMessage from "../../json/systemMessage.json";
 
