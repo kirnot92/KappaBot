@@ -23,6 +23,11 @@ export default class ClientAPI
         await channel.send(message, options);
     }
 
+    public async SendDirectMessage(userId: string, message: string)
+    {
+        await this.client.users.get(userId).send(message);
+    }
+
     public SetActivity(message: string)
     {
         this.client.user.setActivity(message, {type: "PLAYING"});

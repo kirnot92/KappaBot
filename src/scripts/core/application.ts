@@ -55,16 +55,18 @@ export default class Application
     async OnMessage(message: Message)
     {
         var content = message.content;
+        var channelId = message.channel.id;
+
         var attachments = message.attachments.array();
         if (attachments.length != 0)
         {
             content = content + " " + attachments[0].url;
         }
 
-        await this.HandleMessage(content, message.channel, message.author);
+        await this.HandleMessage(content, channelId, message.author);
     }
 
-    async HandleMessage(message: string, channel: Channel, author: User)
+    async HandleMessage(message: string, channelId: string, author: User)
     {
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
@@ -78,26 +80,29 @@ export default class Application
                 // behavior가 직접 채널에 메세지를 쏘는 구조로 되어있다
                 // 메세지를 리턴받아서 처리하는 방안을 고려해봤지만
                 // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
-                var behavior = BehaviorFactory.Create(command, others, author.id, channel.id);
+                var behavior = BehaviorFactory.Create(command, others, author.id, channelId);
 
                 await behavior.Run();
             }
             catch (error)
             {
-                this.HandleError(error, channel);
+                this.HandleError(error, channelId);
             }
         }
     }
 
-    async HandleError(error: any,  channel: Channel)
+    async HandleError(error: any,  channelId: string)
     {
         if (error instanceof MessageUndefinedError)
         {
-            await channel.send(this.GetDefaultHelp());
+            await Global.Client.SendMessage(channelId, this.GetDefaultHelp());
         }
         else
         {
-            await channel.send("에러가 발생했습니다. <@" + Secret.AdminId + ">\n" + error);
+            var channelTag = "<#" + channelId + ">";
+            var msg =  channelTag + "에서 에러가 발생했습니다. \n" + error.stack;
+
+            await Global.Client.SendDirectMessage(Secret.AdminId, msg);
         }
     }
 
