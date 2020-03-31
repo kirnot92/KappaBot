@@ -17,11 +17,12 @@ export default class ClientAPI
         this.client = client;
     }
 
-    public async SendMessage(channel: Channel, message: string,  options?: MessageOptions | RichEmbed | Attachment)
+    public async SendMessage(channelId: string, message: string,  options?: MessageOptions | RichEmbed | Attachment, )
     {
+        var channel = this.GetChannel(channelId);
         await channel.send(message, options);
     }
-    
+
     public SetActivity(message: string)
     {
         this.client.user.setActivity(message, {type: "PLAYING"});
