@@ -69,6 +69,10 @@ export default class Application
             var others = args[1];
 
             var behavior = BehaviorFactory.Create(command, others, author.id, channel.id);
+
+            // behavior가 직접 채널에 메세지를 쏘는 구조로 되어있다
+            // 메세지를 리턴받아서 처리하는 방안을 고려해봤지만
+            // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
             await behavior.Run();
         }
     }
