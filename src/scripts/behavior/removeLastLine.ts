@@ -1,6 +1,7 @@
 import String from "../extension/stringExtension";
 import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
+import Assert from "../core/assert";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
@@ -15,6 +16,9 @@ export class RemoveLastLine implements IBehavior
     {
         this.args = String.Slice([args], /\s|\n/, Command.마지막줄삭제.ArgCount-1);
         this.channelId = channelId;
+
+        var hasValue = String.HasValue(this.args, Command.마지막줄삭제.ArgCount);
+        Assert.ShowDefaultMessageIfFalse(hasValue);
     }
 
     public async Run()
@@ -26,11 +30,6 @@ export class RemoveLastLine implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        if (String.HasValue(this.args, Command.마지막줄삭제.ArgCount))
-        {
-            return CommandRepository.DefaultHelpString();
-        }
-
         var isExists = await CommandRepository.IsExists(this.channelId, this.args[0]);
         if (!isExists)
         {

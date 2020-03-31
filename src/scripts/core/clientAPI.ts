@@ -17,7 +17,7 @@ export default class ClientAPI
         this.client = client;
     }
 
-    public async SendMessage(channelId: string, message: string,  options?: MessageOptions | RichEmbed | Attachment, )
+    public async SendMessage(channelId: string, message: string,  options?: MessageOptions | RichEmbed | Attachment)
     {
         var channel = this.GetChannel(channelId);
         await channel.send(message, options);

@@ -15,4 +15,16 @@ export default class Assert
             throw new Error(msg);
         }
     }
+
+    public static ShowDefaultMessageIfFalse(cond: boolean)
+    {
+        if (cond)
+        {
+            throw new MessageUndefinedError();
+        }
+    }
+}
+
+export class MessageUndefinedError extends Error
+{
 }

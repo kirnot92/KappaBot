@@ -195,18 +195,6 @@ export default class CommandRepository
         return content;
     }
 
-    public static DefaultHelpString(): string
-    {
-        var content = "기본 명령어\n";
-        var commands = Command as any;
-        for (var key in Command)
-        {
-            if (commands[key].IsAdminCommand) { continue; }
-            content = content + Config.Prefix + commands[key].Usage + "\n";
-        }
-        return content;
-    }
-
     public static IsSystemCommand(command: string)
     {
         var sysCommands = Object.keys(Command);

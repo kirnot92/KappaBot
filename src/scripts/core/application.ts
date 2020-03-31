@@ -4,12 +4,14 @@ import Math from "../extension/mathExtension";
 import String from "../extension/stringExtension";
 import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
-import {Message} from "discord.js";
-import {User} from "discord.js";
-import {Channel} from "../extension/typeExtension";
+import { Message } from "discord.js";
+import { User } from "discord.js";
+import { Channel } from "../extension/typeExtension";
+import { MessageUndefinedError } from "./assert";
 import * as Playing from "../../json/playing.json";
 import * as Config from "../../json/config.json";
-
+import * as Command from "../../json/command.json";
+import * as Secret from "../../json/secret.json";
 
 export default class Application
 {
@@ -71,12 +73,43 @@ export default class Application
             var command = args[0];
             var others = args[1];
 
-            var behavior = BehaviorFactory.Create(command, others, author.id, channel.id);
+            try
+            {
+                // behavior가 직접 채널에 메세지를 쏘는 구조로 되어있다
+                // 메세지를 리턴받아서 처리하는 방안을 고려해봤지만
+                // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
+                var behavior = BehaviorFactory.Create(command, others, author.id, channel.id);
 
-            // behavior가 직접 채널에 메세지를 쏘는 구조로 되어있다
-            // 메세지를 리턴받아서 처리하는 방안을 고려해봤지만
-            // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
-            await behavior.Run();
+                await behavior.Run();
+            }
+            catch (error)
+            {
+                this.HandleError(error, channel);
+            }
         }
+    }
+
+    async HandleError(error: any,  channel: Channel)
+    {
+        if (error instanceof MessageUndefinedError)
+        {
+            await channel.send(this.GetDefaultHelp());
+        }
+        else
+        {
+            await channel.send("에러가 발생했습니다. <@" + Secret.AdminId + ">\n" + error);
+        }
+    }
+
+    GetDefaultHelp(): string
+    {
+        var content = "기본 명령어\n";
+        var commands = Command as any;
+        for (var key in Command)
+        {
+            if (commands[key].IsAdminCommand) { continue; }
+            content = content + Config.Prefix + commands[key].Usage + "\n";
+        }
+        return content;
     }
 }

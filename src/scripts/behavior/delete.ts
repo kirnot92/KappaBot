@@ -1,9 +1,11 @@
 import String from "../extension/stringExtension";
 import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
+import Assert from "../core/assert";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
+
 
 export class Delete implements IBehavior
 {
@@ -14,6 +16,9 @@ export class Delete implements IBehavior
     {
         this.args = String.Slice([args], /\s|\n/, Command.삭제.ArgCount-1);
         this.channelId = channelId;
+
+        var hasValue = String.HasValue(this.args, Command.삭제.ArgCount);
+        Assert.ShowDefaultMessageIfFalse(hasValue);
     }
 
     public async Run()
@@ -25,12 +30,6 @@ export class Delete implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        var hasValue = String.HasValue(this.args, Command.삭제.ArgCount)
-        if (!hasValue)
-        {
-            return CommandRepository.DefaultHelpString();
-        }
-
         var isExists = CommandRepository.IsExists(this.channelId, this.args[0])
         if (!isExists)
         {

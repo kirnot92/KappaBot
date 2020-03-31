@@ -4,6 +4,7 @@ import CommandContext from "./commandContext";
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json"
+import Assert from "../core/assert";
 
 export class Load implements IBehavior
 {
@@ -14,6 +15,9 @@ export class Load implements IBehavior
     {
         this.command = command;
         this.channelId = channelId;
+
+        var hasValue = String.HasValue([this.command], Command.로드.ArgCount);
+        Assert.ShowDefaultMessageIfFalse(hasValue);
     }
 
     public async Run()
@@ -25,12 +29,6 @@ export class Load implements IBehavior
 
     async GetResult(): Promise<CommandContext>
     {
-        var hasValue = String.HasValue([this.command], Command.로드.ArgCount);
-        if (!hasValue)
-        {
-            return new CommandContext(CommandRepository.DefaultHelpString());
-        }
-
         var isExists = await CommandRepository.IsExists(this.channelId, this.command);
         if (isExists)
         {
@@ -40,11 +38,7 @@ export class Load implements IBehavior
 
         // 없는 명령어면 비슷한 걸 찾아본다
         var similar = await CommandRepository.FindSimilar(this.channelId, this.command);
-        if (similar == null)
-        {
-            // 없으면 기본 명령어
-            return new CommandContext(CommandRepository.DefaultHelpString());
-        }
+        Assert.ShowDefaultMessageIfFalse(similar != null);
 
         // 비슷한게 있으면 그걸 리턴함
         // 뭔 메세지로 보정했는지 prefix를 달아준다
