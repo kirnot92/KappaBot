@@ -1,4 +1,4 @@
-import {Message} from "discord.js";
+import {Message, User} from "discord.js";
 import {Client} from "discord.js";
 import {Channel} from "../extension/typeExtension";
 import * as Secret from "../../json/secret.json";
@@ -58,8 +58,8 @@ export default class SystemAPI
             {
                 // client 가지고 있으니까 직접 채널을 가져오게 하자
                 // 여기서 Global.Client를 가져오는 건 좀 찜찜함
-                var channel = this.client.channels.get(Secret.DefaultChannelId) as Channel;
-                channel.send("재부팅이 실패했습니다. " + err);
+                var admin = this.client.users.get(Secret.AdminId) as User;
+                admin.send("재부팅이 실패했습니다. ```" + err + "```");
                 this.isRebootProgress = false;
             }
         });
