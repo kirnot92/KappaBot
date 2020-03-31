@@ -53,7 +53,6 @@ export default class SystemAPI
         var cmd = require("child_process").exec;
         cmd(Secret.RebootSequence, (err: any, stdout: any, stderr: any) =>
         {
-            // 될지 모르겠지만...
             if (err)
             {
                 // client 가지고 있으니까 직접 채널을 가져오게 하자
