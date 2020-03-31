@@ -5,7 +5,7 @@ import {Client} from "discord.js";
 import * as Secret from "../json/secret.json";
 import * as SystemMessage from "../json/systemMessage.json";
 
-export class EngineEnvironmnet
+export class KappaEngine
 {
     private static application: Application;
 

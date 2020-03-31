@@ -1,3 +1,3 @@
-import { EngineEnvironmnet } from "./core/EngineEnvironmnet";
+import { KappaEngine } from "./core/KappaEngine";
 
-EngineEnvironmnet.Main();
+KappaEngine.Main();
