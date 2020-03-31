@@ -100,7 +100,7 @@ export default class Application
         else
         {
             var channelTag = "<#" + channelId + ">";
-            var msg =  channelTag + "에서 에러가 발생했습니다. \n" + error.stack;
+            var msg =  channelTag + "에서 에러가 발생했습니다.```" + error.stack + "```";
 
             await Global.Client.SendDirectMessage(Secret.AdminId, msg);
         }
