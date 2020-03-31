@@ -2,7 +2,7 @@ import {Message} from "discord.js";
 import {Client} from "discord.js";
 import {Channel} from "../extension/typeExtension";
 import * as Secret from "../../json/secret.json";
-import Assert from "../assert.js";
+import Assert from "./assert.js";
 
 
 export default class SystemAPI

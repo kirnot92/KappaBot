@@ -1,4 +1,4 @@
-import Dictionary from "../scripts/collection/dictionary";
+import Dictionary from "../collection/dictionary";
 
 var jsonFolder = "../json/";
 var examplePostfix = ".example";

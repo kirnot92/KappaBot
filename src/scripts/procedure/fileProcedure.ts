@@ -3,7 +3,7 @@ import File from "../promisifier/file"
 import Dictionary from "../collection/dictionary";
 import * as Command from "../../json/command.json";
 import * as Config from "../../json/config.json";
-import Levenshtein from "../levenshtein";
+import Levenshtein from "./levenshtein";
 import CommandContext from "../behavior/commandContext";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")

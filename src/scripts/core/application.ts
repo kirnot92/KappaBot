@@ -2,7 +2,7 @@ import Global from "./global";
 import Log from "./log";
 import Math from "../extension/mathExtension";
 import String from "../extension/stringExtension";
-import BackgroundJob from "../backgroundJob";
+import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
 import {Message} from "discord.js";
 import {User} from "discord.js";
