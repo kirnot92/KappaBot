@@ -116,7 +116,7 @@ export default class FileProcedure
         if (await File.IsExists(path))
         {
             var content = await File.ReadFile(path, "utf8");
-            var lines = content.split('\n');
+            var lines = content.split("\n");
 
             await this.ArchiveCommand(identifier, command);
 
@@ -127,7 +127,7 @@ export default class FileProcedure
             else
             {
                 lines.pop();
-                var nextContent = lines.join('\n');
+                var nextContent = lines.join("\n");
                 await File.Write(path, nextContent);
             }
         }
