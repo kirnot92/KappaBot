@@ -7,13 +7,11 @@ import * as Command from "../../json/command.json"
 
 export class Load implements IBehavior
 {
-    prefixMessage: string;
     command: string;
     channelId: string;
 
     constructor(command: string, channelId: string)
     {
-        this.prefixMessage = "";
         this.command = command;
         this.channelId = channelId;
     }
@@ -49,6 +47,10 @@ export class Load implements IBehavior
         }
 
         // 비슷한게 있으면 그걸 리턴함
-        return await FileProcedure.Load(this.channelId, similar);
+        // 뭔 메세지로 보정했는지 prefix를 달아준다
+        var prefixMessage = "[$"+ similar +"]\n";
+        var context = await FileProcedure.Load(this.channelId, similar);
+        context.Message = prefixMessage + context.Message;
+        return context;
     }
 }
