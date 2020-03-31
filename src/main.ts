@@ -1,3 +1,3 @@
-import { KappaEngine } from "./core/KappaEngine";
+import { KappaEngine } from "./core/kappaEngine";
 
 KappaEngine.Main();
