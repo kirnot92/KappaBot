@@ -4,7 +4,7 @@ import Math from "../extension/mathExtension";
 import String from "../extension/stringExtension";
 import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { User } from "discord.js";
 import { MessageUndefinedError } from "./assert";
 import * as Playing from "../../json/playing.json";
@@ -26,7 +26,8 @@ export default class Application
     {
         // 그냥 this.OnMessage를 넘기면 함수 내부의 this 참조가 고장난다
         // 그래서 람다로 한 번 더 감싸서 보내줘야 함...
-        Global.System.AddMessageListener((msg) => this.OnMessage(msg));
+        Global.System.AddMessageListener((msg) =>  this.OnChannelMessage(msg));
+        Global.System.AddMessageListener((msg) =>  this.OnDirectMessage(msg));
         this.InitializeActivity();
 
         Log.Info("Application Initialized");
@@ -52,18 +53,31 @@ export default class Application
         this.currentActivityIndex = (this.currentActivityIndex + 1) % this.activityList.length;
     }
 
-    async OnMessage(message: Message)
+    async OnDirectMessage(message: Message)
     {
-        var content = message.content;
-        var channelId = message.channel.id;
-
-        var attachments = message.attachments.array();
-        if (attachments.length != 0)
+        // 임시기능
+        if (message.channel.type == "dm" && message.author.id == Secret.AdminId)
         {
-            content = content + " " + attachments[0].url;
+            var channel = Global.Client.GetChannel(Secret.DefaultChannelId) as TextChannel;
+            channel.send(message.content);
         }
+    }
 
-        await this.HandleMessage(content, channelId, message.author);
+    async OnChannelMessage(message: Message)
+    {
+        if (message.channel.type == "text")
+        {
+            var content = message.content;
+            var channelId = message.channel.id;
+
+            var attachments = message.attachments.array();
+            if (attachments.length != 0)
+            {
+                content = content + " " + attachments[0].url;
+            }
+
+            await this.HandleMessage(content, channelId, message.author);
+        }
     }
 
     async HandleMessage(message: string, channelId: string, author: User)
