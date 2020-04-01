@@ -68,7 +68,7 @@ export default class Application
 
     async HandleMessage(message: string, channelId: string, author: User)
     {
-        if (BlacklistRepository.IsBlackList(author.id))
+        if (await BlacklistRepository.IsBlackList(author.id))
         {
             return;
         }
