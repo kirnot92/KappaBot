@@ -1,5 +1,13 @@
 export default class Log
 {
+    // 로그에 있으면 싶은 정보
+    // 1. 채널 아이디
+    // 2. 발화자 아이디? (필요한가?)
+    // 3. 시간대(는 당연하고)
+    // 
+    // 고민할 정보
+    // 1. 로거에서 Global.Client.SendDMToAdmin을 할 수 있어야 하나?
+
     // 추후에 파일로 로깅하는 시스템을 붙이자
     public static Initialize()
     {
