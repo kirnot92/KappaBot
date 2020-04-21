@@ -17,7 +17,7 @@ export class GetList implements IBehavior
     {
         var result = await this.GetResult();
 
-        Global.Client.SendMessage(this.channelId, result);
+        await Global.Client.SendMessage(this.channelId, result);
     }
 
     async GetResult(): Promise<string>

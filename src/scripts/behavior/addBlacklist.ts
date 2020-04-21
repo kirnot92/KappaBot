@@ -22,7 +22,7 @@ export class AddBlacklist implements IBehavior
     {
         if (!this.isAdmin)
         {
-            Global.Client.SendMessage(this.channelId, SystemMessage.TooWeak);
+            await Global.Client.SendMessage(this.channelId, SystemMessage.TooWeak);
             return;
         }
 
@@ -31,6 +31,6 @@ export class AddBlacklist implements IBehavior
 
         await BlacklistRepository.Add(this.targetId);
 
-        Global.Client.SendMessage(this.channelId, SystemMessage.Comfirmed);
+        await Global.Client.SendMessage(this.channelId, SystemMessage.Comfirmed);
     }
 }

@@ -21,7 +21,7 @@ export class RemoveBlacklist implements IBehavior
     {
         if (!this.isAdmin)
         {
-            Global.Client.SendMessage(this.channelId, SystemMessage.TooWeak);
+            await Global.Client.SendMessage(this.channelId, SystemMessage.TooWeak);
             return;
         }
 
@@ -30,6 +30,6 @@ export class RemoveBlacklist implements IBehavior
 
         await BlacklistRepository.Remove(this.targetId);
 
-        Global.Client.SendMessage(this.channelId, SystemMessage.Comfirmed);
+        await Global.Client.SendMessage(this.channelId, SystemMessage.Comfirmed);
     }
 }

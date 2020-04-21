@@ -102,7 +102,8 @@ export default class Application
                 // 이렇게 해보니까 결과값을 DM으로 보내기도 편한듯
                 var behavior = BehaviorFactory.Create(command, others, author.id, channelId);
                 
-                await behavior.Run();
+                var promise = await behavior.Run();
+                promise
             }
             catch (error)
             {

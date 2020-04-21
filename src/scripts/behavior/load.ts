@@ -25,7 +25,7 @@ export class Load implements IBehavior
     {
         var result = await this.GetResult();
 
-        Global.Client.SendMessage(this.channelId, result.Message, result.Options);
+        await Global.Client.SendMessage(this.channelId, result.Message, result.Options);
     }
 
     async GetResult(): Promise<CommandContext>

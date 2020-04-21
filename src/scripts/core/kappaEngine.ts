@@ -20,7 +20,7 @@ export class KappaEngine
         Global.Initialize(client);
         Log.Info("GlobalAPI Initialized");
 
-        Global.Client.SendMessage(Secret.DefaultChannelId, SystemMessage.RebootCompleted);
+        await Global.Client.SendMessage(Secret.DefaultChannelId, SystemMessage.RebootCompleted);
 
         this.application = new Application();
         this.application.Initialize();
