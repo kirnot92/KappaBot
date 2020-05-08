@@ -18,13 +18,13 @@ export default class TwitterApplication
 
     public async Initialize()
     {
-        for (var userUnderWatching of Secret.TwitterUsersUnderWatching)
+        for (var data of Secret.TwitterUsersUnderWatching)
         {
-            this.WatchTimeline(userUnderWatching);
+            this.WatchTimeline(data.UserName, data.BroadcastChannelId);
         }
     }
 
-    private async WatchTimeline(userName: string)
+    private async WatchTimeline(userName: string, channelId: string)
     {
         var userData = await this.client.get("users/show", {screen_name: userName});
         var userId = userData.id_str;
@@ -34,10 +34,7 @@ export default class TwitterApplication
         {
             var message = "https://twitter.com/" + event.user.screen_name + "/status/" + event.id_str;
 
-            for (var channelId of Secret.TwitterBroadcastChannels)
-            {
-                await Global.Client.SendMessage(channelId, message);
-            }
+            await Global.Client.SendMessage(channelId, message);
         });
     }
 }
