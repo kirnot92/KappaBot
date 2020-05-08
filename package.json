@@ -22,6 +22,7 @@
   "dependencies": {
     "@types/node": "^12.7.3",
     "@types/node-schedule": "^1.2.4",
+    "@types/twitter": "^1.7.0",
     "async-limiter": "^1.0.1",
     "discord.js": "^11.5.1",
     "long": "^4.0.0",
