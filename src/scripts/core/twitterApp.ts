@@ -1,6 +1,8 @@
 import * as Twitter from "twitter";
 import * as Secret from "../../json/secret.json";
 import Global from "./global.js";
+import Dictionary from "../collection/dictionary.js";
+import { stringify } from "querystring";
 
 export default class TwitterApplication
 {
@@ -18,23 +20,37 @@ export default class TwitterApplication
 
     public async Initialize()
     {
+        var userIds = new Array<string>()
+        var userIdToChannelIdMap = new Dictionary<string, string>();
+
         for (var data of Secret.TwitterUsersUnderWatching)
         {
-            this.WatchTimeline(data.UserName, data.BroadcastChannelId);
+            var userId = await this.GetUserId(data.UserName);
+            userIds.push(userId);
+
+            userIdToChannelIdMap.Add(userId, data.BroadcastChannelId);
         }
+
+        this.WatchTimeline(userIds, userIdToChannelIdMap);
     }
 
-    private async WatchTimeline(userName: string, channelId: string)
+    private async GetUserId(userName: string): Promise<string>
     {
         var userData = await this.client.get("users/show", {screen_name: userName});
-        var userId = userData.id_str;
+        return userData.id_str;
+    }
 
-        var stream = this.client.stream("statuses/filter", {follow: userId});
+    private async WatchTimeline(userIds: Array<string>, userIdToChannelIdMap: Dictionary<string, string>)
+    {
+        var userIdsStr = userIds.toString();
+
+        var stream = this.client.stream("statuses/filter", {follow: userIdsStr});
         stream.on("data", async (event) =>
         {
             var message = "https://twitter.com/" + event.user.screen_name + "/status/" + event.id_str;
+            var targetChannelId = userIdToChannelIdMap.MustGet(event.id_str);
 
-            await Global.Client.SendMessage(channelId, message);
+            await Global.Client.SendMessage(targetChannelId, message);
         });
     }
 }
