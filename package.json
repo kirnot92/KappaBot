@@ -30,6 +30,7 @@
     "prism-media": "^1.1.0",
     "snekfetch": "^4.0.4",
     "tweetnacl": "^1.0.1",
+    "twitter": "^1.7.1",
     "ws": "^7.1.2"
   },
   "devDependencies": {
