@@ -31,7 +31,10 @@ export default class TwitterApplication
             userIdToChannelIdMap.Add(userId, data.BroadcastChannelId);
         }
 
-        this.WatchTimeline(userIds, userIdToChannelIdMap);
+        if (userIds.length != 0)
+        {
+            this.WatchTimeline(userIds, userIdToChannelIdMap);
+        }
     }
 
     private async GetUserId(userName: string): Promise<string>
