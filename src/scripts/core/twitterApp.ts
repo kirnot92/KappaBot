@@ -51,9 +51,15 @@ export default class TwitterApplication
         stream.on("data", async (event) =>
         {
             var message = "https://twitter.com/" + event.user.screen_name + "/status/" + event.id_str;
-            var targetChannelId = userIdToChannelIdMap.MustGet(event.id_str);
-
-            await Global.Client.SendMessage(targetChannelId, message);
+            var eventUserId = event.user.id_str;
+            var isRT = event.text.startsWith("RT @");
+            
+            // 알티인 경우도 걸리지만 그런 경우는 트윗하지 않기로
+            if (!isRT && userIdToChannelIdMap.ContainsKey(eventUserId))
+            {
+                var targetChannelId = userIdToChannelIdMap.MustGet(eventUserId);
+                await Global.Client.SendMessage(targetChannelId, message);
+            }
         });
     }
 }
