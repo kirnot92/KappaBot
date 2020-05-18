@@ -25,6 +25,7 @@
     "@types/twitter": "^1.7.0",
     "async-limiter": "^1.0.1",
     "discord.js": "^11.5.1",
+    "exit-hook": "^2.2.0",
     "long": "^4.0.0",
     "node-cmd": "^3.0.0",
     "node-schedule": "^1.3.2",
