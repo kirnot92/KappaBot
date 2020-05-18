@@ -28,9 +28,17 @@ export default class Application
         // 그래서 람다로 한 번 더 감싸서 보내줘야 함...
         Global.System.AddMessageListener((msg) =>  this.OnChannelMessage(msg));
         Global.System.AddMessageListener((msg) =>  this.OnDirectMessage(msg));
+        Global.System.AddExitHook("NotifyToAdmin", () => this.OnApplicationEnd());
         this.InitializeActivity();
 
         Log.Info("Application Initialized");
+    }
+
+    OnApplicationEnd(): void
+    {
+        var notify = "프로그램이 종료되었습니다.";
+
+        Global.Client.SendDirectMessage(Secret.AdminId, notify);
     }
 
     InitializeActivity()
