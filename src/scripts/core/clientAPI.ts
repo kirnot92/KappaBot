@@ -30,23 +30,25 @@ export default class ClientAPI
         
         await this.SendInternal(message, null, async (msg, option) => { await user.send(msg); });
     }
-
+   
     public async SendInternal(
         message: string,
         options: MessageOptions | RichEmbed | Attachment,
         sendFunc: (msg: string, options?: MessageOptions | RichEmbed | Attachment) => {})
     {
-        var others = message;
-
         // 2000 넘는 글자가 전송이 안됨
+        // 이미지만 있는 경우 고려해서 한 번은 보낸다
+        var msg = message.slice(0, 1500)
+        var others = message.slice(1500);
+        await sendFunc(msg, options);
+        
         while (others.length != 0)
         {
             var msg = others.slice(0, 1500)
             others = others.slice(1500);
-            await sendFunc(msg, options);
+            await sendFunc(msg, null);
         }
     }
-
 
     public SetActivity(message: string)
     {
