@@ -20,13 +20,33 @@ export default class ClientAPI
     public async SendMessage(channelId: string, message: string,  options?: MessageOptions | RichEmbed | Attachment)
     {
         var channel = this.GetChannel(channelId);
-        await channel.send(message, options);
+
+        await this.SendInternal(message, options, async (msg, option) => { await channel.send(msg, option) });
     }
 
     public async SendDirectMessage(userId: string, message: string)
     {
-        await this.client.users.get(userId).send(message);
+        var user = this.client.users.get(userId);
+        
+        await this.SendInternal(message, null, async (msg, option) => { await user.send(msg); });
     }
+
+    public async SendInternal(
+        message: string,
+        options: MessageOptions | RichEmbed | Attachment,
+        sendFunc: (msg: string, options?: MessageOptions | RichEmbed | Attachment) => {})
+    {
+        var others = message;
+
+        // 2000 넘는 글자가 전송이 안됨
+        while (others.length != 0)
+        {
+            var msg = others.slice(0, 1500)
+            others = others.slice(1500);
+            await sendFunc(msg, options);
+        }
+    }
+
 
     public SetActivity(message: string)
     {

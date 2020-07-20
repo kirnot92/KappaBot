@@ -17,6 +17,7 @@ export default class SystemAPI
     private client: Client = null;
     constructor(client: Client)
     {
+        this.exitHookHolder = new Dictionary<string, ()=>{}>();
         this.messageHandlers = new Array<(msg: Message) => Promise<void>>();
         this.client = client;
         this.client.on("message", async (msg) => await this.OnMessage(msg))
