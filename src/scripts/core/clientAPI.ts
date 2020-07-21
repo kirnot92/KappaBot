@@ -36,17 +36,17 @@ export default class ClientAPI
         options: MessageOptions | RichEmbed | Attachment,
         sendFunc: (msg: string, options?: MessageOptions | RichEmbed | Attachment) => {})
     {
-        // 2000 넘는 글자가 전송이 안됨
-        // 이미지만 있는 경우 고려해서 한 번은 보낸다
-        var msg = message.slice(0, 1500)
-        var others = message.slice(1500);
-        await sendFunc(msg, options);
-        
-        while (others.length != 0)
+        // 2000 넘는 메세지는 전송이 안 되서 쪼개서 보낸다.
+        // file같은 options가 있는 경우, 한 번은 보내게 만든다
+        var remains = message;
+
+        while (remains.length != 0 || options != null)
         {
-            var msg = others.slice(0, 1500)
-            others = others.slice(1500);
-            await sendFunc(msg, null);
+            var msg = remains.slice(0, 1500)
+            remains = remains.slice(1500);
+            await sendFunc(msg, options);
+
+            options = null;
         }
     }
 
