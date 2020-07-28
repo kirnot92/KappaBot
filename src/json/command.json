@@ -82,5 +82,12 @@
         "ArgCount": 1,
         "Usage": "",
         "IsAdminCommand": true
+    },
+    "검색":
+    {
+        "Key": "검색",
+        "ArgCount": 1,
+        "Usage": "[이름]",
+        "IsAdminCommand": false
     }
 }

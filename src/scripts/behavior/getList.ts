@@ -22,7 +22,7 @@ export class GetList implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        var fileList = await CommandRepository.GetList(this.channelId);;
+        var fileList = await CommandRepository.GetList(this.channelId);
         if (fileList == null)
         {
             return SystemMessage.NothingSaved;

@@ -13,6 +13,7 @@ import { Register } from "./register";
 import { GetListDM } from "./getListDM";
 import { AddBlacklist } from "./addBlacklist";
 import { RemoveBlacklist } from "./removeBlacklist";
+import { Search } from "./search";
 
 export default class BehaviorFactory
 {
@@ -42,6 +43,8 @@ export default class BehaviorFactory
                 return new AddBlacklist(others, channelId, authorId);
             case Command.블랙리스트삭제.Key:
                 return new RemoveBlacklist(others, channelId, authorId);
+            case Command.검색.Key:
+                return new Search(others, channelId);
             default:
                 return new Load(command, channelId);
         }
