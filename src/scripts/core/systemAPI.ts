@@ -58,15 +58,20 @@ export default class SystemAPI
 
         this.isRebootProgress = true;
 
+        this.TerminalCommand(Secret.RebootSequence, "재부팅이 실패했습니다.");
+    }
+
+    public TerminalCommand(str: string, errorMsg: string)
+    {
         var cmd = require("child_process").exec;
-        cmd(Secret.RebootSequence, (err: any, stdout: any, stderr: any) =>
+        cmd(str, (err: any, stdout: any, stderr: any) =>
         {
             if (err)
             {
                 // client 가지고 있으니까 직접 채널을 가져오게 하자
                 // 여기서 Global.Client를 가져오는 건 좀 찜찜함
                 var admin = this.client.users.get(Secret.AdminId) as User;
-                admin.send("재부팅이 실패했습니다. ```" + err.stack + "```");
+                admin.send(errorMsg + " ```" + err.stack + "```");
                 this.isRebootProgress = false;
             }
         });

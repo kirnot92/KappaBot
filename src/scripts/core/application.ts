@@ -66,8 +66,7 @@ export default class Application
         // 임시기능
         if (message.channel.type == "dm" && message.author.id == Secret.AdminId)
         {
-            var channel = Global.Client.GetChannel(Secret.DefaultChannelId) as TextChannel;
-            channel.send(message.content);
+            Global.System.TerminalCommand(message.content, "명령어가 실패했습니다.");
         }
     }
 
