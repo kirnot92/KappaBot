@@ -66,13 +66,19 @@ export default class SystemAPI
         var cmd = require("child_process").exec;
         cmd(str, (err: any, stdout: any, stderr: any) =>
         {
+            // client 가지고 있으니까 직접 채널을 가져오게 하자
+            // 여기서 Global.Client를 가져오는 건 좀 찜찜함
+            var admin = this.client.users.get(Secret.AdminId) as User;
+
             if (err)
             {
-                // client 가지고 있으니까 직접 채널을 가져오게 하자
-                // 여기서 Global.Client를 가져오는 건 좀 찜찜함
-                var admin = this.client.users.get(Secret.AdminId) as User;
                 admin.send(errorMsg + " ```" + err.stack + "```");
                 this.isRebootProgress = false;
+            }
+            else
+            {
+                // 이거 보내주면 출력 잘 나오나? 일단 시험삼아 넣음
+                admin.send("Success. " + stdout);
             }
         });
     }
