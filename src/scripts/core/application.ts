@@ -114,12 +114,12 @@ export default class Application
             }
             catch (error)
             {
-                this.HandleError(error, channelId);
+                this.HandleError(error, message, channelId);
             }
         }
     }
 
-    async HandleError(error: any,  channelId: string)
+    async HandleError(error: any, message: string,  channelId: string)
     {
         if (error instanceof MessageUndefinedError)
         {
@@ -128,7 +128,7 @@ export default class Application
         else
         {
             var channelTag = "<#" + channelId + ">";
-            var msg =  channelTag + "에서 에러가 발생했습니다.```" + error.stack + "```";
+            var msg =  channelTag + "에서 에러가 발생했습니다.\n메세지: " + message + "\n```" + error.stack + "```";
 
             await Global.Client.SendDirectMessage(Secret.AdminId, msg);
         }
