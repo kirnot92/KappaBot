@@ -87,7 +87,7 @@
     {
         "Key": "검색",
         "ArgCount": 1,
-        "Usage": "[이름]",
+        "Usage": "검색 [이름]",
         "IsAdminCommand": false
     }
 }
