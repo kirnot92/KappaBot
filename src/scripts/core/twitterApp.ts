@@ -52,10 +52,11 @@ export default class TwitterApplication
         {
             var message = "https://twitter.com/" + event.user.screen_name + "/status/" + event.id_str;
             var eventUserId = event.user.id_str;
-            var isRT = event.text.startsWith("RT @");
-            
-            // 알티인 경우도 걸리지만 그런 경우는 트윗하지 않기로
-            if (!isRT && userIdToChannelIdMap.ContainsKey(eventUserId))
+            var text = event.text as string;
+            var isRT = text.startsWith("RT @");
+            var hasUrl = text.includes("http");
+
+            if (!isRT && hasUrl && userIdToChannelIdMap.ContainsKey(eventUserId))
             {
                 var targetChannelId = userIdToChannelIdMap.MustGet(eventUserId);
                 await Global.Client.SendMessage(targetChannelId, message);
