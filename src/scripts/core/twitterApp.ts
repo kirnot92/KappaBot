@@ -29,6 +29,10 @@ export default class TwitterApplication
             userIds.push(userId);
 
             userIdToChannelIdMap.Add(userId, data.BroadcastChannelId);
+
+            var channelTag = "<#" + data.BroadcastChannelId + ">";
+
+            await Global.Client.SendDirectMessage(Secret.AdminId, "<SYSTEM>: 앞으로 " + channelTag + "채널에 @"+data.UserName+"의 트윗이 올라오게 됩니다.");
         }
 
         if (userIds.length != 0)
