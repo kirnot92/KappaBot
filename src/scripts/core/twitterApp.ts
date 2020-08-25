@@ -29,11 +29,13 @@ export default class TwitterApplication
             userIds.push(userId);
 
             userIdToChannelIdMap.Add(userId, data.BroadcastChannelId);
+
+            await Global.Client.SendMessage(data.BroadcastChannelId, "<SYSTEM>: 앞으로 이 채널에 @"+data.UserName+"의 트윗이 올라오게 됩니다.");
         }
 
         if (userIds.length != 0)
         {
-            this.WatchTimeline(userIds, userIdToChannelIdMap);
+            this.WatchTimelines(userIds, userIdToChannelIdMap);
         }
     }
 
@@ -43,11 +45,11 @@ export default class TwitterApplication
         return userData.id_str;
     }
 
-    private async WatchTimeline(userIds: Array<string>, userIdToChannelIdMap: Dictionary<string, string>)
+    private async WatchTimelines(userIds: Array<string>, userIdToChannelIdMap: Dictionary<string, string>)
     {
-        var userIdsStr = userIds.toString();
-
+        var userIdsStr = userIds.join(",");
         var stream = this.client.stream("statuses/filter", {follow: userIdsStr});
+        
         stream.on("data", async (event) =>
         {
             var message = "https://twitter.com/" + event.user.screen_name + "/status/" + event.id_str;
