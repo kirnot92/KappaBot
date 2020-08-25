@@ -29,8 +29,6 @@ export default class TwitterApplication
             userIds.push(userId);
 
             userIdToChannelIdMap.Add(userId, data.BroadcastChannelId);
-
-            await Global.Client.SendMessage(data.BroadcastChannelId, "<SYSTEM>: 앞으로 이 채널에 @"+data.UserName+"의 트윗이 올라오게 됩니다.");
         }
 
         if (userIds.length != 0)
