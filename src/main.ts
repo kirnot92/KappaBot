@@ -29,6 +29,30 @@ class KappaEngine
 
         this.twitterApplication = new TwitterApplication();
         this.twitterApplication.Initialize();
+
+        await this.MainLoop();
+    }
+
+    private static async MainLoop()
+    {
+        if (!this.twitterApplication.IsWatchingTimelines())
+        {
+            return;
+        }
+
+        while (true)
+        {
+            await this.twitterApplication.Update();
+
+            await this.Delay(1);
+        }
+    }
+
+    private static Delay(sec: number)
+    {
+        var ms = sec * 1000;
+
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 

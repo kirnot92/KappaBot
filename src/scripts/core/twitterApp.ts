@@ -2,11 +2,13 @@ import * as Twitter from "twitter";
 import * as Secret from "../../json/secret.json";
 import Global from "./global.js";
 import Dictionary from "../collection/dictionary.js";
-import { stringify } from "querystring";
 
 export default class TwitterApplication
 {
     private client: Twitter
+    private userIds: Array<string>
+    private reconnectRequired: boolean;
+    private userNameToChannelIdMap: Dictionary<string, string>;
 
     constructor()
     {
@@ -16,29 +18,43 @@ export default class TwitterApplication
             access_token_key: Secret.AccessToken,
             access_token_secret: Secret.AccessTokenSecret 
         });
+
+        this.userIds = new Array<string>();
+        this.userNameToChannelIdMap = new Dictionary<string, string>();
     }
 
     public async Initialize()
     {
-        var userIds = new Array<string>()
-        var userIdToChannelIdMap = new Dictionary<string, string>();
-
         for (var data of Secret.TwitterUsersUnderWatching)
         {
             var userId = await this.GetUserId(data.UserName);
-            userIds.push(userId);
+            this.userIds.push(userId);
 
-            userIdToChannelIdMap.Add(userId, data.BroadcastChannelId);
+            this.userNameToChannelIdMap.Add(data.UserName, data.BroadcastChannelId);
 
             var channelTag = "<#" + data.BroadcastChannelId + ">";
-
-            await Global.Client.SendDirectMessage(Secret.AdminId, "<SYSTEM>: 앞으로 " + channelTag + "채널에 @"+data.UserName+"의 트윗이 올라오게 됩니다.");
+            await Global.Client.SendDirectMessage(Secret.AdminId, "앞으로 " + channelTag + "채널에 @"+data.UserName+"의 트윗이 올라오게 됩니다.");
         }
 
-        if (userIds.length != 0)
+        if (this.userIds.length != 0)
         {
-            this.WatchTimelines(userIds, userIdToChannelIdMap);
+            this.WatchTimelines();
         }
+    }
+
+    public async Update()
+    {
+        if (this.reconnectRequired)
+        {
+            await Global.Client.SendDirectMessage(Secret.AdminId, "스트림이 종료되어 재시작합니다.");
+
+            this.WatchTimelines();
+        }
+    }
+
+    public IsWatchingTimelines()
+    {
+        return this.userIds.length > 0;
     }
 
     private async GetUserId(userName: string): Promise<string>
@@ -47,24 +63,45 @@ export default class TwitterApplication
         return userData.id_str;
     }
 
-    private async WatchTimelines(userIds: Array<string>, userIdToChannelIdMap: Dictionary<string, string>)
+    private async WatchTimelines()
     {
-        var userIdsStr = userIds.join(",");
+        this.reconnectRequired = false;
+
+        var userIdsStr = this.userIds.join(",");
         var stream = this.client.stream("statuses/filter", {follow: userIdsStr});
         
         stream.on("data", async (event) =>
         {
-            var message = "https://twitter.com/" + event.user.screen_name + "/status/" + event.id_str;
-            var eventUserId = event.user.id_str;
-            var text = event.text as string;
-            var isRT = text.startsWith("RT @");
-            var hasUrl = text.includes("http");
-
-            if (!isRT && hasUrl && userIdToChannelIdMap.ContainsKey(eventUserId))
+            if (event.errors != undefined)
             {
-                var targetChannelId = userIdToChannelIdMap.MustGet(eventUserId);
+                this.reconnectRequired = true;
+                return;
+            }
+
+            var userName = event.user.screen_name;
+            var message = "https://twitter.com/" + userName + "/status/" + event.id_str;
+
+            var isRT = event.retweeted;
+            var hasYoutubeUrls = this.HasYoutubeUrls(event.entities.urls);
+
+            if (!isRT && hasYoutubeUrls && this.userNameToChannelIdMap.ContainsKey(userName))
+            {
+                var targetChannelId = this.userNameToChannelIdMap.MustGet(userName);
                 await Global.Client.SendMessage(targetChannelId, message);
             }
         });
+    }
+
+    private HasYoutubeUrls(urls: Array<any>): boolean
+    {
+        for (var i = 0; i < urls.length; ++i)
+        {
+            var url = urls[i];
+            if (url.display_url.includes("youtu"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
