@@ -5,6 +5,7 @@ import {Client} from "discord.js";
 import * as Secret from "./json/secret.json";
 import * as SystemMessage from "./json/systemMessage.json";
 import TwitterApplication from "./scripts/core/twitterApp";
+import WaitFor from "./scripts/core/waitFor";
 
 class KappaEngine
 {
@@ -30,29 +31,20 @@ class KappaEngine
         this.twitterApplication = new TwitterApplication();
         this.twitterApplication.Initialize();
 
-        await this.MainLoop();
+        if (this.twitterApplication.IsWatchingTimelines())
+        {
+            await this.MainLoop();
+        }
     }
 
     private static async MainLoop()
     {
-        if (!this.twitterApplication.IsWatchingTimelines())
-        {
-            return;
-        }
-
         while (true)
         {
             await this.twitterApplication.Update();
 
-            await this.Delay(1);
+            await WaitFor.Seconds(1);
         }
-    }
-
-    private static Delay(sec: number)
-    {
-        var ms = sec * 1000;
-
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 
