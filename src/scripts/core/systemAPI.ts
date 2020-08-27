@@ -12,12 +12,10 @@ export default class SystemAPI
     private messageHandlers: Array<(msg: Message) => Promise<void>>;
     private serverStartedDate: string;
     private exitHook = require("exit-hook");
-    private exitHookHolder: Dictionary<string, ()=>{}>;
 
     private client: Client = null;
     constructor(client: Client)
     {
-        this.exitHookHolder = new Dictionary<string, ()=>{}>();
         this.messageHandlers = new Array<(msg: Message) => Promise<void>>();
         this.client = client;
         this.client.on("message", async (msg) => await this.OnMessage(msg))
@@ -25,7 +23,7 @@ export default class SystemAPI
 
         Log.Info("Server Started At " + this.serverStartedDate);
 
-        this.AddExitHook("ExitLog", () =>
+        this.AddExitHook(() =>
         {
             Log.Info("Server Exited");
         });
@@ -83,10 +81,12 @@ export default class SystemAPI
         });
     }
 
-    public AddExitHook(hookName: string, func: () => void): void
+    public AddExitHook(func: () => void): void
     {
-        var hook = this.exitHook(func);
-        this.exitHookHolder.Add(hookName, hook);
+        this.exitHook(() => 
+        {
+            func();
+        });
     }
 
     public IsRebootProgress(): boolean
