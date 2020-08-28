@@ -28,10 +28,15 @@ export default class Application
         // 그래서 람다로 한 번 더 감싸서 보내줘야 함...
         Global.System.AddMessageListener((msg) =>  this.OnChannelMessage(msg));
         Global.System.AddMessageListener((msg) =>  this.OnDirectMessage(msg));
-        Global.System.AddExitHook("NotifyToAdmin", () => this.OnApplicationEnd());
+        Global.System.AddExitHook(() => this.OnApplicationEnd());
         this.InitializeActivity();
 
         Log.Info("Application Initialized");
+    }
+
+    public async Update(): Promise<void>
+    {
+        // do nothing
     }
 
     OnApplicationEnd(): void

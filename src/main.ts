@@ -31,16 +31,15 @@ class KappaEngine
         this.twitterApplication = new TwitterApplication();
         this.twitterApplication.Initialize();
 
-        if (this.twitterApplication.IsWatchingTimelines())
-        {
-            await this.MainLoop();
-        }
+        await this.MainLoop();
     }
 
     private static async MainLoop()
     {
         while (true)
         {
+            await this.application.Update();
+
             await this.twitterApplication.Update();
 
             await WaitFor.Seconds(1);
