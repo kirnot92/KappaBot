@@ -33,7 +33,8 @@
     "snekfetch": "^4.0.4",
     "tweetnacl": "^1.0.1",
     "twitter": "^1.7.1",
-    "ws": "^7.1.2"
+    "ws": "^7.1.2",
+    "youtube-thumbnail": "^1.3.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.0.0",
