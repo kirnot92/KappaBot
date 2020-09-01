@@ -2,6 +2,8 @@ import * as Twitter from "twitter";
 import * as Secret from "../../json/secret.json";
 import Global from "./global.js";
 import Dictionary from "../collection/dictionary.js";
+import {MessageOptions, RichEmbed, Attachment} from "discord.js"
+const youtubeThumbnailMaker = require("youtube-thumbnail");
 
 export default class TwitterApplication
 {
@@ -82,26 +84,31 @@ export default class TwitterApplication
             var message = "https://twitter.com/" + userName + "/status/" + event.id_str;
 
             var isRT = event.retweeted;
-            var hasYoutubeUrls = this.HasYoutubeUrls(event.entities.urls);
+            var youtubeUrl = this.GetYoutubeUrl(event.entities.urls);
 
-            if (!isRT && hasYoutubeUrls && this.userNameToChannelIdMap.ContainsKey(userName))
+            if (!isRT && youtubeUrl != null && this.userNameToChannelIdMap.ContainsKey(userName))
             {
+                var thumbnail = youtubeThumbnailMaker(youtubeUrl);
+                var files = new Array<string>();
+                files.push(thumbnail.high.url);
+                var option = {files} as (MessageOptions | RichEmbed | Attachment);
+
                 var targetChannelId = this.userNameToChannelIdMap.MustGet(userName);
-                await Global.Client.SendMessage(targetChannelId, message);
+                await Global.Client.SendMessage(targetChannelId, message, option);
             }
         });
     }
 
-    private HasYoutubeUrls(urls: Array<any>): boolean
+    private GetYoutubeUrl(urls: Array<any>): string
     {
         for (var i = 0; i < urls.length; ++i)
         {
             var url = urls[i];
-            if (url.display_url.includes("youtu"))
+            if (url.expanded_url.includes("youtu"))
             {
-                return true;
+                return url.expanded_url;
             }
         }
-        return false;
+        return null;
     }
 }
