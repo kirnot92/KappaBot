@@ -71,15 +71,9 @@ export default class TwitterApplication
 
         var userIdsStr = this.userIds.join(",");
         var stream = this.client.stream("statuses/filter", {follow: userIdsStr});
-        
+
         stream.on("data", async (event) =>
         {
-            if (event.errors != undefined)
-            {
-                this.reconnectRequired = true;
-                return;
-            }
-
             var userName = event.user.screen_name;
             var message = "https://twitter.com/" + userName + "/status/" + event.id_str;
 
@@ -96,6 +90,13 @@ export default class TwitterApplication
                 var targetChannelId = this.userNameToChannelIdMap.MustGet(userName);
                 await Global.Client.SendMessage(targetChannelId, message, option);
             }
+        });
+
+        stream.on("error", async (error)=>
+        {
+            this.reconnectRequired = true;
+
+            await Global.Client.SendDirectMessage(Secret.AdminId, "에러 발생 " + error);
         });
     }
 
