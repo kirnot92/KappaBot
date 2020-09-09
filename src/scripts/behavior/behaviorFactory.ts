@@ -32,7 +32,7 @@ export default class BehaviorFactory
             case Command.목록.Key:
                 // $목록 [검색할단어]로 잘못 치는 사람들이 많아서
                 // args 통째로 한 번 검색해보고 있으면 Search로 넘김
-                if (others.length != 0)
+                if (others != null && others.length != 0)
                 {
                     return new Search(others, channelId);
                 }
