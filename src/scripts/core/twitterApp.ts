@@ -77,7 +77,7 @@ export default class TwitterApplication
             var userName = event.user.screen_name;
             var message = "https://twitter.com/" + userName + "/status/" + event.id_str;
 
-            var isRT = event.retweeted;
+            var isRT = (event.text as string).startsWith("RT @");
             var youtubeUrl = this.GetYoutubeUrl(event.entities.urls);
 
             if (!isRT && youtubeUrl != null && this.userNameToChannelIdMap.ContainsKey(userName))
