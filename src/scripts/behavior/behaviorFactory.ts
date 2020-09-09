@@ -17,7 +17,7 @@ import { Search } from "./search";
 
 export default class BehaviorFactory
 {
-    static Create(command: string, others: string, authorId: string, channelId: string): IBehavior
+    public static Create(command: string, others: string, authorId: string, channelId: string): IBehavior
     {
         switch(command)
         {
@@ -30,7 +30,16 @@ export default class BehaviorFactory
             case Command.마지막줄삭제.Key:
                 return new RemoveLastLine(others, channelId);
             case Command.목록.Key:
-                return new GetList(channelId);
+                // $목록 [검색할단어]로 잘못 치는 사람들이 많아서
+                // args 통째로 한 번 검색해보고 있으면 Search로 넘김
+                if (others.length != 0)
+                {
+                    return new Search(others, channelId);
+                }
+                else
+                {
+                    return new GetList(channelId);
+                }
             case Command.목록디엠으로.Key:
                 return new GetListDM(channelId, authorId);
             case Command.삭제.Key:
