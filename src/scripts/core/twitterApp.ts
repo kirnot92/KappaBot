@@ -1,23 +1,24 @@
-import * as Twitter from "twitter";
 import * as Secret from "../../json/secret.json";
 import Global from "./global.js";
 import Dictionary from "../collection/dictionary.js";
 import {MessageOptions, RichEmbed, Attachment} from "discord.js"
 const youtubeThumbnailMaker = require("youtube-thumbnail");
+import * as TwitterClient from "twit";
+import {Twitter} from "twit";
 
 export default class TwitterApplication
 {
-    private client: Twitter
+    private client: TwitterClient
     private userIds: Array<string>
     private reconnectRequired: boolean;
     private userNameToChannelIdMap: Dictionary<string, string>;
 
     constructor()
     {
-        this.client = new Twitter({
+        this.client = new TwitterClient({
             consumer_key: Secret.CounsumerKey,
             consumer_secret: Secret.ConsumerSecret,
-            access_token_key: Secret.AccessToken,
+            access_token: Secret.AccessToken,
             access_token_secret: Secret.AccessTokenSecret 
         });
 
@@ -62,7 +63,7 @@ export default class TwitterApplication
     private async GetUserId(userName: string): Promise<string>
     {
         var userData = await this.client.get("users/show", {screen_name: userName});
-        return userData.id_str;
+        return (userData.data as Twitter.User).id_str;
     }
 
     private async WatchTimelines()
@@ -72,13 +73,13 @@ export default class TwitterApplication
         var userIdsStr = this.userIds.join(",");
         var stream = this.client.stream("statuses/filter", {follow: userIdsStr});
 
-        stream.on("data", async (event) =>
+        stream.on("tweet", async (tweet: Twitter.Status) =>
         {
-            var userName = event.user.screen_name;
-            var message = "https://twitter.com/" + userName + "/status/" + event.id_str;
+            var userName = tweet.user.screen_name;
+            var message = "https://twitter.com/" + userName + "/status/" + tweet.id_str;
 
-            var isRT = (event.text as string).startsWith("RT @");
-            var youtubeUrl = this.GetYoutubeUrl(event.entities.urls);
+            var isRT = tweet.text.startsWith("RT @");
+            var youtubeUrl = this.GetYoutubeUrl(tweet.entities.urls);
 
             if (!isRT && youtubeUrl != null && this.userNameToChannelIdMap.ContainsKey(userName))
             {
@@ -92,11 +93,16 @@ export default class TwitterApplication
             }
         });
 
-        stream.on("error", async (error)=>
+        stream.on("error", async (event)=>
         {
             this.reconnectRequired = true;
+            await Global.Client.SendDirectMessage(Secret.AdminId, "에러 발생 " + event);
+        });
 
-            await Global.Client.SendDirectMessage(Secret.AdminId, "에러 발생 " + error);
+        stream.on("disconnect", async (event)=>
+        {
+            this.reconnectRequired = true;
+            await Global.Client.SendDirectMessage(Secret.AdminId, "disconnect 발생 " + event);
         });
     }
 
