@@ -106,7 +106,7 @@ export default class TwitterApplication
         });
     }
 
-    private GetYoutubeUrl(urls: Array<any>): string
+    private GetYoutubeUrl(urls: Twitter.UrlEntity[]): string
     {
         for (var i = 0; i < urls.length; ++i)
         {
