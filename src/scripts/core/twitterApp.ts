@@ -49,6 +49,8 @@ export default class TwitterApplication
     {
         if (this.reconnectRequired)
         {
+            this.reconnectRequired = false;
+
             await Global.Client.SendDirectMessage(Secret.AdminId, "스트림이 종료되어 재시작합니다.");
 
             this.WatchTimelines();
