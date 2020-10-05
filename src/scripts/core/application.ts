@@ -170,6 +170,6 @@ export default class Application
     {
         var commands = Command as any;
         var command = commands[key];
-        return key + "명령어의 사용법입니다.\n" +  Config.Prefix + command.Usage;
+        return key + " 명령어의 사용법입니다.\n" +  Config.Prefix + command.Usage;
     }
 }
