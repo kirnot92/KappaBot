@@ -8,6 +8,11 @@ export default class BlacklistRepository
 {
     public static async Add(userId: string)
     {
+        if (!(await File.IsExists(BLACKLIST)))
+        {
+            File.MakeDir(BLACKLIST);
+        }
+
         var path = this.GetPath(userId);
         await File.Write(path, "");
     }

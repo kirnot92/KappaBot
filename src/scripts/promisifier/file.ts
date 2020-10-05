@@ -3,6 +3,12 @@ import * as FileRaw from "fs"
 
 export default class File
 {
+    public static async MakeDir(path: string)
+    {
+        var mkdir = Utill.promisify(FileRaw.mkdir);
+        return await mkdir(path);
+    }
+
     public static async IsExists(path: string)
     {
         var isExists = Utill.promisify(FileRaw.exists)
