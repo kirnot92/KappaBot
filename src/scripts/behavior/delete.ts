@@ -18,7 +18,10 @@ export class Delete implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue(this.args, Command.삭제.ArgCount);
-        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
+        if (!hasValue)
+        {
+            LogicHalt.InvaildUsage(Command.삭제.Key);
+        }
     }
 
     public async Run()

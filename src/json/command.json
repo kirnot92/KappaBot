@@ -89,5 +89,19 @@
         "ArgCount": 1,
         "Usage": "검색 [이름]",
         "IsAdminCommand": false
+    },
+    "도움말":
+    {
+        "Key": "도움말",
+        "ArgCount": 0,
+        "Usage": "도움말",
+        "IsAdminCommand": false
+    },
+    "help":
+    {
+        "Key": "help",
+        "ArgCount": 0,
+        "Usage": "help",
+        "IsAdminCommand": false
     }
 }

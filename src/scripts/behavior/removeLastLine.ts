@@ -18,7 +18,10 @@ export class RemoveLastLine implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue(this.args, Command.마지막줄삭제.ArgCount);
-        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
+        if (!hasValue)
+        {
+            LogicHalt.InvaildUsage(Command.마지막줄삭제.Key);
+        }
     }
 
     public async Run()

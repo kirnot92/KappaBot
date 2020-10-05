@@ -17,7 +17,6 @@ export default class CommandRepository
     {
         var commands = await this.GetListAsArray(identifier);
         var list = new Array<string>();
-
         for (var i=0; i<commands.length; ++i)
         {
             var component = commands[i];

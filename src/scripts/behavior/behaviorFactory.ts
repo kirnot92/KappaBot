@@ -14,6 +14,7 @@ import { GetListDM } from "./getListDM";
 import { AddBlacklist } from "./addBlacklist";
 import { RemoveBlacklist } from "./removeBlacklist";
 import { Search } from "./search";
+import { Help } from "./help";
 
 export default class BehaviorFactory
 {
@@ -54,6 +55,9 @@ export default class BehaviorFactory
                 return new RemoveBlacklist(others, channelId, authorId);
             case Command.검색.Key:
                 return new Search(others, channelId);
+            case Command.도움말.Key:
+            case Command.help.Key:
+                return new Help(channelId);
             default:
                 return new Load(command, channelId);
         }

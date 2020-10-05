@@ -18,7 +18,10 @@ export class Load implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue([this.command], Command.로드.ArgCount);
-        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
+        if (!hasValue)
+        {
+            LogicHalt.CommandNotFound();
+        }
     }
 
     public async Run()
@@ -39,7 +42,10 @@ export class Load implements IBehavior
 
         // 없는 명령어면 비슷한 걸 찾아본다
         var similar = await CommandRepository.FindSimilar(this.channelId, this.command);
-        LogicHalt.ShowDefaultMessageIfFalse(similar != null);
+        if (similar == null)
+        {
+            LogicHalt.CommandNotFound();
+        }
 
         // 비슷한게 있으면 그걸 리턴함
         // 뭔 메세지로 보정했는지 prefix를 달아준다

@@ -18,7 +18,10 @@ export class AddLine implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue(this.args, Command.추가.ArgCount);
-        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
+        if (!hasValue)
+        {
+            LogicHalt.InvaildUsage(Command.추가.Key);
+        }
     }
 
     public async Run()

@@ -6,7 +6,7 @@ import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
 import { Message, TextChannel } from "discord.js";
 import { User } from "discord.js";
-import { MessageUndefinedError } from "./assert";
+import { CommandNotFoundError, InvaildUsageError  } from "./assert";
 import * as Playing from "../../json/playing.json";
 import * as Config from "../../json/config.json";
 import * as Command from "../../json/command.json";
@@ -101,6 +101,12 @@ export default class Application
 
         if (message.startsWith(Config.Prefix) && !author.bot)
         {
+            // $만 입력한 경우
+            if (message.length == 1) 
+            {
+                message = "$도움말";
+            }
+
             var prefixRemoved = message.slice(Config.Prefix.length);
             var args = String.Slice([prefixRemoved], /\s|\n/, 1);
             var command = args[0];
@@ -126,9 +132,18 @@ export default class Application
 
     async HandleError(error: any, message: string,  channelId: string)
     {
-        if (error instanceof MessageUndefinedError)
+        if (error instanceof InvaildUsageError)
         {
-            await Global.Client.SendMessage(channelId, this.GetDefaultHelp());
+            var messageInvaildUsageError = error as InvaildUsageError;
+            var key = messageInvaildUsageError.Key;
+
+            await Global.Client.SendMessage(channelId, this.GetUsageHelp(key));
+        }
+        else if (error instanceof CommandNotFoundError)
+        {   
+            var msg = "명령어를 찾지 못했습니다. '" + Config.Prefix + "도움말'을 입력해보세요.";
+
+            await Global.Client.SendMessage(channelId, msg);
         }
         else
         {
@@ -149,5 +164,12 @@ export default class Application
             content = content + Config.Prefix + commands[key].Usage + "\n";
         }
         return content;
+    }
+
+    GetUsageHelp(key: string): string
+    {
+        var commands = Command as any;
+        var command = commands[key];
+        return key + "명령어의 사용법입니다.\n" +  Config.Prefix + command.Usage;
     }
 }

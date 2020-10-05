@@ -19,15 +19,28 @@ export default class Assert
 
 export class LogicHalt
 {   
-    public static ShowDefaultMessageIfFalse(cond: boolean)
+    public static InvaildUsage(key: string)
     {
-        if (!cond)
-        {
-            throw new MessageUndefinedError();
-        }
+        throw new InvaildUsageError(key);
+    }
+
+    public static CommandNotFound()
+    {
+        throw new CommandNotFoundError();
     }
 }
 
-export class MessageUndefinedError extends Error
+export class CommandNotFoundError extends Error
 {
+}
+
+export class InvaildUsageError extends Error
+{
+    public Key: string
+
+    constructor(key: string)
+    {
+        super();
+        this.Key = key;
+    }
 }

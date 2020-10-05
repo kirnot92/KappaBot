@@ -18,7 +18,10 @@ export class Register implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue(this.args, Command.등록.ArgCount);
-        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
+        if (!hasValue)
+        {
+            LogicHalt.InvaildUsage(Command.등록.Key);
+        }
     }
 
     public async Run()

@@ -18,7 +18,10 @@ export class Search implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue([this.command], Command.검색.ArgCount);
-        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
+        if (!hasValue)
+        {
+            LogicHalt.InvaildUsage(Command.검색.Key);
+        }
     }
 
     public async Run()

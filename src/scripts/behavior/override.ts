@@ -18,7 +18,10 @@ export class Override implements IBehavior
         this.channelId = channelId;
 
         var hasValue = String.HasValue(this.args, Command.덮어쓰기.ArgCount);
-        LogicHalt.ShowDefaultMessageIfFalse(hasValue);
+        if (!hasValue)
+        {
+            LogicHalt.InvaildUsage(Command.덮어쓰기.Key);
+        }
     }
 
     public async Run()
