@@ -5,7 +5,7 @@ import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import { LogicHalt } from "../core/assert";
 import * as Command from "../../json/command.json"
-
+import KappaScript from "../kappaScript/parser";
 
 export class Load implements IBehavior
 {
@@ -27,8 +27,9 @@ export class Load implements IBehavior
     public async Run()
     {
         var result = await this.GetResult();
+        var message = KappaScript.Run(result.Message);
 
-        await Global.Client.SendMessage(this.channelId, result.Message, result.Options);
+        await Global.Client.SendMessage(this.channelId, message, result.Options);
     }
 
     async GetResult(): Promise<CommandContext>
