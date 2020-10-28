@@ -36,7 +36,9 @@ export class Register implements IBehavior
         var isAlreadyRegistered = await CommandRepository.IsExists(this.channelId, this.args[0]);
         if (isAlreadyRegistered)
         {
-            return "이미 등록된 명령어입니다.\n한 줄을 추가하려면 [추가] 명령어를 사용해주세요.";
+            return "이미 등록된 명령어입니다.\n"
+                 + "한 줄을 추가하려면 [추가] 명령어를 사용해주세요."
+                 + "내용을 새로 작성하려면 [덮어쓰기] 명령어를 사용해주세요.";
         }
 
         if (CommandRepository.IsSystemCommand(this.args[0]))
