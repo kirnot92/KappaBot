@@ -36,7 +36,7 @@ export class Delete implements IBehavior
         var isExists = await CommandRepository.IsExists(this.channelId, this.args[0])
         if (!isExists)
         {
-            return this.args[0] + "은 없는 명령어입니다."
+            return this.args[0] + "은 없는 명령어입니다.\n"
                 + "명령어를 찾으시려면 [검색] 명령어를 사용해주세요.";
         }
 
