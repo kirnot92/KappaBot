@@ -33,10 +33,11 @@ export class Delete implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        var isExists = CommandRepository.IsExists(this.channelId, this.args[0])
+        var isExists = await CommandRepository.IsExists(this.channelId, this.args[0])
         if (!isExists)
         {
-            return "없는 커맨드입니다.";
+            return this.args[0] + "은 없는 명령어입니다."
+                + "명령어를 찾으시려면 [검색] 명령어를 사용해주세요.";
         }
 
         await CommandRepository.Delete(this.channelId, this.args[0]);
