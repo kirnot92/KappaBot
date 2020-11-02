@@ -15,7 +15,7 @@ import { AddBlacklist } from "./addBlacklist";
 import { RemoveBlacklist } from "./removeBlacklist";
 import { Search } from "./search";
 import { Help } from "./help";
-import { LoadDM } from "./loadToDM";
+import { LoadToDM } from "./loadToDM";
 
 export default class BehaviorFactory
 {
@@ -60,7 +60,7 @@ export default class BehaviorFactory
             case Command.help.Key:
                 return new Help(channelId);
             case Command.내용디엠으로.Key:
-                return new LoadDM(others, channelId, authorId)
+                return new LoadToDM(others, channelId, authorId)
             default:
                 return new Load(command, channelId);
         }

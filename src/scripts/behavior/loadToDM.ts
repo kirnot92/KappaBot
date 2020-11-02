@@ -7,7 +7,7 @@ import { LogicHalt } from "../core/assert";
 import * as Command from "../../json/command.json"
 import KappaScript from "../kappaScript/parser";
 
-export class LoadDM implements IBehavior
+export class LoadToDM implements IBehavior
 {
     command: string;
     channelId: string;
