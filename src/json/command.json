@@ -41,6 +41,13 @@
         "Usage": "목록디엠으로",
         "IsAdminCommand": false
     },
+    "내용디엠으로":
+    {
+        "Key": "내용디엠으로",
+        "ArgCount": 1,
+        "Usage": "내용디엠으로 [이름]",
+        "IsAdminCommand": false
+    },
     "삭제":
     {
         "Key": "삭제",

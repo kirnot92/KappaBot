@@ -24,11 +24,11 @@ export default class ClientAPI
         await this.SendInternal(message, options, async (msg, option) => { await channel.send(msg, option) });
     }
 
-    public async SendDirectMessage(userId: string, message: string)
+    public async SendDirectMessage(userId: string, message: string,  options?: MessageOptions | RichEmbed | Attachment)
     {
         var user = this.client.users.get(userId);
-        
-        await this.SendInternal(message, null, async (msg, option) => { await user.send(msg); });
+
+        await this.SendInternal(message, options, async (msg, option) => { await user.send(msg, option) });
     }
    
     public async SendInternal(
