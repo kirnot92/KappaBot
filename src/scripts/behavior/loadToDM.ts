@@ -19,7 +19,7 @@ export class LoadToDM implements IBehavior
         this.channelId = channelId;
         this.userId = userId;
 
-        var hasValue  = String.HasValue([this.command], Command.내용디엠으로.ArgCount);
+        var hasValue = String.HasValue([this.command], Command.내용디엠으로.ArgCount);
         if (!hasValue)
         {
             LogicHalt.InvaildUsage(Command.내용디엠으로.Key);
@@ -48,7 +48,7 @@ export class LoadToDM implements IBehavior
         var similar = await CommandRepository.FindSimilar(this.channelId, this.command);
         if (similar == null)
         {
-            // 시스템 명령어는 입력했지만 검색어를 찾지 못하는 경우이므로, LogicHalt.CommandNotFound()보다는 load.ts와 같이 메시지를 DM 보내도록 처리.  
+            // 시스템 명령어는 입력했지만 검색어를 찾지 못하는 경우이므로, LogicHalt.CommandNotFound()보다는 search.ts와 같은 메시지를 DM 보내도록 처리.  
             return new CommandContext("비슷한 명령어를 찾을 수 없습니다. 목록을 확인해보세요")
         }
 
