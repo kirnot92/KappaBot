@@ -6,6 +6,13 @@
         "Usage": "등록 [이름] [내용] : 새 명령어를 만듭니다",
         "IsAdminCommand": false
     },
+    "저장":
+    {
+        "Key": "저장 ",
+        "ArgCount": 2,
+        "Usage": "저장 [이름] [내용] : 새 명령어를 만듭니다",
+        "IsAdminCommand": false
+    },
     "추가":
     {
         "Key": "추가",

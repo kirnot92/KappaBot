@@ -24,6 +24,7 @@ export default class BehaviorFactory
         switch(command)
         {
             case Command.등록.Key:
+            case Command.저장.Key:
                 return new Register(others, channelId);
             case Command.추가.Key:
                 return new AddLine(others, channelId);
