@@ -4,13 +4,11 @@ import Log from "./scripts/core/log";
 import {Client} from "discord.js";
 import * as Secret from "./json/secret.json";
 import * as SystemMessage from "./json/systemMessage.json";
-import TwitterApplication from "./scripts/core/twitterApp";
 import WaitFor from "./scripts/core/waitFor";
 
 class KappaEngine
 {
     private static application: Application;
-    private static twitterApplication: TwitterApplication;
 
     public static async Main()
     {
@@ -28,9 +26,6 @@ class KappaEngine
         this.application = new Application();
         this.application.Initialize();
 
-        this.twitterApplication = new TwitterApplication();
-        this.twitterApplication.Initialize();
-
         await this.MainLoop();
     }
 
@@ -39,9 +34,6 @@ class KappaEngine
         while (true)
         {
             await this.application.Update();
-
-            await this.twitterApplication.Update();
-
             await WaitFor.Seconds(1);
         }
     }
