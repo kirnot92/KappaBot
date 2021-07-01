@@ -234,7 +234,7 @@ export default class CommandRepository
 
     private static HasFileExtension(content: string): boolean
     {
-        var candidates = ["png", "jpg", "jpeg", "gif", "webp", "mp3"]
+        var candidates = ["png", "jpg", "jpeg", "gif", "webp", "mp3", "mp4"]
         for (var i = 0; i < candidates.length; ++i)
         {
             if (content.toLowerCase().endsWith(candidates[i]))
