@@ -3,15 +3,12 @@ import {Client} from "discord.js";
 import * as Secret from "../../json/secret.json";
 import Assert from "./assert.js";
 import Log from "./log";
-import Dictionary from "../collection/dictionary";
-
 
 export default class SystemAPI
 {
     private isRebootProgress: boolean = false;
     private messageHandlers: Array<(msg: Message) => Promise<void>>;
     private serverStartedDate: string;
-    private exitHook = require("exit-hook");
 
     private client: Client = null;
     constructor(client: Client)
@@ -22,11 +19,6 @@ export default class SystemAPI
         this.serverStartedDate = Date().toString();
 
         Log.Info("Server Started At " + this.serverStartedDate);
-
-        this.AddExitHook(() =>
-        {
-            Log.Info("Server Exited");
-        });
     }
 
     async OnMessage(message: Message)
@@ -79,14 +71,6 @@ export default class SystemAPI
                     user.send("Success. " + stdout);
                 }
             });
-        });
-    }
-
-    public AddExitHook(func: () => void): void
-    {
-        this.exitHook(() => 
-        {
-            func();
         });
     }
 
