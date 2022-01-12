@@ -22,5 +22,7 @@
   },
   "dependencies": {
     "typescript": "^4.5.4"
-  }
+  },
+  "include": ["sources/**/*.ts"],
+  "exclude": ["node_modules", ".vscode"]
 }
