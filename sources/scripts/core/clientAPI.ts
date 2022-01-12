@@ -18,32 +18,32 @@ export default class ClientAPI
     public async SendMessage(channelId: string, message: string,  options?: MessageOptions)
     {
         var channel = await this.GetChannel(channelId);
-        await this.SendInternal(message, options, async (msg, option) => { await channel.send(msg) });
+        await this.SendInternal(channel, message, options);
     }
 
     public async SendDirectMessage(userId: string, message: string,  options?: MessageOptions)
     {
-        var user = await this.client.users.fetch(userId);
-
-        await this.SendInternal(message, options, async (msg, option) => { await user.send(msg) });
+        var dmChannel = await this.client.users.createDM(userId);
+        await this.SendInternal(dmChannel, message, options);
     }
    
     public async SendInternal(
+        channel: Channel,
         message: string,
-        options: MessageOptions,
-        sendFunc: (msg: string, options?: MessageOptions) => {})
+        options: MessageOptions)
     {
-        // 2000 넘는 메세지는 전송이 안 되서 쪼개서 보낸다.
-        // file같은 options가 있는 경우, 한 번은 보내게 만든다
-        var remains = message;
-
-        while (remains.length != 0 || options != null)
+        if (options != null)
         {
+            await channel.send(options);
+        }
+        
+        var remains = message;
+        while (remains.length != 0)
+        {
+            // 2000 넘는 메세지는 전송이 안 되서 쪼개서 보낸다.
             var msg = remains.slice(0, 1500)
             remains = remains.slice(1500);
-            await sendFunc(msg, options);
-
-            options = null;
+            channel.send(msg);
         }
     }
 
