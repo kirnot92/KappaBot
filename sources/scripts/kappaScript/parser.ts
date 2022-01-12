@@ -52,7 +52,7 @@ export default class KappaScript
     
                                 state = "start";
                             }
-                            if (args[0] == "지난날짜")
+                            else if (args[0] == "지난날짜")
                             {
                                 var date = KappaScript.ParseDate(args);
                                 if (date == null)
