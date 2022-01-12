@@ -12,6 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\autogen\\main.js",
+            "preLaunchTask": "build",
             "outFiles": [
                 "${workspaceFolder}/autogen/**/*.js"
             ]
