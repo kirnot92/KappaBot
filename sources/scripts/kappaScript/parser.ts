@@ -38,17 +38,30 @@ export default class KappaScript
 
                             if (args[0] == "남은날짜")
                             {
-                                var dateStr = args[1].split("/");
-                                if (dateStr.length != 3)
+                                var { date, isValid } = KappaScript.TryParseDate(args);
+                                if (!isValid)
                                 {
                                     // 에러 상황에서 그냥 raw 리턴
                                     return rawStr;
                                 }
-    
-                                // month가 0부터 시작함
-                                var targetDate = new Date(Number(dateStr[0]), Number(dateStr[1]) - 1, Number(dateStr[2]));
+
                                 var today = new Date();
+                                var diffDay = Math.ceil((date.valueOf() - today.valueOf()) / (60*60*24 * 1000));
+                                
+                                switchTarget.push(rawStr.substr(startIndex, (endIndex-startIndex)+1));
+                                switchText.push(diffDay + "일");
     
+                                state = "start";
+                            }
+                            if (args[0] == "지난날짜")
+                            {
+                                var targetDate, isValid = KappaScript.TryParseDate(args);
+                                if (!isValid)
+                                {
+                                    // 에러 상황에서 그냥 raw 리턴
+                                    return rawStr;
+                                }
+
                                 var diffDay = Math.ceil((targetDate.valueOf() - today.valueOf()) / (60*60*24 * 1000));
                                 
                                 switchTarget.push(rawStr.substr(startIndex, (endIndex-startIndex)+1));
@@ -81,5 +94,19 @@ export default class KappaScript
         }
 
         return replaced;
+    }
+
+    private static TryParseDate(args: string[]): {date: Date, isValid: boolean}
+    {
+        var dateStr = args[1].split("/");
+        if (dateStr.length != 3)
+        {
+            // 에러 상황에서 그냥 raw 리턴
+            return {date: null, isValid: false};
+        }
+
+        // month가 0부터 시작함
+        var targetDate = new Date(Number(dateStr[0]), Number(dateStr[1]) - 1, Number(dateStr[2]));
+        return {date: targetDate, isValid: true};
     }
 }
