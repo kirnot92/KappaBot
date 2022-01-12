@@ -15,7 +15,7 @@ export default class SystemAPI
     {
         this.messageHandlers = new Array<(msg: Message) => Promise<void>>();
         this.client = client;
-        this.client.on("message", async (msg) => await this.OnMessage(msg))
+        this.client.on("messageCreate", async (msg) => await this.OnMessage(msg))
         this.serverStartedDate = Date().toString();
 
         Log.Info("Server Started At " + this.serverStartedDate);
