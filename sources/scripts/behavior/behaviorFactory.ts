@@ -44,6 +44,7 @@ export default class BehaviorFactory
                     return new GetList(channelId);
                 }
             case Command.목록디엠으로.Key:
+            case Command.목록디엠.Key:
                 return new GetListDM(channelId, authorId);
             case Command.삭제.Key:
                 return new Delete(others, channelId);
@@ -60,6 +61,7 @@ export default class BehaviorFactory
             case Command.도움말.Key:
             case Command.help.Key:
                 return new Help(channelId);
+            case Command.내용디엠.Key:
             case Command.내용디엠으로.Key:
                 return new LoadToDM(others, channelId, authorId)
             default:
