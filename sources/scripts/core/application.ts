@@ -4,7 +4,7 @@ import Math from "../extension/mathExtension";
 import String from "../extension/stringExtension";
 import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
-import { Message, TextChannel } from "discord.js";
+import { Message, TextChannel, ThreadChannel, ThreadChannelTypes } from "discord.js";
 import { User } from "discord.js";
 import { CommandNotFoundError, InvaildUsageError  } from "./assert";
 import * as Playing from "../../json/playing.json";
@@ -69,7 +69,7 @@ export default class Application
     async OnDirectMessage(message: Message)
     {
         // 임시기능
-        if (message.channel.type == "dm" && message.author.id == Secret.AdminId)
+        if (message.channel.type == "DM" && message.author.id == Secret.AdminId)
         {
             Global.System.TerminalCommand(message.content, "명령어가 실패했습니다.");
         }
@@ -77,12 +77,15 @@ export default class Application
 
     async OnChannelMessage(message: Message)
     {
-        if (message.channel.type == "text")
+        if (message.channel.type == "GUILD_TEXT"
+            || message.channel.type == "GUILD_NEWS_THREAD"
+            || message.channel.type ==  "GUILD_PUBLIC_THREAD" 
+            || message.channel.type == "GUILD_PRIVATE_THREAD")
         {
             var content = message.content;
             var channelId = message.channel.id;
 
-            var attachments = message.attachments.array();
+            var attachments = Array.from(message.attachments.values());
             if (attachments.length != 0)
             {
                 content = content + " " + attachments[0].url;

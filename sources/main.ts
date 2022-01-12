@@ -1,7 +1,7 @@
 import Global from "./scripts/core/global";
 import Application from "./scripts/core/application";
 import Log from "./scripts/core/log";
-import {Client} from "discord.js";
+import {Client, Intents} from "discord.js";
 import * as Secret from "./json/secret.json";
 import * as SystemMessage from "./json/systemMessage.json";
 import WaitFor from "./scripts/core/waitFor";
@@ -14,7 +14,7 @@ class KappaEngine
     {
         Log.Initialize();
 
-        var client = new Client();
+        var client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_WEBHOOKS] });
         await client.login(Secret.Token);
         Log.Info("Client Logged In");
 

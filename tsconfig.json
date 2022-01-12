@@ -6,8 +6,8 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "rootDir": "src",
-        "outDir": "dist",
+        "rootDir": "sources",
+        "outDir": "autogen",
         "sourceMap": true
     }
 }

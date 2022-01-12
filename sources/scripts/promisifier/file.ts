@@ -17,8 +17,7 @@ export default class File
 
     public static async ReadFile(path: string, encoding: string)
     {
-        var readFile = Utill.promisify<string, string, string>(FileRaw.readFile)
-        return await readFile(path, encoding)
+        return FileRaw.readFileSync(path, 'utf8');
     }
 
     public static async ReadDir(path: string)

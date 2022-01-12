@@ -2,7 +2,7 @@ import * as path from "path"
 import File from "../promisifier/file"
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
-const BLACKLIST = path.join(ROOT, "blackList")
+const BLACKLIST = path.join(ROOT, "resources","blackList")
 
 export default class BlacklistRepository
 {

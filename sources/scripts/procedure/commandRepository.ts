@@ -6,8 +6,8 @@ import Levenshtein from "./levenshtein";
 import CommandContext from "../behavior/commandContext";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
-const COMMANDS = path.join(ROOT, "commands")
-const COMMANDS_OLD = path.join(ROOT, "commandsOld")
+const COMMANDS = path.join(ROOT, "resources", "commands")
+const COMMANDS_OLD = path.join(ROOT, "resources", "commandsOld")
 
 export default class CommandRepository
 {
@@ -198,7 +198,7 @@ export default class CommandRepository
         var splited = content.split("\n");
         var files = new Array<string>();
 
-        splited.forEach(line =>
+        splited.forEach((line: string) =>
         {
             if (line.startsWith("https://") && this.HasFileExtension(line))
             {

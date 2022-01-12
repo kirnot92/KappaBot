@@ -1,7 +1,5 @@
 import {Client, User} from "discord.js";
 import {MessageOptions} from "discord.js"
-import {RichEmbed} from "discord.js"
-import {Attachment} from "discord.js"
 import {Channel} from "../extension/typeExtension";
 
 export default class ClientAPI
@@ -17,24 +15,23 @@ export default class ClientAPI
         this.client = client;
     }
 
-    public async SendMessage(channelId: string, message: string,  options?: MessageOptions | RichEmbed | Attachment)
+    public async SendMessage(channelId: string, message: string,  options?: MessageOptions)
     {
-        var channel = this.GetChannel(channelId);
-
-        await this.SendInternal(message, options, async (msg, option) => { await channel.send(msg, option) });
+        var channel = await this.GetChannel(channelId);
+        await this.SendInternal(message, options, async (msg, option) => { await channel.send(msg) });
     }
 
-    public async SendDirectMessage(userId: string, message: string,  options?: MessageOptions | RichEmbed | Attachment)
+    public async SendDirectMessage(userId: string, message: string,  options?: MessageOptions)
     {
-        var user = this.client.users.get(userId);
+        var user = await this.client.users.fetch(userId);
 
-        await this.SendInternal(message, options, async (msg, option) => { await user.send(msg, option) });
+        await this.SendInternal(message, options, async (msg, option) => { await user.send(msg) });
     }
    
     public async SendInternal(
         message: string,
-        options: MessageOptions | RichEmbed | Attachment,
-        sendFunc: (msg: string, options?: MessageOptions | RichEmbed | Attachment) => {})
+        options: MessageOptions,
+        sendFunc: (msg: string, options?: MessageOptions) => {})
     {
         // 2000 넘는 메세지는 전송이 안 되서 쪼개서 보낸다.
         // file같은 options가 있는 경우, 한 번은 보내게 만든다
@@ -55,13 +52,13 @@ export default class ClientAPI
         this.client.user.setActivity(message, {type: "PLAYING"});
     }
 
-    public GetChannel(channelId: string): Channel
+    public async GetChannel(channelId: string): Promise<Channel>
     {
-        return (this.client.channels.get(channelId)) as Channel;
+        return await (this.client.channels.fetch(channelId)) as Channel;
     }
 
-    public GetUser(userId: string): User
+    public async GetUser(userId: string): Promise<User>
     {
-        return (this.client.users.get(userId)) as User;
+        return await (this.client.users.fetch(userId)) as User;
     }
 }
