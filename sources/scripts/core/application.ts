@@ -4,14 +4,15 @@ import Math from "../extension/mathExtension";
 import String from "../extension/stringExtension";
 import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
-import { Message, TextChannel, ThreadChannel, ThreadChannelTypes } from "discord.js";
-import { User } from "discord.js";
+import { MessageReaction, Message, TextChannel, ThreadChannel, ThreadChannelTypes, PartialMessageReaction, PartialUser, ReactionEmoji, Guild } from "discord.js";
+import { GuildEmoji, GuildMember, User } from "discord.js";
 import { CommandNotFoundError, InvaildUsageError  } from "./assert";
 import * as Playing from "../../json/playing.json";
 import * as Config from "../../json/config.json";
 import * as Command from "../../json/command.json";
 import * as Secret from "../../json/secret.json";
 import BlacklistRepository from "../procedure/blacklistRepository";
+import EmojiRoleRepository from "../procedure/emojiRoleRepository";
 
 export default class Application
 {
@@ -28,6 +29,8 @@ export default class Application
         // 그래서 람다로 한 번 더 감싸서 보내줘야 함...
         Global.System.AddMessageListener((msg) =>  this.OnChannelMessage(msg));
         Global.System.AddMessageListener((msg) =>  this.OnDirectMessage(msg));
+        Global.System.AddMessageReactionAdd((msg, user) => this.OnMessageReactionAdd(msg, user));
+        Global.System.AddMessageReactionRemove((msg, user) => this.OnMessageReactionRemove(msg, user));
         this.InitializeActivity();
 
         Log.Info("Application Initialized");
@@ -58,13 +61,70 @@ export default class Application
         this.currentActivityIndex = (this.currentActivityIndex + 1) % this.activityList.length;
     }
 
+    async OnMessageReactionAdd(msgReaction: MessageReaction|PartialMessageReaction, user: User|PartialUser)
+    {
+        var origMessage = msgReaction.message;
+        var channelType = origMessage.channel.type;
+
+        if (!origMessage.author.bot || user.bot)
+        {
+            return;
+        }
+
+        if (channelType == "GUILD_TEXT"
+            || channelType == "GUILD_NEWS_THREAD"
+            || channelType ==  "GUILD_PUBLIC_THREAD" 
+            || channelType == "GUILD_PRIVATE_THREAD")
+        {
+            var emoji = msgReaction.emoji;
+            var guild = origMessage.guild;
+            await this.HandleReaction(emoji, guild, user, true);
+        }
+    }
+
+    async OnMessageReactionRemove(msgReaction: MessageReaction|PartialMessageReaction, user: User|PartialUser)
+    {
+        var origMessage = msgReaction.message;
+        var channelType = origMessage.channel.type;
+
+        if (!origMessage.author.bot || user.bot)
+        {
+            return;
+        }
+
+        if (channelType == "GUILD_TEXT"
+            || channelType == "GUILD_NEWS_THREAD"
+            || channelType ==  "GUILD_PUBLIC_THREAD" 
+            || channelType == "GUILD_PRIVATE_THREAD")
+        {
+            var emoji = msgReaction.emoji;
+            var guild = origMessage.guild;
+            await this.HandleReaction(emoji, guild, user, false);
+        }
+    }
+
+    async HandleReaction(emoji: GuildEmoji|ReactionEmoji, guild: Guild, user: User|PartialUser, isAdd: boolean)
+    {
+        if (EmojiRoleRepository.HasRole(guild.id, emoji.name))
+        {
+            var member = await guild.members.fetch(user.id) as GuildMember;
+            var roleName = await EmojiRoleRepository.GetRole(guild.id, emoji.name);
+            var alreadyHasRole = member.roles.cache.find(r => r.name == roleName) != null;
+            var role = guild.roles.cache.find(r => r.name == roleName);
+
+            if (isAdd && !alreadyHasRole)
+            {
+                await member.roles.add(role.id);
+            }
+            if (!isAdd && alreadyHasRole)
+            {
+                await member.roles.remove(role.id);
+            }
+        }
+    }
+
     async OnDirectMessage(message: Message)
     {
-        // 임시기능
-        if (message.channel.type == "DM" && message.author.id == Secret.AdminId)
-        {
-            Global.System.TerminalCommand(message.content, "명령어가 실패했습니다.");
-        }
     }
 
     async OnChannelMessage(message: Message)
@@ -76,6 +136,7 @@ export default class Application
         {
             var content = message.content;
             var channelId = message.channel.id;
+            var guildId = message.guildId;
 
             var attachments = Array.from(message.attachments.values());
             if (attachments.length != 0)
@@ -83,11 +144,11 @@ export default class Application
                 content = content + " " + attachments[0].url;
             }
 
-            await this.HandleMessage(content, channelId, message.author);
+            await this.HandleMessage(content, channelId, message.author, guildId);
         }
     }
 
-    async HandleMessage(message: string, channelId: string, author: User)
+    async HandleMessage(message: string, channelId: string, author: User|PartialUser, guildId: string)
     {
         if (await BlacklistRepository.IsBlackList(author.id))
         {
@@ -113,7 +174,7 @@ export default class Application
                 // 메세지를 리턴받아서 처리하는 방안을 고려해봤지만
                 // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
                 // 이렇게 해보니까 결과값을 DM으로 보내기도 편한듯
-                var behavior = BehaviorFactory.Create(command, others, author.id, channelId);
+                var behavior = BehaviorFactory.Create(command, others, author.id, channelId, guildId);
                 
                 var promise = await behavior.Run();
                 promise

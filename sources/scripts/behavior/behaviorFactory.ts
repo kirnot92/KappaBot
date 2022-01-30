@@ -1,4 +1,3 @@
-
 import { IBehavior } from "./IBehavior";
 import { AddLine } from "./addLine";
 import { Reboot } from "./reboot";
@@ -16,10 +15,18 @@ import { RemoveBlacklist } from "./removeBlacklist";
 import { Search } from "./search";
 import { Help } from "./help";
 import { LoadToDM } from "./loadToDM";
+import { StartGivingRole } from "./startGivingRole";
+import { AddRole } from "./addRole";
+import { RemoveRole } from "./removeRole";
 
 export default class BehaviorFactory
 {
-    public static Create(command: string, others: string, authorId: string, channelId: string): IBehavior
+    public static Create(
+        command: string,
+        others: string,
+        authorId: string,
+        channelId: string,
+        guildId: string): IBehavior
     {
         switch(command)
         {
@@ -64,6 +71,12 @@ export default class BehaviorFactory
             case Command.내용디엠.Key:
             case Command.내용디엠으로.Key:
                 return new LoadToDM(others, channelId, authorId)
+            case Command.역할부여시작.Key:
+                return new StartGivingRole(guildId, channelId);
+            case Command.역할추가.Key:
+                return new AddRole(guildId, channelId, others);
+            case Command.역할삭제.Key:
+                return new RemoveRole(guildId, channelId, others);
             default:
                 return new Load(command, channelId);
         }

@@ -131,5 +131,26 @@
         "ArgCount": 0,
         "Usage": "help",
         "IsAdminCommand": false
+    },
+    "역할부여시작":
+    {
+        "Key": "역할부여시작",
+        "ArgCount": 0,
+        "Usage": "역할부여시작",
+        "IsAdminCommand": true
+    },
+    "역할추가":
+    {
+        "Key": "역할추가",
+        "ArgCount": 2,
+        "Usage": "역할추가 [이모지] [역할이름]",
+        "IsAdminCommand": true
+    },
+    "역할삭제":
+    {
+        "Key": "역할삭제",
+        "ArgCount": 2,
+        "Usage": "역할삭제 [이모지] [역할이름]",
+        "IsAdminCommand": true
     }
 }

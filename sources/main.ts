@@ -14,7 +14,16 @@ class KappaEngine
     {
         Log.Initialize();
 
-        var client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_MESSAGES] });
+        var client = new Client({ intents: [
+                                    Intents.FLAGS.GUILDS, 
+                                    Intents.FLAGS.DIRECT_MESSAGES, 
+                                    Intents.FLAGS.GUILD_MESSAGES,
+                                    Intents.FLAGS.GUILD_MESSAGES, 
+                                    Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+                                  ]});
+                                //   partials: [
+                                //       'MESSAGE'
+                                //   ]});
         await client.login(Secret.Token);
         Log.Info("Client Logged In");
 

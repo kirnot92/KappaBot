@@ -1,4 +1,4 @@
-import {Message, User} from "discord.js";
+import {MessageReaction, Message, User, PartialMessageReaction, PartialUser} from "discord.js";
 import {Client} from "discord.js";
 import * as Secret from "../../json/secret.json";
 import Assert from "./assert.js";
@@ -8,14 +8,21 @@ export default class SystemAPI
 {
     private isRebootProgress: boolean = false;
     private messageHandlers: Array<(msg: Message) => Promise<void>>;
+    private messageReactionAddHandlers: Array<(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>>;
+    private messageReactionRemoveHandlers: Array<(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>>;
     private serverStartedDate: string;
 
     private client: Client = null;
     constructor(client: Client)
     {
         this.messageHandlers = new Array<(msg: Message) => Promise<void>>();
+        this.messageReactionAddHandlers = new Array<(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>>();
+        this.messageReactionRemoveHandlers = new Array<(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>>();
+
         this.client = client;
-        this.client.on("messageCreate", async (msg) => await this.OnMessage(msg))
+        this.client.on("messageCreate", async (msg) => await this.OnMessage(msg));
+        this.client.on("messageReactionAdd", async (msgReaction, user) => await this.OnMessageReactionAdd(msgReaction, user));
+        this.client.on("messageReactionRemove", async (msgReaction, user) => await this.OnMessageReactionRemove(msgReaction, user));
         this.serverStartedDate = Date().toString();
 
         Log.Info("Server Started At " + this.serverStartedDate);
@@ -40,6 +47,32 @@ export default class SystemAPI
     public AddMessageListener(handler: (msg: Message) => Promise<void>)
     {
         this.messageHandlers.push(handler);
+    }
+
+    async OnMessageReactionAdd(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser)
+    {
+        this.messageReactionAddHandlers.forEach(async (handler) =>
+        {
+            await handler(msgReaction, user);
+        })
+    }
+
+    public AddMessageReactionAdd(handler: (msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>)
+    {
+        this.messageReactionAddHandlers.push(handler);
+    }
+
+    async OnMessageReactionRemove(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser)
+    {
+        this.messageReactionRemoveHandlers.forEach(async (handler) =>
+        {
+            await handler(msgReaction, user);
+        })
+    }
+
+    public AddMessageReactionRemove(handler: (msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>)
+    {
+        this.messageReactionRemoveHandlers.push(handler);
     }
 
     public Reboot()
@@ -82,5 +115,10 @@ export default class SystemAPI
     public GetServerStartedDate(): string
     {
         return this.serverStartedDate;
+    }
+
+    public AddGivingRoleMessageId(msgId: string)
+    {
+
     }
 }
