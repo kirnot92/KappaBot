@@ -1,6 +1,7 @@
-import {MessageReaction, Message, User, PartialMessageReaction, PartialUser} from "discord.js";
+import {MessageReaction, Message, User, PartialMessageReaction, PartialUser, TextBasedChannel} from "discord.js";
 import {Client} from "discord.js";
 import * as Secret from "../../json/secret.json";
+import LatestEmojiRoleMessage from "../procedure/LatestEmojiRoleMessage";
 import Assert from "./assert.js";
 import Log from "./log";
 
@@ -20,12 +21,28 @@ export default class SystemAPI
         this.messageReactionRemoveHandlers = new Array<(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>>();
 
         this.client = client;
+        this.client.on("ready", async () => await this.OnReady());
         this.client.on("messageCreate", async (msg) => await this.OnMessage(msg));
         this.client.on("messageReactionAdd", async (msgReaction, user) => await this.OnMessageReactionAdd(msgReaction, user));
         this.client.on("messageReactionRemove", async (msgReaction, user) => await this.OnMessageReactionRemove(msgReaction, user));
         this.serverStartedDate = Date().toString();
 
         Log.Info("Server Started At " + this.serverStartedDate);
+    }
+
+    async OnReady()
+    {
+        var guilds = this.client.guilds.cache.values();
+        
+        for (var guild of guilds)
+        {
+            var data = await LatestEmojiRoleMessage.TryRead(guild.id);
+            if (data != null)
+            {
+                var channel = await this.client.channels.fetch(data.channelId) as TextBasedChannel;
+                await channel.messages.fetch(data.msgId);
+            }
+        }
     }
 
     async OnMessage(message: Message)

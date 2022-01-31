@@ -1,5 +1,6 @@
 import Global from "../core/global";
 import EmojiRoleRepository from "../procedure/emojiRoleRepository";
+import LatestEmojiRoleMessage from "../procedure/LatestEmojiRoleMessage";
 import { IBehavior } from "./IBehavior";
 
 export class StartGivingRole implements IBehavior
@@ -47,5 +48,7 @@ export class StartGivingRole implements IBehavior
                 await msg.react(emoji);
             }
         }
+
+        LatestEmojiRoleMessage.Regist(this.guildId, this.channelId, msg.id);
     }
 }
