@@ -155,7 +155,9 @@ export default class Application
             return;
         }
 
-        if (message.startsWith(Config.Prefix) && !author.bot)
+        if ((message.startsWith(Config.Prefix) 
+            || message.startsWith("!")) // 피카츄봇 임시대응
+            && !author.bot)
         {
             // $만 입력한 경우
             if (message.length == 1) 
