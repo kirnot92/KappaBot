@@ -1,11 +1,9 @@
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json"
-import * as Config from "../../json/config.json"
 import String from "../extension/stringExtension";
 import EmojiRoleRepository from "../procedure/emojiRoleRepository";
 import * as SystemMessage from "../../json/systemMessage.json";
-import * as Secret from "../../json/secret.json";
 
 export class AddRole implements IBehavior
 {

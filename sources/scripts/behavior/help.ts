@@ -1,7 +1,7 @@
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
 import * as Command from "../../json/command.json"
-import * as Config from "../../json/config.json"
+import Prefix from "../procedure/prefix";
 
 export class Help implements IBehavior
 {
@@ -24,7 +24,7 @@ export class Help implements IBehavior
         for (var key in Command)
         {
             if (commands[key].IsAdminCommand) { continue; }
-            content = content + Config.Prefix + commands[key].Usage + "\n";
+            content = content + Prefix.First + commands[key].Usage + "\n";
         }
         return content;
     }

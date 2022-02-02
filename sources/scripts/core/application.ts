@@ -8,11 +8,11 @@ import { MessageReaction, Message, TextChannel, ThreadChannel, ThreadChannelType
 import { GuildEmoji, GuildMember, User } from "discord.js";
 import { CommandNotFoundError, InvaildUsageError  } from "./assert";
 import * as Playing from "../../json/playing.json";
-import * as Config from "../../json/config.json";
 import * as Command from "../../json/command.json";
 import * as Secret from "../../json/secret.json";
 import BlacklistRepository from "../procedure/blacklistRepository";
 import EmojiRoleRepository from "../procedure/emojiRoleRepository";
+import Prefix from "../procedure/prefix";
 
 export default class Application
 {
@@ -56,7 +56,7 @@ export default class Application
     async SetNextActivitymessage()
     {
         // 명령어 호출용 prefix를 달아서 호출 방법을 안내하게 하는 목적
-        var currentActivity = Config.Prefix + this.activityList[this.currentActivityIndex];
+        var currentActivity = Prefix.First + this.activityList[this.currentActivityIndex];
         await Global.Client.SetActivity(currentActivity);
         this.currentActivityIndex = (this.currentActivityIndex + 1) % this.activityList.length;
     }
@@ -155,9 +155,7 @@ export default class Application
             return;
         }
 
-        if ((message.startsWith(Config.Prefix) 
-            || message.startsWith("!")) // 피카츄봇 임시대응
-            && !author.bot)
+        if (Prefix.IsCommandMessage(message) && !author.bot)
         {
             // $만 입력한 경우
             if (message.length == 1) 
@@ -165,7 +163,7 @@ export default class Application
                 message = "$도움말";
             }
 
-            var prefixRemoved = message.slice(Config.Prefix.length);
+            var prefixRemoved = message.slice(Prefix.First.length);
             var args = String.Slice([prefixRemoved], /\s|\n/, 1);
             var command = args[0];
             var others = args[1];
@@ -199,7 +197,7 @@ export default class Application
         }
         else if (error instanceof CommandNotFoundError)
         {   
-            var msg = "명령어를 찾지 못했습니다. '" + Config.Prefix + "도움말'을 입력해보세요.";
+            var msg = "명령어를 찾지 못했습니다. '" + Prefix.First + "도움말'을 입력해보세요.";
 
             await Global.Client.SendMessage(channelId, msg);
         }
@@ -219,7 +217,7 @@ export default class Application
         for (var key in Command)
         {
             if (commands[key].IsAdminCommand) { continue; }
-            content = content + Config.Prefix + commands[key].Usage + "\n";
+            content = content + Prefix.First + commands[key].Usage + "\n";
         }
         return content;
     }
@@ -228,6 +226,6 @@ export default class Application
     {
         var commands = Command as any;
         var command = commands[key];
-        return key + " 명령어의 사용법입니다.\n" +  Config.Prefix + command.Usage;
+        return key + " 명령어의 사용법입니다.\n" +  Prefix.First + command.Usage;
     }
 }
