@@ -23,7 +23,7 @@ export class Help implements IBehavior
         var commands = Command as any;
         for (var key in Command)
         {
-            if (commands[key].IsAdminCommand) { continue; }
+            if (commands[key].IsHidden) { continue; }
             content = content + Prefix.First + commands[key].Usage + "\n";
         }
         return content;

@@ -4,153 +4,153 @@
         "Key": "등록",
         "ArgCount": 2,
         "Usage": "등록 [이름] [내용] : 새 명령어를 만듭니다",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "저장":
     {
         "Key": "저장",
         "ArgCount": 2,
         "Usage": "저장 [이름] [내용] : 새 명령어를 만듭니다",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "추가":
     {
         "Key": "추가",
         "ArgCount": 2,
         "Usage": "추가 [이름] [내용] : 한 줄을 추가합니다.",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "덮어쓰기":
     {
         "Key": "덮어쓰기",
         "ArgCount": 2,
         "Usage": "덮어쓰기 [이름] [내용] : 내용을 덮어씌웁니다",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "마지막줄삭제":
     {
         "Key": "마지막줄삭제",
         "ArgCount": 1,
         "Usage": "마지막줄삭제 [이름]",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "목록":
     {
         "Key": "목록",
         "ArgCount": 0,
         "Usage": "목록",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "목록디엠":
     {
         "Key": "목록디엠",
         "ArgCount": 0,
         "Usage": "목록디엠",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "목록디엠으로":
     {
         "Key": "목록디엠으로",
         "ArgCount": 0,
         "Usage": "목록디엠으로",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "내용디엠":
     {
         "Key": "내용디엠",
         "ArgCount": 1,
         "Usage": "내용디엠 [이름]",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "내용디엠으로":
     {
         "Key": "내용디엠으로",
         "ArgCount": 1,
         "Usage": "내용디엠으로 [이름]",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "삭제":
     {
         "Key": "삭제",
         "ArgCount": 1,
         "Usage": "삭제 [이름]",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "로드":
     {
         "Key": "로드",
         "ArgCount": 0,
         "Usage": "[이름]",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "재부팅":
     {
         "Key": "재부팅",
         "ArgCount": 0,
         "Usage": "",
-        "IsAdminCommand": true
+        "IsHidden": true
     },
     "부팅시간":
     {
         "Key": "부팅시간",
         "ArgCount": 0,
         "Usage": "",
-        "IsAdminCommand": true
+        "IsHidden": true
     },
     "블랙리스트등록":
     {
         "Key": "블랙리스트등록",
         "ArgCount": 1,
         "Usage": "",
-        "IsAdminCommand": true
+        "IsHidden": true
     },
     "블랙리스트삭제":
     {
         "Key": "블랙리스트삭제",
         "ArgCount": 1,
         "Usage": "",
-        "IsAdminCommand": true
+        "IsHidden": true
     },
     "검색":
     {
         "Key": "검색",
         "ArgCount": 1,
         "Usage": "검색 [이름]",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "도움말":
     {
         "Key": "도움말",
         "ArgCount": 0,
         "Usage": "도움말",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "help":
     {
         "Key": "help",
         "ArgCount": 0,
         "Usage": "help",
-        "IsAdminCommand": false
+        "IsHidden": false
     },
     "역할부여시작":
     {
         "Key": "역할부여시작",
         "ArgCount": 0,
         "Usage": "역할부여시작",
-        "IsAdminCommand": true
+        "IsHidden": true
     },
     "역할추가":
     {
         "Key": "역할추가",
         "ArgCount": 2,
         "Usage": "역할추가 [이모지] [역할이름]",
-        "IsAdminCommand": true
+        "IsHidden": true
     },
     "역할삭제":
     {
         "Key": "역할삭제",
         "ArgCount": 2,
         "Usage": "역할삭제 [이모지] [역할이름]",
-        "IsAdminCommand": true
+        "IsHidden": true
     }
 }

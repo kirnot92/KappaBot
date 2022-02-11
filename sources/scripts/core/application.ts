@@ -176,8 +176,7 @@ export default class Application
                 // 이렇게 해보니까 결과값을 DM으로 보내기도 편한듯
                 var behavior = BehaviorFactory.Create(command, others, author.id, channelId, guildId);
                 
-                var promise = await behavior.Run();
-                promise
+                await behavior.Run();
             }
             catch (error)
             {
@@ -216,7 +215,7 @@ export default class Application
         var commands = Command as any;
         for (var key in Command)
         {
-            if (commands[key].IsAdminCommand) { continue; }
+            if (commands[key].IsHidden) { continue; }
             content = content + Prefix.First + commands[key].Usage + "\n";
         }
         return content;
