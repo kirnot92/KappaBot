@@ -42,14 +42,14 @@ export default class ClientAPI
         }
         
         var remains = message;
-        while (remains.length != 0)
+        do
         {
             // 2000 넘는 메세지는 전송이 안 되서 쪼개서 보낸다.
             var msgStr = remains.slice(0, 1500)
             remains = remains.slice(1500);
             var msg = await channel.send(msgStr);
             msgs.push(msg);
-        }
+        } while (remains.length != 0);
 
         return msgs;
     }
