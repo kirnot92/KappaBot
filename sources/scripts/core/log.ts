@@ -1,3 +1,6 @@
+import Global from "./global";
+import * as Secret from "../../json/secret.json";
+
 export default class Log
 {
     // 로그에 있으면 싶은 정보
@@ -26,7 +29,7 @@ export default class Log
         message = this.AttachTimestamp(message);
 
         // 이건 관리자한테 바로 알려주기
-        console.log(message);
+        Global.Client.SendDirectMessage(Secret.AdminId, message);
     }
 
     private static AttachTimestamp(msg: string): string
