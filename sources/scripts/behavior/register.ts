@@ -5,17 +5,20 @@ import { IBehavior } from "./IBehavior";
 import { LogicHalt } from "../core/assert";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
+import { MessageAttachment } from "discord.js";
 
 export class Register implements IBehavior
 {
     args: string[];
     channelId: string;
     isSystemCommand: boolean;
+    attachments: MessageAttachment[];
 
-    constructor(args: string, channelId: string)
+    constructor(args: string, attachments: MessageAttachment[], channelId: string)
     {
         this.args = String.Slice([args], /\s|\n/, Command.등록.ArgCount-1);
         this.channelId = channelId;
+        this.attachments = attachments;
 
         var hasValue = String.HasValue(this.args, Command.등록.ArgCount);
         if (!hasValue)
@@ -46,7 +49,14 @@ export class Register implements IBehavior
             return SystemMessage.IsSystemMessage;
         }
 
-        await CommandRepository.AddLine(this.channelId, this.args[0], this.args[1]);
+        var urls = new Array<string>();
+        for (var attachment of this.attachments)
+        {
+            // 필요하다면 attachment.size 검사 (나중에)
+            urls.push(attachment.url);
+        }
+
+        await CommandRepository.Save(this.channelId, this.args[0], this.args[1], urls);
 
         return SystemMessage.Comfirmed;
     }

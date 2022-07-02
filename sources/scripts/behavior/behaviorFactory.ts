@@ -18,11 +18,13 @@ import { LoadToDM } from "./loadToDM";
 import { StartGivingRole } from "./startGivingRole";
 import { AddRole } from "./addRole";
 import { RemoveRole } from "./removeRole";
+import { MessageAttachment } from "discord.js";
 
 export default class BehaviorFactory
 {
     public static Create(
         command: string,
+        attachments: MessageAttachment[],
         others: string,
         authorId: string,
         channelId: string,
@@ -32,11 +34,11 @@ export default class BehaviorFactory
         {
             case Command.등록.Key:
             case Command.저장.Key:
-                return new Register(others, channelId);
+                return new Register(others, attachments, channelId);
             case Command.추가.Key:
                 return new AddLine(others, channelId);
             case Command.덮어쓰기.Key:
-                return new Override(others, channelId);
+                return new Override(others, attachments, channelId);
             case Command.마지막줄삭제.Key:
                 return new RemoveLastLine(others, channelId);
             case Command.목록.Key:

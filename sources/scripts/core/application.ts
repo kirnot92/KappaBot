@@ -4,7 +4,7 @@ import Math from "../extension/mathExtension";
 import String from "../extension/stringExtension";
 import BackgroundJob from "./backgroundJob";
 import BehaviorFactory from "../behavior/behaviorFactory";
-import { MessageReaction, Message, TextChannel, ThreadChannel, ThreadChannelTypes, PartialMessageReaction, PartialUser, ReactionEmoji, Guild } from "discord.js";
+import { MessageReaction, Message, TextChannel, ThreadChannel, ThreadChannelTypes, PartialMessageReaction, PartialUser, ReactionEmoji, Guild, MessageAttachment } from "discord.js";
 import { GuildEmoji, GuildMember, User } from "discord.js";
 import { CommandNotFoundError, InvaildUsageError  } from "./assert";
 import * as Playing from "../../json/playing.json";
@@ -137,18 +137,12 @@ export default class Application
             var content = message.content;
             var channelId = message.channel.id;
             var guildId = message.guildId;
-
             var attachments = Array.from(message.attachments.values());
-            if (attachments.length != 0)
-            {
-                content = content + " " + attachments[0].url;
-            }
-
-            await this.HandleMessage(content, channelId, message.author, guildId);
+            await this.HandleMessage(content, attachments, channelId, message.author, guildId);
         }
     }
 
-    async HandleMessage(message: string, channelId: string, author: User|PartialUser, guildId: string)
+    async HandleMessage(message: string, attachments: MessageAttachment[], channelId: string, author: User|PartialUser, guildId: string)
     {
         if (await BlacklistRepository.IsBlackList(author.id))
         {
@@ -174,7 +168,7 @@ export default class Application
                 // 메세지를 리턴받아서 처리하는 방안을 고려해봤지만
                 // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
                 // 이렇게 해보니까 결과값을 DM으로 보내기도 편한듯
-                var behavior = BehaviorFactory.Create(command, others, author.id, channelId, guildId);
+                var behavior = BehaviorFactory.Create(command, attachments, others, author.id, channelId, guildId);
                 
                 await behavior.Run();
             }
