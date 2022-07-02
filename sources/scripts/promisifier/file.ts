@@ -1,5 +1,6 @@
 import * as Utill from "util"
 import * as FileRaw from "fs"
+import {PathLike, RmOptions, NoParamCallback} from "fs";
 
 export default class File
 {
@@ -30,6 +31,18 @@ export default class File
     {
         var delFile = Utill.promisify<string>(FileRaw.unlink)
         return await delFile(path)
+    }
+
+    public static async RemoveDir(path: string)
+    {
+        var removeDir = Utill.promisify(FileRaw.rmdir);
+        return await removeDir(path);
+    }
+
+    public static async ForceRemove(path: string)
+    {
+        var rm = Utill.promisify<PathLike, RmOptions, NoParamCallback>(FileRaw.rm);
+        return await rm(path, { recursive: true, force: true }, (err: any)=> {} );
     }
 
     public static async Write(path: string, content: string)
