@@ -4,6 +4,7 @@ import Dictionary from "../collection/dictionary";
 import * as Command from "../../json/command.json";
 import Levenshtein from "./levenshtein";
 import CommandContext from "../behavior/commandContext";
+import Web from "./web";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "resources", "commands")
@@ -132,6 +133,8 @@ export default class CommandRepository
             await File.Delete(path);
         }
 
+        var contentsPath = this.GetContentsPath
+
         this.cacheList.Remove(identifier);
     }
 
@@ -173,12 +176,23 @@ export default class CommandRepository
 
         var nextContent = prevContent + content;
 
-        await this.Save(identifier, title, nextContent);
+        await this.Save(identifier, title, nextContent, new Array<string>());
     }
 
-    public static async Save(identifier: string, title: string, content: string)
+    public static async Save(identifier: string, title: string, content: string, urls: Array<string>)
     {
         title = title.replace("/", "").replace("\\", "");
+
+        var splited = content.split("\n");
+        for(let line of splited)
+        {
+            if (line.startsWith("https://") && this.HasFileExtension(line))
+            {
+                urls.push(line);
+            }
+        }
+
+        await CommandRepository.SaveContents(identifier, title, urls)
 
         var path = this.GetPath(identifier, title);
         if (await File.IsExists(path))
@@ -187,8 +201,24 @@ export default class CommandRepository
         }
 
         await File.Write(path, content);
-
         this.cacheList.Remove(identifier);
+    }
+
+    private static async SaveContents(identifier: string, title: string, contentUrls: Array<string>)
+    {
+        var folderPath = await this.GetContentsPath(identifier, title);
+        if (!await File.IsExists(folderPath))
+        {
+            await File.MakeDir(folderPath);
+        }
+
+        for (var url of contentUrls)
+        {
+            var splited = url.split("/");
+            var fileName = splited.pop();
+
+            await Web.Download(url, path.join(folderPath, fileName));
+        }
     }
 
     public static async Load(identifier: string, command: string): Promise<CommandContext>
@@ -198,7 +228,7 @@ export default class CommandRepository
 
         var hasContents = await CommandRepository.IsContentsExists(identifier, command);
         return hasContents
-            ? new CommandContext(content, {files: await CommandRepository.GetContentsFilePaths(identifier, command)})
+            ? new CommandContext(content, {files: await CommandRepository.GetContents(identifier, command)})
             : new CommandContext(content);
     }
 
@@ -247,7 +277,7 @@ export default class CommandRepository
         return await File.IsExists(path);
     }
 
-    private static async GetContentsFilePaths(identifier: string, command: string): Promise<string[]>
+    private static async GetContents(identifier: string, command: string): Promise<string[]>
     {
         var path = await CommandRepository.GetContentsPath(identifier, command);
         var files = await File.ReadDir(path);
