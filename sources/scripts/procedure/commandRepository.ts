@@ -7,6 +7,7 @@ import CommandContext from "../behavior/commandContext";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "resources", "commands")
+const CONTENTS = path.join(ROOT, "resources", "contents")
 const COMMANDS_OLD = path.join(ROOT, "resources", "commandsOld")
 
 export default class CommandRepository
@@ -195,19 +196,9 @@ export default class CommandRepository
         var path = this.GetPath(identifier, command);
         var content = await File.ReadFile(path, "utf8");
 
-        var splited = content.split("\n");
-        var files = new Array<string>();
-
-        splited.forEach((line: string) =>
-        {
-            if (line.startsWith("https://") && this.HasFileExtension(line))
-            {
-                files.push(line);
-            }
-        });
-
-        return files.length == splited.length
-            ? new CommandContext("", {files})
+        var hasContents = await CommandRepository.IsContentsExists(identifier, command);
+        return hasContents
+            ? new CommandContext(content, {files: await CommandRepository.GetContentsFilePaths(identifier, command)})
             : new CommandContext(content);
     }
 
@@ -248,6 +239,30 @@ export default class CommandRepository
     private static GetPath(identifier: string, command: string): string
     {
         return path.join(COMMANDS, identifier + "." + command + ".txt");
+    }
+
+    private static async IsContentsExists(identifier: string, command: string): Promise<boolean>
+    {
+        var path = await CommandRepository.GetContentsPath(identifier, command);
+        return await File.IsExists(path);
+    }
+
+    private static async GetContentsFilePaths(identifier: string, command: string): Promise<string[]>
+    {
+        var path = await CommandRepository.GetContentsPath(identifier, command);
+        var files = await File.ReadDir(path);
+
+        var arr = new Array<string>();
+        for (var fileName of files)
+        {
+            arr.push(fileName);
+        }
+        return arr;
+    }
+
+    private static async GetContentsPath(identifier: string, command: string): Promise<string>  
+    {
+        return path.join(CONTENTS, identifier + "." + command);
     }
 
     private static async Archive(identifier: string, command: string)
