@@ -21,8 +21,14 @@
     "discord.js": "^13.5.1"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "typescript": "^4.5.4"
   },
-  "include": ["sources/**/*.ts"],
-  "exclude": ["node_modules", ".vscode"]
+  "include": [
+    "sources/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode"
+  ]
 }
