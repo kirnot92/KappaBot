@@ -1,10 +1,6 @@
 import String from "../extension/stringExtension";
 import CommandRepository from "../procedure/commandRepository";
-import Global from "../core/global";
-import { IBehavior } from "./IBehavior";
 import { LogicHalt } from "../core/assert";
-import * as Command from "../../json/command.json";
-import * as SystemMessage from "../../json/systemMessage.json";
 import { MessageAttachment } from "discord.js";
 import MediaRepository from "../procedure/mediaRepository";
 
@@ -43,7 +39,10 @@ export class SaveHelper
         var result = MediaRepository.FindMediaUrls(this.content);
         result.urls.forEach(url => urls.push(url));
 
-        await CommandRepository.Save(this.channelId, this.Command, result.others, urls);
-        await MediaRepository.Save(this.channelId, this.Command, urls);
+        await CommandRepository.Save(this.channelId, this.Command, result.others);
+        if (urls.length != 0)
+        {
+            await MediaRepository.Save(this.channelId, this.Command, urls);
+        }
     }
 }
