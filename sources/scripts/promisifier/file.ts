@@ -62,4 +62,10 @@ export default class File
         var stats = Utill.promisify<string, FileRaw.Stats>(FileRaw.stat)   
         return await stats(path)
     }
+
+    public static async Rename(oldPath: string, newPath: string)
+    {
+        var rename =  Utill.promisify(FileRaw.rename);
+        return await rename(oldPath, newPath);
+    }
 }
