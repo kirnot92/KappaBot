@@ -175,10 +175,10 @@ export default class CommandRepository
 
         var nextContent = prevContent + content;
 
-        await this.Save(identifier, title, nextContent, new Array<string>());
+        await this.Save(identifier, title, nextContent);
     }
 
-    public static async Save(identifier: string, title: string, content: string, urls: Array<string>)
+    public static async Save(identifier: string, title: string, content: string)
     {
         title = title.replace("/", "").replace("\\", "");
 
