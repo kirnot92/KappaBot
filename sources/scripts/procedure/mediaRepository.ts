@@ -16,6 +16,11 @@ export default class MediaRepository
         {
             await File.MakeDir(folderPath);
         }
+        else
+        {
+            await MediaRepository.Archive(identifier, title);
+            await File.MakeDir(folderPath);
+        }
 
         for (var url of contentUrls)
         {
