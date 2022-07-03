@@ -1,9 +1,5 @@
 import * as path from "path"
 import File from "../promisifier/file"
-import Dictionary from "../collection/dictionary";
-import * as Command from "../../json/command.json";
-import Levenshtein from "./levenshtein";
-import CommandContext from "../behavior/commandContext";
 import Web from "./web";
 import { MessageAttachment } from "discord.js";
 
@@ -15,7 +11,7 @@ export default class MediaRepository
 {
     public static async Save(identifier: string, title: string, contentUrls: Array<string>)
     {
-        var folderPath = await this.GetPath(identifier, title);
+        var folderPath = this.GetPath(identifier, title);
         if (!await File.IsExists(folderPath))
         {
             await File.MakeDir(folderPath);
@@ -54,19 +50,19 @@ export default class MediaRepository
 
     public static async HasMedias(identifier: string, command: string): Promise<boolean>
     {
-        var path = await MediaRepository.GetPath(identifier, command);
+        var path = MediaRepository.GetPath(identifier, command);
         return await File.IsExists(path);
     }
 
     public static async GetMedias(identifier: string, command: string): Promise<string[]>
     {
-        var path = await MediaRepository.GetPath(identifier, command);
-        var files = await File.ReadDir(path);
+        var folderPath = MediaRepository.GetPath(identifier, command);
+        var files = await File.ReadDir(folderPath);
 
         var arr = new Array<string>();
         for (var fileName of files)
         {
-            arr.push(fileName);
+            arr.push(path.join(folderPath, fileName));
         }
         return arr;
     }
@@ -78,7 +74,7 @@ export default class MediaRepository
 
     private static GetOldPath(identifier: string, command: string, order: number): string
     {
-        return path.join(MEDIAS_PATH, identifier + "." + command + order);
+        return path.join(MEDIAS_OLD_PATH, identifier + "." + command + order);
     }
 
     public static HasMediaString(content: string): boolean
@@ -96,7 +92,7 @@ export default class MediaRepository
 
     public static FindMediaUrls(content: string): {urls: Array<string>, others: string}
     {
-        var urls = new Array<string>
+        var urls = new Array<string>();
         var splited = new Array<string>();
         content.split("\n").forEach(elem => 
         {
