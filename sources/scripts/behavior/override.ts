@@ -1,31 +1,21 @@
-import String from "../extension/stringExtension";
 import CommandRepository from "../procedure/commandRepository";
 import Global from "../core/global";
 import { IBehavior } from "./IBehavior";
-import { LogicHalt } from "../core/assert";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
 import { MessageAttachment } from "discord.js";
-import MediaRepository from "../procedure/mediaRepository";
+import { SaveHelper } from "./saveHelper";
 
 export class Override implements IBehavior
 {
-    args: string[];
     channelId: string;
-    isSystemCommand: boolean;
     attachments: MessageAttachment[];
+
+    saveHelper: SaveHelper;
 
     constructor(args: string, attachments: MessageAttachment[], channelId: string)
     {
-        this.args = String.Slice([args], /\s|\n/, Command.덮어쓰기.ArgCount-1);
-        this.channelId = channelId;
-        this.attachments = attachments;
-
-        var hasValue = String.HasValue(this.args, Command.덮어쓰기.ArgCount);
-        if (!hasValue)
-        {
-            LogicHalt.InvaildUsage(Command.덮어쓰기.Key);
-        }
+        this.saveHelper = new SaveHelper(args, attachments, channelId, Command.덮어쓰기.ArgCount, Command.덮어쓰기.Key)
     }
 
     public async Run()
@@ -37,8 +27,7 @@ export class Override implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        var command = this.args[0]
-        var content = this.args[1];
+        var command = this.saveHelper.Command;
 
         var isExists = await CommandRepository.IsExists(this.channelId, command);
         if (!isExists)
@@ -51,12 +40,7 @@ export class Override implements IBehavior
             return SystemMessage.IsSystemMessage;
         }
 
-        var urls = MediaRepository.GetUrlsFromMediaAttachments(this.attachments);
-        var result = MediaRepository.FindMediaUrls(content);
-        result.urls.forEach(url => urls.push(url));
-
-        await CommandRepository.Save(this.channelId, command, result.others, urls);
-        await MediaRepository.Save(this.channelId, command, urls);
+        await this.saveHelper.Save();
 
         return SystemMessage.Comfirmed;
     }
