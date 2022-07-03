@@ -15,6 +15,7 @@ export class Override implements IBehavior
 
     constructor(args: string, attachments: MessageAttachment[], channelId: string)
     {
+        this.channelId = channelId;   
         this.saveHelper = new SaveHelper(args, attachments, channelId, Command.덮어쓰기.ArgCount, Command.덮어쓰기.Key)
     }
 

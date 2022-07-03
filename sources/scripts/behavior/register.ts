@@ -13,6 +13,7 @@ export class Register implements IBehavior
 
     constructor(args: string, attachments: MessageAttachment[], channelId: string)
     {
+        this.channelId = channelId;
         this.saveHelper = new SaveHelper(args, attachments, channelId, Command.등록.ArgCount, Command.등록.Key)
     }
 
