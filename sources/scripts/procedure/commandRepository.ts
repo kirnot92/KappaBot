@@ -4,11 +4,10 @@ import Dictionary from "../collection/dictionary";
 import * as Command from "../../json/command.json";
 import Levenshtein from "./levenshtein";
 import CommandContext from "../behavior/commandContext";
-import Web from "./web";
+import MediaRepository from "./mediaRepository";
 
 const ROOT = path.resolve(__dirname, "..", "..", "..")
 const COMMANDS = path.join(ROOT, "resources", "commands")
-const CONTENTS = path.join(ROOT, "resources", "contents")
 const COMMANDS_OLD = path.join(ROOT, "resources", "commandsOld")
 
 export default class CommandRepository
@@ -133,9 +132,9 @@ export default class CommandRepository
             await File.Delete(path);
         }
 
-        var contentsPath = this.GetContentsPath
-
         this.cacheList.Remove(identifier);
+
+        MediaRepository.OnCommandDeleted(identifier, command);
     }
 
     public static async RemoveLastLine(identifier: string, command: string)
@@ -183,16 +182,6 @@ export default class CommandRepository
     {
         title = title.replace("/", "").replace("\\", "");
 
-        var splited = content.split("\n");
-        for(let line of splited)
-        {
-            if (line.startsWith("https://") && this.HasFileExtension(line))
-            {
-                urls.push(line);
-            }
-        }
-
-        await CommandRepository.SaveContents(identifier, title, urls)
 
         var path = this.GetPath(identifier, title);
         if (await File.IsExists(path))
@@ -204,31 +193,14 @@ export default class CommandRepository
         this.cacheList.Remove(identifier);
     }
 
-    private static async SaveContents(identifier: string, title: string, contentUrls: Array<string>)
-    {
-        var folderPath = await this.GetContentsPath(identifier, title);
-        if (!await File.IsExists(folderPath))
-        {
-            await File.MakeDir(folderPath);
-        }
-
-        for (var url of contentUrls)
-        {
-            var splited = url.split("/");
-            var fileName = splited.pop();
-
-            await Web.Download(url, path.join(folderPath, fileName));
-        }
-    }
-
     public static async Load(identifier: string, command: string): Promise<CommandContext>
     {
         var path = this.GetPath(identifier, command);
         var content = await File.ReadFile(path, "utf8");
 
-        var hasContents = await CommandRepository.IsContentsExists(identifier, command);
+        var hasContents = await MediaRepository.HasMedias(identifier, command);
         return hasContents
-            ? new CommandContext(content, {files: await CommandRepository.GetContents(identifier, command)})
+            ? new CommandContext(content, {files: await MediaRepository.GetMedias(identifier, command)})
             : new CommandContext(content);
     }
 
@@ -253,46 +225,9 @@ export default class CommandRepository
         return await File.IsExists(path);
     }
 
-    private static HasFileExtension(content: string): boolean
-    {
-        var candidates = ["png", "jpg", "jpeg", "gif", "webp", "mp3", "mp4"]
-        for (var i = 0; i < candidates.length; ++i)
-        {
-            if (content.toLowerCase().endsWith(candidates[i]))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private static GetPath(identifier: string, command: string): string
     {
         return path.join(COMMANDS, identifier + "." + command + ".txt");
-    }
-
-    private static async IsContentsExists(identifier: string, command: string): Promise<boolean>
-    {
-        var path = await CommandRepository.GetContentsPath(identifier, command);
-        return await File.IsExists(path);
-    }
-
-    private static async GetContents(identifier: string, command: string): Promise<string[]>
-    {
-        var path = await CommandRepository.GetContentsPath(identifier, command);
-        var files = await File.ReadDir(path);
-
-        var arr = new Array<string>();
-        for (var fileName of files)
-        {
-            arr.push(fileName);
-        }
-        return arr;
-    }
-
-    private static async GetContentsPath(identifier: string, command: string): Promise<string>  
-    {
-        return path.join(CONTENTS, identifier + "." + command);
     }
 
     private static async Archive(identifier: string, command: string)

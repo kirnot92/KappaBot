@@ -6,6 +6,7 @@ import { LogicHalt } from "../core/assert";
 import * as Command from "../../json/command.json";
 import * as SystemMessage from "../../json/systemMessage.json";
 import { MessageAttachment } from "discord.js";
+import MediaRepository from "../procedure/mediaRepository";
 
 export class Override implements IBehavior
 {
@@ -36,25 +37,26 @@ export class Override implements IBehavior
 
     async GetResult(): Promise<string>
     {
-        var isExists = await CommandRepository.IsExists(this.channelId, this.args[0]);
+        var command = this.args[0]
+        var content = this.args[1];
+
+        var isExists = await CommandRepository.IsExists(this.channelId, command);
         if (!isExists)
         {
             return "없는 커맨드입니다.";
         }
 
-        if (CommandRepository.IsSystemCommand(this.args[0]))
+        if (CommandRepository.IsSystemCommand(command))
         {
             return SystemMessage.IsSystemMessage;
         }
 
-        var urls = new Array<string>();
-        for (var attachment of this.attachments)
-        {
-            // 필요하다면 attachment.size 검사 (나중에)
-            urls.push(attachment.url);
-        }
+        var urls = MediaRepository.GetUrlsFromMediaAttachments(this.attachments);
+        var result = MediaRepository.FindMediaUrls(content);
+        result.urls.forEach(url => urls.push(url));
 
-        await CommandRepository.Save(this.channelId, this.args[0], this.args[1], urls);
+        await CommandRepository.Save(this.channelId, command, result.others, urls);
+        await MediaRepository.Save(this.channelId, command, urls);
 
         return SystemMessage.Comfirmed;
     }
