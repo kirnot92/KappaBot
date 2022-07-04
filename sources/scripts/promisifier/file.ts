@@ -21,7 +21,7 @@ export default class File
         return FileRaw.readFileSync(path, 'utf8');
     }
 
-    public static async ReadDir(path: string)
+    public static async ReadDir(path: string): Promise<string[]>
     {
         var readDir = Utill.promisify<string, string[]>(FileRaw.readdir)
         return await readDir(path)
