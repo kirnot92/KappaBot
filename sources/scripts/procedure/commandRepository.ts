@@ -16,6 +16,9 @@ export default class CommandRepository
 
     public static async FindCommandBySubString(identifier: string, arg: string): Promise<Array<string>>
     {
+        // https://stackoverflow.com/questions/5167096/help-with-javascript-regex-to-add-backslashes-to-certain-characters-if-doesnt-e\
+        // 특수 문자를 regex string으로 해석하지 않도록 특수처리함
+        arg = arg.replace(/([^\w \\])/g,'\\$1');
         var commands = await this.GetListAsArray(identifier);
         var list = new Array<string>();
         for (var i=0; i<commands.length; ++i)
