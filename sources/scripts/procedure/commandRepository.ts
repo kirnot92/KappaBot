@@ -21,7 +21,7 @@ export default class CommandRepository
         for (var i=0; i<commands.length; ++i)
         {
             var component = commands[i];
-            var searchResult = component.search(String.raw`arg`);
+            var searchResult = component.search(arg);
             if (searchResult != -1)
             {
                 list.push(component);
