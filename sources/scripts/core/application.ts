@@ -149,6 +149,11 @@ export default class Application
             return;
         }
 
+        if (Prefix.IsJustBunchOfPrefix(message) && message.length != 1)
+        {
+            return;
+        }
+
         if (Prefix.IsCommandMessage(message) && !author.bot)
         {
             // $만 입력한 경우
@@ -169,7 +174,7 @@ export default class Application
                 // Behavior 안에서 코드 시나리오가 완결되는 형태가 더 좋아보여서 이렇게 함
                 // 이렇게 해보니까 결과값을 DM으로 보내기도 편한듯
                 var behavior = BehaviorFactory.Create(command, attachments, others, author.id, channelId, guildId);
-                
+
                 await behavior.Run();
             }
             catch (error)

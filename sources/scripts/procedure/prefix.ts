@@ -33,5 +33,30 @@ export default class Prefix
         }
         return false;
     }
+
+    public static IsJustBunchOfPrefix(msg: string): boolean
+    {
+        for (var prefix of this.prefixs)
+        {
+            let isBunchOfPrefix = true;
+
+            for (var i=0; i<msg.length; ++i)
+            {
+                if (msg.charAt(i) != prefix)
+                {
+                    isBunchOfPrefix = false;
+                    break;
+                }
+            }
+
+            if (isBunchOfPrefix)
+            {
+                return true;
+            }
+        }
+        return false;
+
+
+    }
 }
 Prefix.Initialize();
