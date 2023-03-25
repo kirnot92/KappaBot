@@ -22,9 +22,9 @@ export default class SystemAPI
 
         this.client = client;
         this.client.on("ready", async () => await this.OnReady());
-        this.client.on("messageCreate", async (msg) => await this.OnMessage(msg));
-        this.client.on("messageReactionAdd", async (msgReaction, user) => await this.OnMessageReactionAdd(msgReaction, user));
-        this.client.on("messageReactionRemove", async (msgReaction, user) => await this.OnMessageReactionRemove(msgReaction, user));
+        this.client.on("messageCreate", async (msg) => {await this.OnMessage(msg)});
+        this.client.on("messageReactionAdd", async (msgReaction, user) => {await this.OnMessageReactionAdd(msgReaction, user)});
+        this.client.on("messageReactionRemove", async (msgReaction, user) => {await this.OnMessageReactionRemove(msgReaction, user)});
         this.serverStartedDate = Date().toString();
 
         Log.Info("Server Started At " + this.serverStartedDate);
