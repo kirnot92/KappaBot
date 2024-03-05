@@ -51,7 +51,7 @@ export class Load implements IBehavior
         // 비슷한게 있으면 그걸 리턴함
         // 뭔 메세지로 보정했는지 prefix를 달아준다
         var prefixMessage = "[$"+ similar +"]\n";
-        var context = await CommandRepository.Load(this.channelId, similar);
+        var context = await CommandRepository.Load(this.channelId, similar!);
         context.Message = prefixMessage + context.Message;
         return context;
     }

@@ -55,7 +55,7 @@ export default class Dictionary<TKey, TValue>
         return this._map.has(key);
     }
 
-    public TryGet(key: TKey): TValue
+    public TryGet(key: TKey): TValue|null
     {
         if (this.ContainsKey(key))
         {
@@ -64,8 +64,13 @@ export default class Dictionary<TKey, TValue>
         return null;
     }
 
-    public MustGet(key: TKey): TValue
+    public MustGet(key: TKey): TValue|null
     {
-        return this._map.get(key);
+        var value = this._map.get(key);
+        if (value === undefined)
+        {
+            return null;
+        }
+        return value;
     }
 }

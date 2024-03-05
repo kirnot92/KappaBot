@@ -65,7 +65,7 @@ export default class CommandRepository
         return list.reverse().slice(0, last);
     }
 
-    public static async FindSimilar(identifier: string, invalidCommand: string): Promise<string>
+    public static async FindSimilar(identifier: string, invalidCommand: string): Promise<string|null>
     {
         // 글자를 모자라게 적은 경우 substring으로 판단
         var substringSearchResult = await this.FindCommandBySubString(identifier, invalidCommand);
@@ -100,7 +100,7 @@ export default class CommandRepository
         return arr;
     }
 
-    public static async GetList(identifier: string): Promise<string>
+    public static async GetList(identifier: string): Promise<string|null>
     {
         var files = await File.ReadDir(COMMANDS);
 
@@ -118,7 +118,7 @@ export default class CommandRepository
         }
 
         var fileList = this.cacheList.MustGet(identifier);
-        if (fileList.length == 0)
+        if (fileList == null || fileList.length == 0)
         {
             return null;
         }

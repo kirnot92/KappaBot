@@ -24,9 +24,13 @@ export default class MediaRepository
 
         for (var url of contentUrls)
         {
-            var splited = url.split("/");
+            var firstSplited = url.split('?');
+            var splited = firstSplited[0].split("/");
             var fileName = splited.pop();
-
+            if (fileName === undefined)
+            {
+                return;
+            }
             await Web.Download(url, path.join(folderPath, fileName));
         }
     }

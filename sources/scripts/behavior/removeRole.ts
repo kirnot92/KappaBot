@@ -18,9 +18,22 @@ export class RemoveRole implements IBehavior
         var emojiRaw = args[0];
         var isCustomEmoji = (new RegExp("^<\\:.+\\:\\d+>")).exec(emojiRaw) != null;
 
-        this.emoji = isCustomEmoji
-            ? emojiRaw.match(":(\\d+)>")[1]
-            : emojiRaw;
+        if (isCustomEmoji)
+        {
+            var matched = emojiRaw.match(":(\\d+)>");
+            if (matched != null)
+            {
+                this.emoji = matched[1];
+            }
+            else
+            {
+                this.emoji = emojiRaw;
+            }
+        }
+        else
+        {
+            this.emoji = emojiRaw;
+        }
     }
 
     public async Run()

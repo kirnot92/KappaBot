@@ -21,6 +21,10 @@ export default class StringExtension
         if (match == null) { return args; }
 
         var target = args.pop();
+        if (target === undefined)
+        {
+            return args;
+        }
         args.push(target.slice(0, match.index));
         args.push(target.slice(match.index + 1));
         return this.Slice(args, regExp, times -1);

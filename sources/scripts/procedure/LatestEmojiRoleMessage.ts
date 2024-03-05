@@ -26,7 +26,7 @@ export default class LatestEmojiRoleMessage
         return path.join(LATESTMSG, guildId + ".txt");
     }
 
-    public static async TryRead(guildId: string): Promise<{channelId: string, msgId: string}>
+    public static async TryRead(guildId: string): Promise<{channelId: string, msgId: string}|null>
     {
         var path = this.GetPath(guildId);
         if (await File.IsExists(path))

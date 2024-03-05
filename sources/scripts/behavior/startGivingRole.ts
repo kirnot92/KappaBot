@@ -18,7 +18,11 @@ export class StartGivingRole implements IBehavior
     {
         var emojiRoles = await EmojiRoleRepository.GetRoles(this.guildId);
         var guild = Global.Client.GetGuild(this.guildId);
-
+        if (guild == null)
+        {
+            return;
+        }
+        
         var str = ""
         for (var elem of emojiRoles)
         {

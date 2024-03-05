@@ -95,7 +95,7 @@ export default class KappaScript
         return replaced;
     }
 
-    private static ParseDate(args: string[]): Date
+    private static ParseDate(args: string[]): Date|null
     {
         var dateStr = args[1].split("/");
         if (dateStr.length != 3)

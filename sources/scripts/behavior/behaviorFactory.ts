@@ -19,6 +19,7 @@ import { StartGivingRole } from "./startGivingRole";
 import { AddRole } from "./addRole";
 import { RemoveRole } from "./removeRole";
 import { MessageAttachment } from "discord.js";
+import { DoNothing } from "./doNothing";
 
 export default class BehaviorFactory
 {
@@ -28,7 +29,7 @@ export default class BehaviorFactory
         others: string,
         authorId: string,
         channelId: string,
-        guildId: string): IBehavior
+        guildId: string|null): IBehavior
     {
         switch(command)
         {
@@ -74,10 +75,13 @@ export default class BehaviorFactory
             case Command.내용디엠으로.Key:
                 return new LoadToDM(others, channelId, authorId)
             case Command.역할부여시작.Key:
+                if (guildId == null){return new DoNothing();}
                 return new StartGivingRole(guildId, channelId);
             case Command.역할추가.Key:
+                if (guildId == null){return new DoNothing();}
                 return new AddRole(guildId, channelId, others);
             case Command.역할삭제.Key:
+                if (guildId == null){return new DoNothing();}
                 return new RemoveRole(guildId, channelId, others);
             default:
                 return new Load(command, channelId);

@@ -21,9 +21,23 @@ export class AddRole implements IBehavior
         var emojiRaw = splited[0];
         var isCustomEmoji = (new RegExp("^<\\:.+\\:\\d+>")).exec(emojiRaw) != null;
 
-        this.emoji = isCustomEmoji
-            ? emojiRaw.match("<:(.+):")[1]
-            : emojiRaw;
+        if (isCustomEmoji)
+        {
+            var matched = emojiRaw.match("<:(.+):");
+            if (matched != null)
+            {
+                this.emoji = matched[1];
+            }
+            else
+            {
+                this.emoji = emojiRaw;
+            }
+        }
+        else
+        {
+            this.emoji = emojiRaw;
+        }
+
         this.role = splited[1];
     }
 
@@ -42,7 +56,11 @@ export class AddRole implements IBehavior
         }
 
         var guild = Global.Client.GetGuild(this.guildId);
-        var role = guild.roles.cache.find(r => r.name == this.role);
+        if (guild == null)
+        {
+            return "guild not found";
+        }
+        var role = guild.roles.cache.find((r: any) => r.name == this.role);
         if (role == null)
         {
             return "role not founded";

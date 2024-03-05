@@ -9,7 +9,7 @@ export default class ClientAPI
     // 메세지의 결과를 최상단으로 다시 받아와서 channel.Send 하지 않고,
     // 결과가 나온 순간에 Global.Client.SendMessage 하는 모양새가 나을 것 같아서 이것도 같이 함
 
-    private client: Client = null;
+    private client: Client;
     constructor(client: Client)
     {
         this.client = client;
@@ -32,11 +32,11 @@ export default class ClientAPI
     public async SendInternal(
         channel: Channel,
         message: string,
-        options: MessageOptions): Promise<Array<Message>>
+        options?: MessageOptions): Promise<Array<Message>>
     {
         var msgs = new Array<Message>();
 
-        if (options != null)
+        if (options != null || options !== undefined)
         {
             await channel.send(options);
         }
@@ -56,6 +56,10 @@ export default class ClientAPI
 
     public SetActivity(message: string)
     {
+        if (this.client.user == null)
+        {
+            return;
+        }
         this.client.user.setActivity(message, {type: "PLAYING"});
     }
 
@@ -69,8 +73,13 @@ export default class ClientAPI
         return await (this.client.users.fetch(userId)) as User;
     }
 
-    public GetGuild(guildId: string): Guild
+    public GetGuild(guildId: string): Guild|null
     {
-        return this.client.guilds.cache.get(guildId);
+        var guild = this.client.guilds.cache.get(guildId);
+        if (guild === undefined)
+        {
+            return null;
+        }
+        return guild;
     }
 }

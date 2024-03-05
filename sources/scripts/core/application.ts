@@ -65,8 +65,8 @@ export default class Application
     {
         var origMessage = msgReaction.message;
         var channelType = origMessage.channel.type;
-
-        if (!origMessage.author.bot || user.bot)
+        var author = origMessage.author;
+        if ((author != null && !author.bot) || user.bot)
         {
             return;
         }
@@ -87,7 +87,7 @@ export default class Application
         var origMessage = msgReaction.message;
         var channelType = origMessage.channel.type;
 
-        if (!origMessage.author.bot || user.bot)
+        if ((origMessage.author != null && !origMessage.author.bot) || user.bot)
         {
             return;
         }
@@ -103,14 +103,24 @@ export default class Application
         }
     }
 
-    async HandleReaction(emoji: GuildEmoji|ReactionEmoji, guild: Guild, user: User|PartialUser, isAdd: boolean)
+    async HandleReaction(emoji: GuildEmoji|ReactionEmoji, guild: Guild|null, user: User|PartialUser, isAdd: boolean)
     {
-        if (EmojiRoleRepository.HasRole(guild.id, emoji.name))
+        if (guild == null || emoji.name == null)
+        {
+            return;
+        }
+
+        if (await EmojiRoleRepository.HasRole(guild.id, emoji.name))
         {
             var member = await guild.members.fetch(user.id) as GuildMember;
             var roleName = await EmojiRoleRepository.GetRole(guild.id, emoji.name);
-            var alreadyHasRole = member.roles.cache.find(r => r.name == roleName) != null;
-            var role = guild.roles.cache.find(r => r.name == roleName);
+            var alreadyHasRole = member.roles.cache.find((r: any) => r.name == roleName) != null;
+            var role = guild.roles.cache.find((r: any) => r.name == roleName);
+
+            if (role == null)
+            {
+                return;
+            }
 
             if (isAdd && !alreadyHasRole)
             {
@@ -137,12 +147,13 @@ export default class Application
             var content = message.content;
             var channelId = message.channel.id;
             var guildId = message.guildId;
+
             var attachments = Array.from(message.attachments.values());
             await this.HandleMessage(content, attachments, channelId, message.author, guildId);
         }
     }
 
-    async HandleMessage(message: string, attachments: MessageAttachment[], channelId: string, author: User|PartialUser, guildId: string)
+    async HandleMessage(message: string, attachments: MessageAttachment[], channelId: string, author: User|PartialUser, guildId: string|null)
     {
         if (await BlacklistRepository.IsBlackList(author.id))
         {

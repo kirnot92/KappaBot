@@ -13,7 +13,7 @@ export default class SystemAPI
     private messageReactionRemoveHandlers: Array<(msgReaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) => Promise<void>>;
     private serverStartedDate: string;
 
-    private client: Client = null;
+    private client: Client;
     constructor(client: Client)
     {
         this.messageHandlers = new Array<(msg: Message) => Promise<void>>();

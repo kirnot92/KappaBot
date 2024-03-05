@@ -5,9 +5,9 @@ import { Client } from "discord.js";
 
 export default class Global
 {
-    public static Client: ClientAPI = null;
-    public static System: SystemAPI = null;
-    public static Time: TimeAPI = null;
+    public static Client: ClientAPI;
+    public static System: SystemAPI;
+    public static Time: TimeAPI;
 
     public static Initialize(client: Client)
     {
