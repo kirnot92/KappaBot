@@ -13,6 +13,7 @@ import * as Secret from "../../json/secret.json";
 import BlacklistRepository from "../procedure/blacklistRepository";
 import EmojiRoleRepository from "../procedure/emojiRoleRepository";
 import Prefix from "../procedure/prefix";
+import { AskChatGPT } from "../behavior/askChatGPT";
 
 export default class Application
 {
@@ -158,6 +159,19 @@ export default class Application
         if (await BlacklistRepository.IsBlackList(author.id))
         {
             return;
+        }
+
+        if (Prefix.IsCallChatGPT(message))
+        {
+            try
+            {
+                var askChatGPTBehavior = new AskChatGPT(message, channelId);
+                await askChatGPTBehavior.Run();
+            }
+            catch (error)
+            {
+                this.HandleError(error, message, channelId);
+            }
         }
 
         if (Prefix.IsJustBunchOfPrefix(message) && message.length != 1)
