@@ -13,7 +13,7 @@ export class AskChatGPT implements IBehavior
 
     constructor(command: string, author: User|PartialUser, channelId: string, messageHistory: MessageContext[])
     {
-        messageHistory.push({"role":"user", content: `${author.username}:${command}`});
+        //messageHistory.push({"role":"user", content: `${author.username}:${command}`});
         this.channelId = channelId;
         this.messageHistory = messageHistory;
     }
