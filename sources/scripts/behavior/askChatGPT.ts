@@ -24,7 +24,15 @@ export class AskChatGPT implements IBehavior
 
         var instructions = (await this.GetPrompt()).Message + "input은 최근 대화를 포함하고 있습니다. 마지막 input이 사용자의 질문이며, 나머지는 이전 기록임을 참고하여 답변을 작성하세요.";
         var response = await Global.ChatGPT.Request(instructions, this.messageHistory);
-        msgs[0].edit(response);
+        if (response.length < 2000)
+        {
+            msgs[0].edit(response);
+        }
+        else
+        {
+            msgs[0].delete();
+            await Global.Client.SendMessage(this.channelId, response);
+        }
     }
 
     async GetPrompt(): Promise<CommandContext>
