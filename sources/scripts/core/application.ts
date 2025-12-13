@@ -165,7 +165,7 @@ export default class Application
 
     async HandleChatGPT(message: Message)
     {
-        var msgs = await message.channel.messages.fetch();
+        var msgs = await message.channel.messages.fetch({ limit: 100 });
         var sorted = ([...msgs.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp))
         var msgList = new Array<MessageContext>();
 
