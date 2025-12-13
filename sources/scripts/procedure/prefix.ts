@@ -24,7 +24,7 @@ export default class Prefix
 
     public static IsCallChatGPT(msg: string): boolean
     {
-        return msg.startsWith("챗지피티야");
+        return msg.startsWith(Config.AIPrefix);
     }
 
     public static IsCommandMessage(msg: string): boolean

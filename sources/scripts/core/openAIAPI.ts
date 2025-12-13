@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { install } from "undici";
 import * as Secret from "../../json/secret.json";
+import { MessageContext } from "../type/types";
 
 export default class OpenAIAPI
 {
@@ -11,7 +12,7 @@ export default class OpenAIAPI
         this.client = new OpenAI({ apiKey: Secret.OpenAIApiKey });
     }
 
-    public async Request(input: string, instructions: string) : Promise<string>
+    public async Request(instructions: string, messageHistory: MessageContext[]) : Promise<string>
     {
         var response = await this.client.responses.create(
         {
@@ -20,7 +21,7 @@ export default class OpenAIAPI
             tools: [{ type: "web_search" }],
             tool_choice: "auto",
             instructions: instructions,
-            input: input
+            input: messageHistory
         });
 
         return response.output_text;

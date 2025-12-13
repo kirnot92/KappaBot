@@ -14,6 +14,7 @@ import BlacklistRepository from "../procedure/blacklistRepository";
 import EmojiRoleRepository from "../procedure/emojiRoleRepository";
 import Prefix from "../procedure/prefix";
 import { AskChatGPT } from "../behavior/askChatGPT";
+import {MessageContext} from "../type/types";
 
 export default class Application
 {
@@ -149,8 +150,49 @@ export default class Application
             var channelId = message.channel.id;
             var guildId = message.guildId;
 
-            var attachments = Array.from(message.attachments.values());
-            await this.HandleMessage(content, attachments, channelId, message.author, guildId);
+            if (Prefix.IsCallChatGPT(content))
+            {
+                await this.HandleChatGPT(message);
+                return;
+            }
+            else
+            {
+                var attachments = Array.from(message.attachments.values());
+                await this.HandleMessage(content, attachments, channelId, message.author, guildId);
+            }
+        }
+    }
+
+    async HandleChatGPT(message: Message)
+    {
+        var msgs = await message.channel.messages.fetch();
+        var sorted = ([...msgs.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp))
+        var msgList = new Array<MessageContext>();
+
+        for (var msg of sorted)
+        {
+            if (msg.author.bot && msg.author.id == Global.Client.GetMyId())
+            {
+                msgList.push({role:"assistant", content: msg.content});
+            }
+            else
+            {
+                msgList.push({role:"user", content: `${msg.author.username}:${msg.content}`});
+            }
+        }
+
+        var content = message.content;
+        var author = message.author;
+        var channelId = message.channel.id;
+
+        try
+        {
+            var askChatGPTBehavior = new AskChatGPT(content, author, channelId, msgList);
+            await askChatGPTBehavior.Run();
+        }
+        catch (error)
+        {
+            this.HandleError(error, content, channelId);
         }
     }
 
@@ -159,19 +201,6 @@ export default class Application
         if (await BlacklistRepository.IsBlackList(author.id))
         {
             return;
-        }
-
-        if (Prefix.IsCallChatGPT(message))
-        {
-            try
-            {
-                var askChatGPTBehavior = new AskChatGPT(message, channelId);
-                await askChatGPTBehavior.Run();
-            }
-            catch (error)
-            {
-                this.HandleError(error, message, channelId);
-            }
         }
 
         if (Prefix.IsJustBunchOfPrefix(message) && message.length != 1)

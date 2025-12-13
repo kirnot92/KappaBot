@@ -73,6 +73,11 @@ export default class ClientAPI
         return await (this.client.users.fetch(userId)) as User;
     }
 
+    public GetMyId(): string|undefined
+    {
+        return this.client.user?.id
+    }
+
     public GetGuild(guildId: string): Guild|null
     {
         var guild = this.client.guilds.cache.get(guildId);
