@@ -10,20 +10,36 @@ export class AskChatGPT implements IBehavior
     command: string;
     channelId: string;
     messageHistory: MessageContext[];
+    author: User|PartialUser;
 
     constructor(command: string, author: User|PartialUser, channelId: string, messageHistory: MessageContext[])
     {
         //messageHistory.push({"role":"user", content: `${author.username}:${command}`});
+        this.author = author;
         this.channelId = channelId;
         this.messageHistory = messageHistory;
     }
 
     public async Run()
     {
-        var msgs = await Global.Client.SendMessage(this.channelId, "잠시만 기다려주세요! 생각 중이에요!");
+        const fileName = `user_${this.author.id}.memory.json`;
+        let memoryData = "";
+        if (await CommandRepository.IsExists(this.channelId, fileName))
+        {
+            memoryData = (await CommandRepository.Load(this.channelId, fileName)).Message;
+        }
 
-        var instructions = (await this.GetPrompt()).Message + "input은 최근 대화를 포함하고 있습니다. 마지막 input이 사용자의 질문이며, 나머지는 이전 기록임을 참고하여 답변을 작성하세요.";
-        var response = await Global.ChatGPT.Request(instructions, this.messageHistory);
+        const msgs = await Global.Client.SendMessage(this.channelId, "잠시만 기다려주세요! 생각 중이에요!");
+
+        let instructions = (await this.GetPrompt()).Message;
+        instructions += "input은 최근 대화를 포함하고 있습니다. 마지막 input이 사용자의 질문이며, 나머지는 이전 기록임을 참고하여 답변을 작성하세요.\n";
+        if (memoryData != "")
+        {
+            instructions += "다음은 사용자에 대한 메모리 데이터입니다. 이를 활용하여 답변을 작성하세요.";
+            instructions += memoryData;
+        }
+
+        const response = await Global.ChatGPT.Request(instructions, this.messageHistory);
         if (response.length < 2000)
         {
             msgs[0].edit(response);

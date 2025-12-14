@@ -109,7 +109,7 @@ export default class CommandRepository
             var arr = new Array<string>();
             files.forEach(element =>
             {
-                if (element.includes(identifier))
+                if (element.includes(identifier) && !element.endsWith("memory.json.txt"))
                 {
                     arr.push(element.replace(".txt", "").replace(identifier + ".", ""));
                 }

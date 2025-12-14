@@ -15,6 +15,7 @@ import EmojiRoleRepository from "../procedure/emojiRoleRepository";
 import Prefix from "../procedure/prefix";
 import { AskChatGPT } from "../behavior/askChatGPT";
 import {MessageContext} from "../type/types";
+import { MemoryCollect, MemoryCollectRunner } from "../behavior/memoryCollect";
 
 export default class Application
 {
@@ -24,6 +25,7 @@ export default class Application
 
     private currentActivityIndex: number = 0
     private activityList: Array<string>
+    private memoryCollectRunner: MemoryCollectRunner;
 
     public Initialize()
     {
@@ -36,6 +38,7 @@ export default class Application
         this.InitializeActivity();
 
         Log.Info("Application Initialized");
+        this.memoryCollectRunner = new MemoryCollectRunner();
     }
 
     public async Update(): Promise<void>
@@ -165,7 +168,7 @@ export default class Application
 
     async HandleChatGPT(message: Message)
     {
-        var msgs = await message.channel.messages.fetch({ limit: 100 });
+        var msgs = await message.channel.messages.fetch({ limit: 30 });
         var sorted = ([...msgs.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp))
         var msgList = new Array<MessageContext>();
 
@@ -187,8 +190,14 @@ export default class Application
 
         try
         {
-            var askChatGPTBehavior = new AskChatGPT(content, author, channelId, msgList);
+            const askChatGPTBehavior = new AskChatGPT(content, author, channelId, msgList);
             await askChatGPTBehavior.Run();
+
+            this.memoryCollectRunner.TryRun(channelId, async () =>
+            {
+                const memoryCollectBehavior = new MemoryCollect(sorted, message, channelId);
+                await memoryCollectBehavior.Run();
+            });
         }
         catch (error)
         {
