@@ -14,7 +14,7 @@ export class MemoryCollectRunner
     public async TryRun(channelId: string, task: () => Promise<void>)
     {
         const currentCount = (this.counter.get(channelId) ?? 0);
-        const nextCount = (currentCount + 1) % 25;
+        const nextCount = (currentCount + 1) % 80;
         this.counter.set(channelId, nextCount);
 
         Log.Info(`메모리 카운터 ${channelId}:${currentCount}`);

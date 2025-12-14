@@ -173,7 +173,7 @@ export default class Application
 
     async HandleChatGPT(message: Message)
     {
-        var messages = await this.FetchSortedMessages(message);
+        var messages = await this.FetchSortedMessages(message, 50);
         var content = message.content;
         var author = message.author;
         var channelId = message.channel.id;
@@ -204,7 +204,7 @@ export default class Application
 
     async HandleChatCollection(message: Message)
     {
-        var messages = await this.FetchSortedMessages(message);
+        var messages = await this.FetchSortedMessages(message, 100);
         var content = message.content;
         var channelId = message.channel.id;
 
@@ -222,9 +222,9 @@ export default class Application
         }
     }
 
-    async FetchSortedMessages(message: Message): Promise<Message<boolean>[]>
+    async FetchSortedMessages(message: Message, limit: number): Promise<Message<boolean>[]>
     {
-        var msgs = await message.channel.messages.fetch({ limit: 30 });
+        var msgs = await message.channel.messages.fetch({ limit: limit });
         var sorted = ([...msgs.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp))
         return sorted;
     }
