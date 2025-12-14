@@ -175,6 +175,7 @@ export default class Application
     {
         var messages = await this.FetchSortedMessages(message);
         var content = message.content;
+        var author = message.author;
         var channelId = message.channel.id;
 
         try
@@ -191,6 +192,9 @@ export default class Application
                     inputs.push({role:"user", content: `${msg.author.username}:${msg.content}`});
                 }
             }
+
+            const askChatGPTBehavior = new AskChatGPT(content, author, channelId, inputs);
+            await askChatGPTBehavior.Run();
         }
         catch (error)
         {
