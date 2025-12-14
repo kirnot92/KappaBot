@@ -16,6 +16,7 @@ import Prefix from "../procedure/prefix";
 import { AskChatGPT } from "../behavior/askChatGPT";
 import {MessageContext} from "../type/types";
 import { MemoryCollect, MemoryCollectRunner } from "../behavior/memoryCollect";
+import CommandRepository from "../procedure/commandRepository";
 
 export default class Application
 {
@@ -156,46 +157,58 @@ export default class Application
             if (Prefix.IsCallChatGPT(content))
             {
                 await this.HandleChatGPT(message);
-                return;
             }
             else
             {
                 var attachments = Array.from(message.attachments.values());
                 await this.HandleMessage(content, attachments, channelId, message.author, guildId);
             }
+
+            if (await CommandRepository.IsExists(channelId, "readme.md"))
+            {
+                await this.HandleChatCollection(message);
+            }
         }
     }
 
     async HandleChatGPT(message: Message)
     {
-        var msgs = await message.channel.messages.fetch({ limit: 30 });
-        var sorted = ([...msgs.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp))
-        var msgList = new Array<MessageContext>();
-
-        for (var msg of sorted)
-        {
-            if (msg.author.bot && msg.author.id == Global.Client.GetMyId())
-            {
-                msgList.push({role:"assistant", content: msg.content});
-            }
-            else
-            {
-                msgList.push({role:"user", content: `${msg.author.username}:${msg.content}`});
-            }
-        }
-
+        var messages = await this.FetchSortedMessages(message);
         var content = message.content;
-        var author = message.author;
         var channelId = message.channel.id;
 
         try
         {
-            const askChatGPTBehavior = new AskChatGPT(content, author, channelId, msgList);
-            await askChatGPTBehavior.Run();
+            var inputs = new Array<MessageContext>();
+            for (var msg of messages)
+            {
+                if (msg.author.bot && msg.author.id == Global.Client.GetMyId())
+                {
+                    inputs.push({role:"assistant", content: msg.content});
+                }
+                else
+                {
+                    inputs.push({role:"user", content: `${msg.author.username}:${msg.content}`});
+                }
+            }
+        }
+        catch (error)
+        {
+            this.HandleError(error, content, channelId);
+        }
+    }
 
+    async HandleChatCollection(message: Message)
+    {
+        var messages = await this.FetchSortedMessages(message);
+        var content = message.content;
+        var channelId = message.channel.id;
+
+        try
+        {
             this.memoryCollectRunner.TryRun(channelId, async () =>
             {
-                const memoryCollectBehavior = new MemoryCollect(sorted, message, channelId);
+                const memoryCollectBehavior = new MemoryCollect(messages, message, channelId);
                 await memoryCollectBehavior.Run();
             });
         }
@@ -203,6 +216,13 @@ export default class Application
         {
             this.HandleError(error, content, channelId);
         }
+    }
+
+    async FetchSortedMessages(message: Message): Promise<Message<boolean>[]>
+    {
+        var msgs = await message.channel.messages.fetch({ limit: 30 });
+        var sorted = ([...msgs.values()].sort((a, b) => a.createdTimestamp - b.createdTimestamp))
+        return sorted;
     }
 
     async HandleMessage(message: string, attachments: MessageAttachment[], channelId: string, author: User|PartialUser, guildId: string|null)
