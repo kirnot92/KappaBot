@@ -104,8 +104,8 @@ export default class OpenAIAPI
 
         const input =
         [
-            {role: "user" as const, content: `다음은 json 파일 데이터입니다. ${memoryData}`},
-            {role: "user" as const, content: `다음은 메모리 후보군 데이터입니다. ${JSON.stringify(userMemoryCandidate)}`},
+            {role: "user" as const, content: `다음은 json 파일 데이터입니다.\n\`\`\`json\n${memoryData}\n\`\`\``},
+            {role: "user" as const, content: `다음은 메모리 후보군 데이터입니다. \n\`\`\`json\n${JSON.stringify(userMemoryCandidate)}\n\`\`\``},
         ];
         
         const response = await this.client.responses.create(
