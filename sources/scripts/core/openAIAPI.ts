@@ -94,7 +94,7 @@ export default class OpenAIAPI
             - delete op의 text는 ""(빈 문자열)로 설정한다.
 
             섹션 매핑:
-            - type=fact,relationship => StableFacts
+            - type=fact,relationship =>Facts
             - type=preference => Preferences
             - type=project => Projects
             - type=constraint => Constraints
