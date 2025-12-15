@@ -104,7 +104,11 @@ export default class SystemAPI
     public TerminalCommand(str: string, errorMsg: string)
     {
         var cmd = require("child_process").exec;
-        cmd(str, (err: any, stdout: any, stderr: any) =>
+        cmd(str,
+        {
+            shell: "powershell.exe"
+        },
+        (err: any, stdout: any, stderr: any) =>
         {
             // client 가지고 있으니까 직접 채널을 가져오게 하자
             // 여기서 Global.Client를 가져오는 건 좀 찜찜함
