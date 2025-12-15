@@ -24,6 +24,25 @@ export class UserMemoryModifier
                 },
                 discarded: []
             };
+
+        this.FillUpdatedAtAll();
+    }
+
+    private FillUpdatedAtAll()
+    {
+        const now = this.data.updated_at ?? new Date().toISOString();
+        this.FillUpdatedAt(this.data.items.facts, now);
+        this.FillUpdatedAt(this.data.items.constraints, now);
+        this.FillUpdatedAt(this.data.items.preferences, now);
+        this.FillUpdatedAt(this.data.items.projects, now);
+    }
+
+    private FillUpdatedAt(section: UserMemoryItem[], now: string)
+    {
+        for (const item of section)
+        {
+            item.updated_at ??= now;
+        }
     }
 
     public ApplyPatch(patch: MemoryPatchData)
@@ -42,6 +61,7 @@ export class UserMemoryModifier
                 section?.push(
                 {
                     key: id,
+                    updated_at: operationItem.updated_at,
                     text: operationItem.text,
                     confidence: operationItem.confidence,
                     ttl: operationItem.ttl,
@@ -57,6 +77,7 @@ export class UserMemoryModifier
                 section[index] = 
                 {
                     key: operationItem.id,
+                    updated_at: operationItem.updated_at,
                     text: operationItem.text,
                     confidence: operationItem.confidence,
                     ttl: operationItem.ttl,

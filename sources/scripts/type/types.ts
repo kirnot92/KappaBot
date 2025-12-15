@@ -56,6 +56,7 @@ export type Evidence = {
 
 export type MemoryPatchCandidate = {
   type: MemoryCandidateType;
+  created_at: string;
   summary: string;
   confidence: Confidence;
   ttl: Ttl;
@@ -106,6 +107,7 @@ export const memoryCandidatesV1Format: ResponseCreateParams["text"] = {
                   additionalProperties: false,
                   required: [
                     "type",
+                    "created_at",
                     "summary",
                     "confidence",
                     "ttl",
@@ -118,6 +120,7 @@ export const memoryCandidatesV1Format: ResponseCreateParams["text"] = {
                       type: "string",
                       enum: ["fact", "preference", "project", "constraint", "relationship"],
                     },
+                    created_at: { type: "string", format: "date-time", maxLength: 32 },
                     summary: { type: "string", minLength: 1, maxLength: 200 },
                     confidence: { type: "string", enum: ["low", "medium", "high"] },
                     ttl: { type: "string", enum: ["7d", "14d", "30d", "90d", "permanent"] },
@@ -163,7 +166,7 @@ export const memoryCandidatesV1Format: ResponseCreateParams["text"] = {
 export const MemoryPatchFormat: ResponseCreateParams["text"] = {
     format: {
     type: "json_schema",
-    name: "memory_candidates_v1",
+    name: "memory_patch_v1",
     strict: true,
     schema: {
       type: "object",
@@ -181,6 +184,7 @@ export const MemoryPatchFormat: ResponseCreateParams["text"] = {
               "op",
               "section",
               "id",
+              "updated_at",
               "text",
               "confidence",
               "ttl",
@@ -191,6 +195,7 @@ export const MemoryPatchFormat: ResponseCreateParams["text"] = {
               op: { type: "string", enum: ["add", "update", "delete"] },
               section: { type: "string", enum: ["StableFacts", "Preferences", "Projects", "Constraints"] },
               id: { anyOf: [{ type: "string", minLength: 1 }, { type: "null" }] },
+              updated_at: { type: "string", format: "date-time", maxLength: 32 },
               text: { type: "string", maxLength: 220 },
               confidence: { type: "string", enum: ["low", "medium", "high"] },
               ttl: { type: "string", enum: ["7d", "14d", "30d", "90d", "permanent"] },
@@ -221,6 +226,7 @@ export type MemoryPatchOperation = {
   op: "add" | "update" | "delete";
   section: "StableFacts" | "Preferences" | "Projects" | "Constraints";
   id: string | null;
+  updated_at: string;
   text: string; // delete면 ""(빈 문자열) 권장
   confidence: "low" | "medium" | "high";
   ttl: Ttl;
@@ -237,6 +243,7 @@ export type MemoryPatchData = {
 export type UserMemoryItem = {
   key: string; // e.g. "language_korean"
   text: string;
+  updated_at: string;
   confidence: "low" | "medium" | "high";
   ttl: Ttl;
   evidence: Array<{ message_id: string; quote: string }>;
@@ -250,7 +257,7 @@ export type UserMemoryDiscarded = {
 export type UserMemory = {
   schema_version: 1;
   user_id: string;
-  updated_at: string; // ISO string
+  updated_at?: string; // ISO string
   items: {
     facts: UserMemoryItem[];
     preferences: UserMemoryItem[];
