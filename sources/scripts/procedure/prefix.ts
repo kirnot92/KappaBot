@@ -8,7 +8,7 @@ export default class Prefix
 {
     public static First: string;
     public static prefixs: string[];
-    public static callAIPrefixs: string[]
+    public static callAIPrefixs: string[] = [];
 
     public static Initialize()
     {
@@ -25,7 +25,7 @@ export default class Prefix
         const splitedAICallSign = Config.AIPrefix.split(',');
         if (splitedAICallSign.length != 0)
         {
-            for (const item of Config.AIPrefix.split(','))
+            for (const item of splitedAICallSign)
             {
                 this.callAIPrefixs.push(item.trim());
             }
