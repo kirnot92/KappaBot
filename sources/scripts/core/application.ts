@@ -154,20 +154,23 @@ export default class Application
             var channelId = message.channel.id;
             var guildId = message.guildId;
 
-            if (Prefix.IsCallChatGPT(content))
-            {
-                await this.HandleChatGPT(message);
-            }
-            else
-            {
-                var attachments = Array.from(message.attachments.values());
-                await this.HandleMessage(content, attachments, channelId, message.author, guildId);
-            }
+            // if (Prefix.IsCallChatGPT(content))
+            // {
+            //     await this.HandleChatGPT(message);
+            // }
+            // else
+            // {
+            //     var attachments = Array.from(message.attachments.values());
+            //     await this.HandleMessage(content, attachments, channelId, message.author, guildId);
+            // }
 
-            if (await CommandRepository.IsExists(channelId, "readme.md"))
-            {
-                await this.HandleChatCollection(message);
-            }
+            // if (await CommandRepository.IsExists(channelId, Global.Constants.ReadMeFileName))
+            // {
+            //     await this.HandleChatCollection(message);
+            // }
+
+            var attachments = Array.from(message.attachments.values());
+            await this.HandleMessage(content, attachments, channelId, message.author, guildId);
         }
     }
 
