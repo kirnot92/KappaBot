@@ -8,6 +8,7 @@ export default class Prefix
 {
     public static First: string;
     public static prefixs: string[];
+    public static callAIPrefixs: string[]
 
     public static Initialize()
     {
@@ -20,11 +21,31 @@ export default class Prefix
         {
             this.First = this.prefixs[0];
         }
+
+        const splitedAICallSign = Config.AIPrefix.split(',');
+        if (splitedAICallSign.length != 0)
+        {
+            for (const item of Config.AIPrefix.split(','))
+            {
+                this.callAIPrefixs.push(item.trim());
+            }
+        }
+        else
+        {
+            this.callAIPrefixs.push("챗지피티야");
+        }
     }
 
     public static IsCallChatGPT(msg: string): boolean
     {
-        return msg.startsWith(Config.AIPrefix);
+        for (const prefix of this.callAIPrefixs)
+        {
+            if (msg.startsWith(prefix))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static IsCommandMessage(msg: string): boolean
