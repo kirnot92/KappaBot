@@ -266,3 +266,10 @@ export type UserMemory = {
   };
   discarded: UserMemoryDiscarded[];
 };
+
+export type ChatUserMessage = {
+  user_id: string;
+  display_name: string;
+  text: string;
+  created_at: string; 
+};

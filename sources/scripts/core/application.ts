@@ -14,7 +14,7 @@ import BlacklistRepository from "../procedure/blacklistRepository";
 import EmojiRoleRepository from "../procedure/emojiRoleRepository";
 import Prefix from "../procedure/prefix";
 import { AskChatGPT } from "../behavior/askChatGPT";
-import {MessageContext} from "../type/types";
+import {ChatUserMessage, MessageContext} from "../type/types";
 import { MemoryCollect, MemoryCollectRunner } from "../behavior/memoryCollect";
 import CommandRepository from "../procedure/commandRepository";
 
@@ -189,7 +189,15 @@ export default class Application
                 }
                 else
                 {
-                    inputs.push({role:"user", content: `${msg.author.username}:${msg.content}`});
+                    const userMessage =
+                    {
+                        user_id: msg.author.id,
+                        display_name: msg.author.displayName,
+                        text: msg.content,
+                        created_at: msg.createdAt.toISOString()
+                    } as ChatUserMessage;
+
+                    inputs.push({role:"user", content: `${JSON.stringify(userMessage)}`});
                 }
             }
 
@@ -204,7 +212,6 @@ export default class Application
 
     async HandleChatCollection(message: Message)
     {
-        var messages = await this.FetchSortedMessages(message, 100);
         var content = message.content;
         var channelId = message.channel.id;
 
@@ -212,6 +219,7 @@ export default class Application
         {
             this.memoryCollectRunner.TryRun(channelId, async () =>
             {
+                const messages = await this.FetchSortedMessages(message, 100);
                 const memoryCollectBehavior = new MemoryCollect(messages, message, channelId);
                 await memoryCollectBehavior.Run();
             });

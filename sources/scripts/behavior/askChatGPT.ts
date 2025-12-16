@@ -33,6 +33,7 @@ export class AskChatGPT implements IBehavior
 
         let instructions = (await this.GetPrompt()).Message;
         instructions += "input은 최근 대화를 포함하고 있습니다. 마지막 input이 사용자의 질문이며, 나머지는 이전 기록임을 참고하여 답변을 작성하세요.\n";
+        instructions += "input은 각 유저의 식별자를 포함하여 JSON 형식으로 기술됩니다.\n";
         if (memoryDataStr != "")
         {
             instructions += "다음은 사용자에 대한 메모리 데이터입니다. 이를 활용하여 답변을 작성하세요.";
