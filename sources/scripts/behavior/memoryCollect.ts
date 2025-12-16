@@ -72,9 +72,9 @@ export class MemoryCollect implements IBehavior
                 continue;
             }
 
-            if (await CommandRepository.IsExists(this.channelId, fileName))
+            if (await CommandRepository.IsExists(Global.Constants.MemoryChannelId, fileName))
             {
-                prevMemory = (await CommandRepository.Load(this.channelId, fileName)).Message;
+                prevMemory = (await CommandRepository.Load(Global.Constants.MemoryChannelId, fileName)).Message;
             }
 
             const memoryPatch = await Global.ChatGPT.CreateMemoryPatch(prevMemory, userData);
@@ -82,7 +82,7 @@ export class MemoryCollect implements IBehavior
             userMemoryModifier.ApplyPatch(memoryPatch);
             const newMemoryJson = userMemoryModifier.GetJsonString();
 
-            await CommandRepository.Save(this.channelId, fileName, newMemoryJson);
+            await CommandRepository.Save(Global.Constants.MemoryChannelId, fileName, newMemoryJson);
         }
     }
 

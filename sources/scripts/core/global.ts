@@ -3,6 +3,7 @@ import SystemAPI from "./systemAPI";
 import TimeAPI from "./timeAPI";
 import ChatGPTAPI from "./openAIAPI";
 import { Client } from "discord.js";
+import { Constants } from "./Constants";
 
 export default class Global
 {
@@ -10,6 +11,7 @@ export default class Global
     public static System: SystemAPI;
     public static Time: TimeAPI;
     public static ChatGPT: ChatGPTAPI;
+    public static Constants: Constants;
 
     public static Initialize(client: Client)
     {
@@ -25,6 +27,8 @@ export default class Global
         this.Time = new TimeAPI();
 
         this.ChatGPT = new ChatGPTAPI();
+
+        this.Constants = new Constants();
     }
 }
 

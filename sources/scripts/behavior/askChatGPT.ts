@@ -24,9 +24,9 @@ export class AskChatGPT implements IBehavior
     {
         const fileName = `user_${this.author.id}.memory.json`;
         let memoryDataStr = "";
-        if (await CommandRepository.IsExists(this.channelId, fileName))
+        if (await CommandRepository.IsExists(Global.Constants.MemoryChannelId, fileName))
         {
-            memoryDataStr = (await CommandRepository.Load(this.channelId, fileName)).Message;
+            memoryDataStr = (await CommandRepository.Load(Global.Constants.MemoryChannelId, fileName)).Message;
         }
 
         const msgs = await Global.Client.SendMessage(this.channelId, "잠시만 기다려주세요! 생각 중이에요!");
@@ -54,11 +54,17 @@ export class AskChatGPT implements IBehavior
 
     async GetPrompt(): Promise<CommandContext>
     {
-        var isExists = await CommandRepository.IsExists(this.channelId, "readme.md");
-        if (isExists)
+        const isLocalReadMeExists =  await CommandRepository.IsExists(this.channelId, Global.Constants.ReadMeFileName);
+        if (isLocalReadMeExists)
+        {
+            return await CommandRepository.Load(this.channelId, Global.Constants.ReadMeFileName);
+        }
+
+        const isGlobalReadMeExists = await CommandRepository.IsExists(Global.Constants.MemoryChannelId, Global.Constants.ReadMeFileName);
+        if (isGlobalReadMeExists)
         {
             // 있는 명령어라면 바로 로드함
-            return await CommandRepository.Load(this.channelId, "readme.md");
+            return await CommandRepository.Load(Global.Constants.MemoryChannelId, Global.Constants.ReadMeFileName);
         }
 
         return new CommandContext("");
