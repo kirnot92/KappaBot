@@ -14,7 +14,6 @@ export class AskChatGPT implements IBehavior
 
     constructor(command: string, author: User|PartialUser, channelId: string, messageHistory: MessageContext[])
     {
-        //messageHistory.push({"role":"user", content: `${author.username}:${command}`});
         this.author = author;
         this.channelId = channelId;
         this.messageHistory = messageHistory;
@@ -22,26 +21,13 @@ export class AskChatGPT implements IBehavior
 
     public async Run()
     {
-        const fileName = `user_${this.author.id}.memory.json`;
-        let memoryDataStr = "";
-        if (await CommandRepository.IsExists(Global.Constants.MemoryChannelId, fileName))
-        {
-            memoryDataStr = (await CommandRepository.Load(Global.Constants.MemoryChannelId, fileName)).Message;
-        }
-
         const msgs = await Global.Client.SendMessage(this.channelId, "잠시만 기다려주세요! 생각 중이에요!");
 
         let instructions = (await this.GetPrompt()).Message;
         instructions += "input은 최근 대화를 포함하고 있습니다. 마지막 input이 사용자의 질문이며, 나머지는 이전 기록임을 참고하여 답변을 작성하세요.\n";
         instructions += "input은 각 유저의 식별자를 포함하여 JSON 형식으로 기술됩니다.\n";
-        if (memoryDataStr != "")
-        {
-            instructions += "다음은 사용자에 대한 메모리 데이터입니다. 이를 활용하여 답변을 작성하세요.";
-            const memoryData =  JSON.parse(memoryDataStr) as UserMemory;
-            instructions += this.ConvertUserMemoryToMD(memoryData);
-        }
 
-        const response = await Global.ChatGPT.Request(instructions, this.messageHistory);
+        const response = await Global.ChatGPT.Request(instructions, "medium", this.messageHistory);
         if (response.length < 2000)
         {
             msgs[0].edit(response);
@@ -69,30 +55,5 @@ export class AskChatGPT implements IBehavior
         }
 
         return new CommandContext("");
-    }
-
-    private ConvertUserMemoryToMD(data: UserMemory): string
-    {
-        let r = "";
-        r += `\n# Memory (updated: ${data.updated_at})\n`
-        r += this.ConvertSectionToMD("Facts", data.items.facts);
-        r += this.ConvertSectionToMD("Constraints", data.items.constraints);
-        r += this.ConvertSectionToMD("Preferences", data.items.preferences);
-        r += this.ConvertSectionToMD("Projects", data.items.projects);
-        return r;
-    }
-
-    private ConvertSectionToMD(sectionName: string, section: UserMemoryItem[]): string
-    {
-        let r = "";
-        if (section.length > 0)
-        {
-            r += `\n## ${sectionName}\n`;
-            for (const item of section)
-            {
-                r += `- [${item.confidence} Confidence] ${item.text}\n`;
-            }
-        }
-        return r;
     }
 }

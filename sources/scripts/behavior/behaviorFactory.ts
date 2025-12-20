@@ -20,6 +20,7 @@ import { AddRole } from "./addRole";
 import { RemoveRole } from "./removeRole";
 import { MessageAttachment } from "discord.js";
 import { DoNothing } from "./doNothing";
+import { todayNEWS } from "./todayNEWS";
 
 export default class BehaviorFactory
 {
@@ -83,6 +84,8 @@ export default class BehaviorFactory
             case Command.역할삭제.Key:
                 if (guildId == null){return new DoNothing();}
                 return new RemoveRole(guildId, channelId, others);
+            case Command.오늘의뉴스.Key:
+                return new todayNEWS(others, channelId);
             default:
                 return new Load(command, channelId);
         }

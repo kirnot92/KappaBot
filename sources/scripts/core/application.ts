@@ -15,7 +15,6 @@ import EmojiRoleRepository from "../procedure/emojiRoleRepository";
 import Prefix from "../procedure/prefix";
 import { AskChatGPT } from "../behavior/askChatGPT";
 import {ChatUserMessage, MessageContext} from "../type/types";
-import { MemoryCollect, MemoryCollectRunner } from "../behavior/memoryCollect";
 import CommandRepository from "../procedure/commandRepository";
 
 export default class Application
@@ -26,7 +25,6 @@ export default class Application
 
     private currentActivityIndex: number = 0
     private activityList: Array<string>
-    private memoryCollectRunner: MemoryCollectRunner;
 
     public Initialize()
     {
@@ -39,7 +37,6 @@ export default class Application
         this.InitializeActivity();
 
         Log.Info("Application Initialized");
-        this.memoryCollectRunner = new MemoryCollectRunner();
     }
 
     public async Update(): Promise<void>
@@ -154,20 +151,6 @@ export default class Application
             var channelId = message.channel.id;
             var guildId = message.guildId;
 
-            // if (Prefix.IsCallChatGPT(content))
-            // {
-            //     await this.HandleChatGPT(message);
-            // }
-            // else
-            // {
-            //     var attachments = Array.from(message.attachments.values());
-            //     await this.HandleMessage(content, attachments, channelId, message.author, guildId);
-            // }
-
-            // if (await CommandRepository.IsExists(channelId, Global.Constants.ReadMeFileName))
-            // {
-            //     await this.HandleChatCollection(message);
-            // }
 
             var attachments = Array.from(message.attachments.values());
             await this.HandleMessage(content, attachments, channelId, message.author, guildId);
@@ -206,26 +189,6 @@ export default class Application
 
             const askChatGPTBehavior = new AskChatGPT(content, author, channelId, inputs);
             await askChatGPTBehavior.Run();
-        }
-        catch (error)
-        {
-            this.HandleError(error, content, channelId);
-        }
-    }
-
-    async HandleChatCollection(message: Message)
-    {
-        var content = message.content;
-        var channelId = message.channel.id;
-
-        try
-        {
-            this.memoryCollectRunner.TryRun(channelId, async () =>
-            {
-                const messages = await this.FetchSortedMessages(message, 100);
-                const memoryCollectBehavior = new MemoryCollect(messages, message, channelId);
-                await memoryCollectBehavior.Run();
-            });
         }
         catch (error)
         {
