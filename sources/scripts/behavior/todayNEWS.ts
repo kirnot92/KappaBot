@@ -49,10 +49,48 @@ user가 입력하는 내용에 대해 웹 검색을 통해 면밀히 조사하�
 각 이슈는 하나의 문장에 정리되고, 끝에는 근거가 되는 링크가 붙습니다.\n\n
         `;
         
-        const msgs = await Global.Client.SendMessage(this.channelId, "뉴스 생성 중...");
-        const messageContext = { role: "user", content: this.command} as MessageContext;
-        const result = await Global.ChatGPT.Request(instructions, "medium", [messageContext]);
+        const msgs = await Global.Client.SendMessage(this.channelId,  "뉴스 생성 중... (00:00)");
+        const start = Date.now();
+        let needStop = false;
+        const tick = async () =>
+        {
+            if (needStop) { return; }
+            const elapsed = this.formatElapsed(Date.now() - start);
+            try
+            {
+                await msgs[0].edit(`뉴스 생성 중... (${elapsed})`);
+            }
+            catch
+            {
+                needStop = true;
+                return;
+            }
+            setTimeout(tick, 5000);
+        }
 
-        msgs[0].edit(result);
+        setTimeout(tick, 5000);
+        
+        try
+        {
+            const messageContext = { role: "user", content: this.command} as MessageContext;
+            const result = await Global.ChatGPT.Request(instructions, "medium", [messageContext]);
+            await msgs[0].edit(result);
+        }
+        catch
+        {
+            await msgs[0].edit("뉴스 생성 실패");
+        }
+        finally
+        {
+            needStop = true;
+        }
+    }
+
+    private formatElapsed(ms: number): string
+    {
+        const totalSec = Math.floor(ms / 1000);
+        const min = Math.floor(totalSec / 60);
+        const sec = totalSec % 60;
+        return `${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
     }
 }
