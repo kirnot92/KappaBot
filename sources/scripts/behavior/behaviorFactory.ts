@@ -84,7 +84,7 @@ export default class BehaviorFactory
             case Command.역할삭제.Key:
                 if (guildId == null){return new DoNothing();}
                 return new RemoveRole(guildId, channelId, others);
-            case Command.오늘의뉴스.Key:
+            case Command.뉴스.Key:
                 return new todayNEWS(others, channelId);
             default:
                 return new Load(command, channelId);

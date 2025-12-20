@@ -18,7 +18,7 @@ export class todayNEWS implements IBehavior
         this.command = command;
         this.channelId = channelId;
 
-        var hasValue = String.HasValue([this.command], Command.오늘의뉴스.ArgCount);
+        var hasValue = String.HasValue([this.command], Command.뉴스.ArgCount);
         if (!hasValue)
         {
             LogicHalt.CommandNotFound();
@@ -33,8 +33,10 @@ export class todayNEWS implements IBehavior
 디스코드는 한 번에 최대 2000자까지 사용 가능하나, 너무 길어지지 않도록 주의하세요.\n
 200자에서 600자 사이를 사용하세요.\n\n
 
-링크의 경우, 그냥 링크하지 말고 다음과 같은 포멧을 사용하세요.\n
-ex)\n
+링크의 경우, 반드시 다음과 같은 포멧을 사용하세요. 이외의 방식은 허용하지 않습니다.\n
+[링크](<https://example.com/path>)\n\n
+
+예시는 아래와 같습니다.
 <input> http://naver.com\n
 <output> [링크](<http://naver.com>)\n
 
