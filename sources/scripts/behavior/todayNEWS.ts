@@ -55,7 +55,7 @@ user가 입력하는 내용에 대해 웹 검색을 통해 면밀히 조사하�
       
         const msgs = await Global.Client.SendMessage(this.channelId,  "뉴스 생성 중...");
         const messageContext = { role: "user", content: this.command} as MessageContext;
-        const result = await Global.ChatGPT.Request(instructions, "gpt-5-mini", 'low', [messageContext]);
+        const result = await Global.ChatGPT.Request(instructions, "gpt-5.2", 'medium', [messageContext]);
         await Global.Client.SendMessage(this.channelId, result);
         await msgs[0].delete();
     }
