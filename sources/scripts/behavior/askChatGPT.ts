@@ -27,7 +27,7 @@ export class AskChatGPT implements IBehavior
         instructions += "input은 최근 대화를 포함하고 있습니다. 마지막 input이 사용자의 질문이며, 나머지는 이전 기록임을 참고하여 답변을 작성하세요.\n";
         instructions += "input은 각 유저의 식별자를 포함하여 JSON 형식으로 기술됩니다.\n";
 
-        const response = await Global.ChatGPT.Request(instructions, "medium", this.messageHistory);
+        const response = await Global.ChatGPT.Request(instructions, 'gpt-5.2', "medium", this.messageHistory);
         if (response.length < 2000)
         {
             msgs[0].edit(response);

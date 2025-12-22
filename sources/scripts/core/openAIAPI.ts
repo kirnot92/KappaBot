@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import * as Secret from "../../json/secret.json";
 import { MemoryCandidatesV1, memoryCandidatesV1Format as MemoryCandidatesV1Format, MemoryPatchCandidate, MemoryPatchData, MemoryPatchFormat, MessageContext, UserMemoryCandidate } from "../type/types";
 import Log from "./log";
-import { ReasoningEffort } from "openai/resources/shared";
+import { ReasoningEffort, ResponsesModel } from "openai/resources/shared";
 
 export default class OpenAIAPI
 {
@@ -13,11 +13,11 @@ export default class OpenAIAPI
         this.client = new OpenAI({ apiKey: Secret.OpenAIApiKey });
     }
 
-    public async Request(instructions: string, effort: ReasoningEffort, messageHistory: MessageContext[]) : Promise<string>
+    public async Request(instructions: string, model: ResponsesModel, effort: ReasoningEffort, messageHistory: MessageContext[]) : Promise<string>
     {
         var response = await this.client.responses.create(
         {
-            model: "gpt-5.2",
+            model: model,
             reasoning: { effort: effort },
             tools: [{ type: "web_search" }],
             tool_choice: "auto",
