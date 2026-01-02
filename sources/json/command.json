@@ -139,6 +139,13 @@
         "Usage": "뉴스 [토픽]",
         "IsHidden": false
     },
+    "경제뉴스":
+    {
+        "Key": "경제뉴스",
+        "ArgCount": 0,
+        "Usage": "경제뉴스",
+        "IsHidden": false
+    },
     "역할부여시작":
     {
         "Key": "역할부여시작",
