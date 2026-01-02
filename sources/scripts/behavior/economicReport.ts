@@ -50,7 +50,7 @@ export class economicReport implements IBehavior
         `;
 
         const msgs = await Global.Client.SendMessage(this.channelId,  "뉴스 생성 중...");
-        const messageContext = { role: "user", content: "오늘(Asia/Seoul) 기준으로 최근 7일(보완 30일) 데이터를 우선해 “주간 경제·시장 통합 리포트”를 작성하세요."} as MessageContext;
+        const messageContext = { role: "user", content: "오늘(Asia/Seoul) 기준으로 최근 7일(보완 30일) 데이터를 우선해 “주간 경제·시장 통합 리포트”를 작성하세요. 디스코드에 업로드 되므로 디스코드의 마크다운 문법을 사용하고, 최대 2000자가 넘지 않도록 하십시오."} as MessageContext;
         const result = await Global.ChatGPT.Request(instructions, "gpt-5.2", 'high', [messageContext]);
         await Global.Client.SendMessage(this.channelId, result);
         await msgs[0].delete();
